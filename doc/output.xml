@@ -1,0 +1,86 @@
+   <Section><Heading>Calling Polymake and converting its output</Heading>
+   <ManSection>
+   <Meth Name="Polymake" Arg="poly,option [: [PolymakeNolookup]]"/>
+    <Description>
+    
+     This method calls the polymake program (see <Ref
+     Var="POLYMAKE_COMMAND"/>) with the option
+     <A>option</A>. You may use several keywords such as
+     <C>"DIM VERTICES"</C> as an option. The returned value is cut into blocks
+     starting with keywords (which are taken from output and not 
+     looked up in <A>option</A>). Each block is then
+     interpreted and translated into &GAP; readable form. This
+     translation is done using the functions given in <Ref
+     Var="ObjectConverters"/>.
+
+     The first line of each block of polymake output is taken as a
+     keyword and the according entry in <Ref Var="ObjectConverters"/>
+     is called to convert the block into &GAP; readable form. If no
+     such conversion function exists, an error is issued.
+
+     If only one keyword has been given as <A>option</A>,
+     <C>Polymake</C> returns the result of the conversion operation.
+     If more than one keyword has been given or the output consists of
+     more than one block, <C>Polymake</C> returns <K>fail</K>.
+
+     In any case, the calculated values for each block are stored as
+     known properties of the <K>PolymakeObject</K> <A>poly</A> as long
+     as they are not <K>fail</K>. 
+
+     If <K>Polymake</K> is called with an option that corresponds to a
+     name of a known property of <A>poly</A>, the known property is
+     returned. In this case, there is no call of the external program.
+     (see below for suppression of this feature).<P/>
+     
+     Note that the command <K>Polymake</K> returns <K>fail</K> if
+     nothing is returned by the program polymake or more than one
+     block of data is returned. For example, the returned value of
+     <C>Polymake(poly,"VISUAL")</C> is always
+     <K>fail</K>. Likewise, <C>Polymake(poly,"POINTS VERTICES")</C>
+     will return <K>fail</K> (but may add new known properties to
+     <A>poly</A>).
+
+     For a description of the conversion functions, see chapter <Ref
+     Chap="Converting"/>.<P/>
+     
+     If the option <A>PolymakeNolookup</A> is set to anything else
+     than false, the polymake program is called even if <A>poly</A>
+     already has a known property with name <A>option</A>.
+  </Description>
+  </ManSection>
+
+  </Section>
+
+   <Section><Heading>An Example</Heading>
+
+   Let's generate a three dimensional permutahedron.
+
+    <Example>
+    <![CDATA[
+    gap> S:=SymmetricGroup(3);
+    Sym( [ 1 .. 3 ] )
+    gap> v:=[1,2,3];
+    [ 1, 2, 3 ]
+    gap> points:=Orbit(S,v,Permuted);;
+    gap> permutahedron:=CreatePolymakeObject();
+    <polymake object. No properties known>
+    gap> AppendPointlistToPolymakeObject(permutahedron,points);
+    gap> Polymake(permutahedron,"VOLUME");
+    3
+    gap> Polymake(permutahedron,"N_VERTICES");
+    6
+          #Now <permutahedron> knows its number of vertices, but not the vertices:
+    gap> PropertyOfPolymakeObject(permutahedron,"VERTICES");
+    fail
+    gap> NamesKnownPropertiesOfPolymakeObject(permutahedron);
+    [ "VOLUME", "N_VERTICES" ]
+        #Let's look at the object!
+    gap> Polymake(permutahedron,"VISUAL");
+    #I  There was no or wrong polymake output
+    fail
+    gap> Polymake(permutahedron,"DIM");
+    2
+    ]]>
+    </Example>    
+
+   </Section>

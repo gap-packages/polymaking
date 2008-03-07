@@ -1,0 +1,79 @@
+0.7.1:
+- polymaking now suggests GAPdoc
+- changed the way POLYMAKE_COMMAND is determined (thanks to Andreas Distler)
+  polymaking now tries to guess the location of polymake using the system 
+  path variable via DirectoriesSystemPrograms().
+- documentation now includes a couple of comments on the installation of 
+  polymake.------------------
+
+0.7.0:
+- Package is now called "polymaking" instead of "polymake" to avoid 
+  confusion. 
+- Added a few converters (FAR_HYPERPLANE, N_01POINTS, REL_INT_POINT)
+
+------------------
+
+0.6.3:
+- changed PackageInfo.g to point to the new homepage
+- minor changes to the installation instructions in README.polymake and 
+  the manual.
+------------------
+
+0.6.2:
+- some changes in the manual.
+- AppendToPolymakeObject now has a 3-argument version
+  to be called like AppendToPolymakeObject(poly,"KEYWORD","datastring");
+- the converter for HASSE_DIAGRAM now returns a list of sets of triples of sets
+  rather than the strange record. To be precise, only the ".hasse" part of the
+  old version is returned.
+- set global variables POLYMAKE_PROGRAM and POLYMAKE_DATA_DIR to "read only"
+  status (thanks to Alexander Konovalov for this hint).------------------
+
+0.6.1:
+- more converters added to ObjectConverters.gi
+- PolymakeObject is not longer a sub category of Record.
+- added AppendInequalitiesToPolymakeObject for convenience
+
+------------------
+
+0.6:
+- Added a few object converters and removed a 
+- Rewrote most of the documentation------------------
+
+0.5:
+- package does no longer depend on the IO package.
+
+- Conversion method for HASSE_DIAGRAM changed. Output has also changed and is
+  not compatible with earlier versions.
+
+- Polymake can now be called with several keywords. In this case, fail is 
+  returned but the record is updated.
+  If a part of the returned values are fail, these are not updated in the 
+  polygon record (but the others are!).
+  Any line of polymake output starting with a capital letter will be treated
+  as a line containing a single keyword.
+
+- Conversion method for FACE_LATTICE added.
+
+- The objects now have their own type "PolymakeObject". Lots of functions 
+  for manipulating them have been added.
+------------------
+
+0.3:
+- Changes in CreatePolygon:
+	can now take an existing directory as an argument,
+	Change in naming convention for generated file. Number is appended
+	if a file with the same name exists (can happen, if CreatePolygon(dir)
+	is called several times without other calculations between the calls)
+
+------------------
+
+0.2:
+- added conversion functions for polymake output.
+------------------
+
+0.1:
+- packages started with very limited functionality
+------------------
+
+
