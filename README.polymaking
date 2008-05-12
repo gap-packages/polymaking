@@ -3,7 +3,7 @@ National University of Ireland, Galway
 
 
           polymak(e)inG(AP)
-         ============
+         ==================
 
 A very basic GAP-interface to the program "polymake" by
 Ewgenij Gawrilow and Michael Joswig which is available at
@@ -15,12 +15,12 @@ has to be installed separately.
 This package is distributed under the terms of the GNU general public license version 2 or later (at your descretion).
 
        	    	Requirements
-		-----------
+		------------
 polymaking requires GAP version 4.4. It also needs polymake to be installed.
 The GAPDoc package is needed to display the documentation.
 
 		Installation
-		---------
+		------------
 0. Install polymake (http://www.math.tu-berlin.de/polymake/)
 
 1. Download one of the archives
@@ -51,3 +51,26 @@ The GAPDoc package is needed to display the documentation.
    your home directory (use "pwd" to find out what it is, if you don't know)
 
 4. Type "LoadPackage("polymaking");" to load  polymaking package
+
+
+
+			IMPORTANT NOTE!
+			===============
+
+Please help me extend/improve/debug polymaking!
+
+Not all polymake keywords/properties are yet converted into GAP
+language by polymaking. If you want to use one of those, please tell
+me about it.  
+
+Also, if you find the conversion output for some keyword inconsistent
+or wrong the reason is probably that I never used this keyword in the
+context you do. For some keywords, the method for conversion was
+actually guessed.
+
+So if you find a bug or strange behaviour, please write a bug report to 
+marc_roeder@web.de.
+
+Thanks,
+marc
+

@@ -192,90 +192,104 @@ end);
 
 InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
         function(polygon,option)
-    local   exitstatus,  gapobject,  splitoption,  returnval,  
-            knownProperties,  returnedstring,  stdout,  stdin,  dir,  
-            block;
-
-
-    exitstatus:=0;
-    gapobject:=[];
-    option:=NormalizedWhitespace(option);
-    splitoption:=SplitString(option," ");
-    if ValueOption("PolymakeNolookup") in [fail,false]
-       then
-        knownProperties:=NamesKnownPropertiesOfPolymakeObject(polygon);
-        if knownProperties<>fail and Size(splitoption)=1 and 
-           splitoption[1] in NamesKnownPropertiesOfPolymakeObject(polygon)
-           then
-            returnval:=PropertyOfPolymakeObject(polygon,splitoption[1]);
-        elif Size(splitoption)=1
-          then
-            returnval:=[];
-        elif splitoption=[]
-          then
-            Error("you must pass an option to polymake");
-        else
-            returnval:=fail;
-        fi;
-        if knownProperties<> fail 
-           then
-            splitoption:=Filtered(splitoption,i->not i in knownProperties);
-        fi;
-    else
-        returnval:=[];
-    fi;
+    local   callPolymake,  gapobject,  splitoption,  knownProperties,  
+            returnval,  returnedstring,  block;
     
-    if not splitoption=[]
-       then
+    callPolymake:=function(object,splitoption)
+        local   returnedstring,  stdout,  stdin,  dir,  exitstatus;
+        
         returnedstring:=[];
         stdout:=OutputTextString(returnedstring,false);
         stdin:=InputTextNone();;
-        dir:=DirectoryOfPolymakeObject(polygon);
+        dir:=DirectoryOfPolymakeObject(object);
         if dir=fail 
            then
             dir:=DirectoryCurrent();
         fi;
         exitstatus:=Process( dir, POLYMAKE_COMMAND, stdin, stdout, 
-                            Concatenation([FullFilenameOfPolymakeObject(polygon)],
+                            Concatenation([FullFilenameOfPolymakeObject(object)],
                                     splitoption)
                             );;
         CloseStream(stdout);
         CloseStream(stdin);
-    else
-        returnedstring:=[];
-    fi;
-    #returnedstring:=IO_PipeThrough(POLYMAKE_COMMAND,[polygon.filename,option],"");
-    if exitstatus<>0 
-       then
-        Info(InfoPolymaking,1,"polymake returned an error");
-        gapobject:=[];
-    elif returnedstring<>[]
+        return rec(status:=exitstatus,string:=returnedstring);
+    end;
+
+    gapobject:=[];
+    option:=NormalizedWhitespace(option);
+    splitoption:=SplitString(option," ");
+    knownProperties:=NamesKnownPropertiesOfPolymakeObject(polygon);
+    returnval:=[];
+    
+    if Size(splitoption)=0
       then
-        Info(InfoPolymaking,2,returnedstring);
-        gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring);
-    fi;
-    if Size(gapobject)=1 and gapobject[1].object<>fail 
-       then
-        WriteKnownPropertyToPolymakeObject(polygon,gapobject[1].name,gapobject[1].object);
-#        polygon.(gapobject[1].name):=gapobject[1].object;
-        if returnval<> fail
+        Error("you must pass an option to polymake");
+        
+    elif Size(splitoption)=1
+      then
+        if ValueOption("PolymakeNolookup") in [fail,false]
+           and knownProperties<>fail
+           and splitoption[1] in knownProperties
            then
-            returnval:=gapobject[1].object;
+            returnval:=PropertyOfPolymakeObject(polygon,splitoption[1]);
+        else
+            returnedstring:=callPolymake(polygon,splitoption);
+            if returnedstring.status <>0
+               then
+                Error("polymake returned an error (error code ", returnedstring.status, ")");
+                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",String(returnedstring.status)));
+                returnval:=fail;
+            elif returnedstring.string<>[]
+               then
+                Info(InfoPolymaking,2,returnedstring.string);
+                gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
+                if gapobject[1].object<>fail
+                   then
+                    WriteKnownPropertyToPolymakeObject(polygon,gapobject[1].name,gapobject[1].object);
+                    returnval:=gapobject[1].object;
+                else
+                    returnval:=fail;
+                fi;
+            else
+                UpdatePolymakeFailReason("polymake did not return anything");
+                returnval:=fail;
+            fi;
         fi;
-    elif Size(gapobject)>1
-      then
-        for block in Filtered(gapobject,i->i.object<>fail)
-          do
-            WriteKnownPropertyToPolymakeObject(polygon,block.name,block.object);
-#            polygon.(block.name):=block.object;
-        od;
+        
+    else
+        # we return fail, whatever happens.
+        ## only the reason may change...
+        ###
         returnval:=fail;
-    elif returnval = []
-      then
-        Info(InfoPolymaking,1,"There was no or wrong polymake output");
-        returnval:= fail;
-    fi;
-    return returnval;    
+        UpdatePolymakeFailReason("polymake called with multiple keywords");
+        if ValueOption("PolymakeNolookup") in [fail,false]
+           and knownProperties<>fail
+           then
+            splitoption:=Filtered(splitoption,i->not i in knownProperties);
+        fi;
+        if Size(splitoption)>0
+           then
+            returnedstring:=callPolymake(polygon,splitoption);
+            if returnedstring.status <>0
+               then
+                Error("polymake returned an error");
+                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",String(returnedstring.status)));
+            elif returnedstring<>[]
+              then
+                Info(InfoPolymaking,2,returnedstring.string);
+                gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
+                
+                for block in Filtered(gapobject,i->i.object<>fail)
+                  do
+                    WriteKnownPropertyToPolymakeObject(polygon,block.name,block.object);
+                od;
+            else
+                UpdatePolymakeFailReason("polymake didn't return anything. All keywords that would have triggered output were looked up.");
+            fi;
+            
+        fi;
+     fi;
+     return returnval;
 end);
 
 

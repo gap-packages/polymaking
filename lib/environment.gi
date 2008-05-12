@@ -55,6 +55,27 @@ InstallMethod(SetPolymakeCommand,[IsString],
 end);
 
 
+#############################################################################
+##
+## additional paths for polymake clients
+##
+if not IsBound(POLYMAKE_CLIENT_PATHS)
+   then
+    POLYMAKE_CLIENT_PATHS:=DirectoriesSystemPrograms();
+    MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
+fi;
+
+InstallMethod(SetPolymakeClientPaths,[IsDenseList],
+        function(dirs)
+    if not ForAll(dirs,IsDirectory)
+       then
+        Error("<dirs> must be a list of directories");
+    fi;
+    MakeReadWriteGlobal(POLYMAKE_CLIENT_PATHS);
+    POLYMAKE_CLIENT_PATHS:=dirs;
+    MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
+end);
+
 #
 # This directory will hold the files generated for polymake
 # It can be changed using "SetPolymakeDataDirectory"
@@ -74,4 +95,17 @@ InstallMethod(SetPolymakeDataDirectory,[IsDirectory],
 end);
 
 
+
+####
+### 
+##  Handling of last fail reason:
+#
+InstallValue(POLYMAKE_LAST_FAIL_REASON,"");
+
+InstallMethod(UpdatePolymakeFailReason,[IsString],
+        function(reason)
+    MakeReadWriteGlobal("POLYMAKE_LAST_FAIL_REASON");
+    POLYMAKE_LAST_FAIL_REASON:=reason;
+    MakeReadOnlyGlobal("POLYMAKE_LAST_FAIL_REASON");
+end);
 

@@ -1,3 +1,41 @@
+0.7.3:
+- fixed an embarrassing bug. Now HASSE_DIAGRAM really does what it should.
+
+
+------------------
+
+0.7.2:
+ATTENTION! change in output type:
+- Polymake(poly,"HASSE_DIAGRAM") now returns a record instead of a list.
+   This change was necessary to make HASSE_DIAGRAM work with simplicial 
+   complexes.
+
+New features:
+- polymaking is now supporting some clients via PolymakeClient
+- variable POLYMAKE_LAST_FAIL_REASON introduced. It should contain information 
+   abut the reason of the last returned <fail>.
+
+Changes to existing methods:
+- Method Polymake rewritten
+- polymaking now returns an error if polymake returns one
+- Change in SplitPolymakeOutputStringIntoBlocks:
+   keywords are now recognised by starting with an upper chase character and 
+   consisting of  uppercase letters, numbers and "_" only.
+- PolymakeObjects now print their description instead of just <polymake object>
+   if they know it.
+
+Converter things:
+- ConvertPolymakeBoolToGAP now also accepts "true" and "false"
+- converter ConvertPolymakeDescriptionToGAP added.
+- converter ConvertPolymakeMatrixOrListOfSetsToGAP added 
+    (for things like FACETS that exist in the polytope and topaz world)
+- converter ConvertPolymakeIntVectorToGAPPlusOne added.
+- A few more entries added to ObjectConverters (now supporting 105 keywords)
+
+Converter method assignment changed for:
+GRAPH, DUAL_GRAPH, FACETS, 
+------------------
+
 0.7.1:
 - polymaking now suggests GAPdoc
 - changed the way POLYMAKE_COMMAND is determined (thanks to Andreas Distler)

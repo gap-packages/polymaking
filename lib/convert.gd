@@ -29,16 +29,23 @@ DeclareOperation("ConvertPolymakeOutputToGapNotation",[IsString]);
 DeclareOperation("SplitPolymakeOutputStringIntoBlocks",[IsString]);
 DeclareOperation("ConvertedObject",[IsString,IsDenseList]);
 
+DeclareOperation("ConverterSyntaxError",[IsString]);
+
 DeclareOperation("ConvertPolymakeNumber",[IsString]);
 
 DeclareOperation("ConvertPolymakeScalarToGAP",[IsDenseList]);
+DeclareOperation("ConvertPolymakeBoolToGAP",[IsDenseList]);
+DeclareOperation("ConvertPolymakeDescriptionToGAP",[IsDenseList]);
+
+DeclareOperation("ConvertPolymakeMatrixOrListOfSetsToGAP",[IsDenseList]);
+DeclareOperation("ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne",[IsDenseList]);
 
 DeclareOperation("ConvertPolymakeMatrixToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeMatrixToGAPKillOnes",[IsDenseList]);
 DeclareOperation("ConvertPolymakeVectorToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeVectorToGAPKillOne",[IsDenseList]);
+DeclareOperation("ConvertPolymakeIntVectorToGAPPlusOne",[IsDenseList]);
 
-DeclareOperation("ConvertPolymakeBoolToGAP",[IsDenseList]);
 
 DeclareOperation("ConvertPolymakeSetToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeListOfSetsToGAP",[IsDenseList]);

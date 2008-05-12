@@ -44,7 +44,13 @@ InstallMethod(ViewObj,
         function(poly)
     local compnames;
     compnames:=NamesOfComponents(poly);
-    Print("<polymake object");
+    if "knownProperties" in compnames 
+      and "DESCRIPTION" in NamesKnownPropertiesOfPolymakeObject(poly)
+      then
+        Print("<",PropertyOfPolymakeObject(poly,"DESCRIPTION"));
+    else
+        Print("<polymake object");
+    fi;
     if not "knownProperties" in compnames
        then
         Print(". No properties known");
@@ -58,7 +64,13 @@ InstallMethod(PrintObj,
         function(poly)
     local compnames;
     compnames:=NamesOfComponents(poly);
-    Print("<polymake object ",FilenameOfPolymakeObject(poly));
+    if "knownProperties" in compnames 
+      and "DESCRIPTION" in NamesKnownPropertiesOfPolymakeObject(poly)
+      then
+        Print("<",PropertyOfPolymakeObject(poly,"DESCRIPTION"));
+    else
+        Print("<polymake object");
+    fi;
     if not "knownProperties" in compnames
        then
         Print(". No properties known");

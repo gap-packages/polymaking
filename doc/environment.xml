@@ -15,10 +15,13 @@
 <C>polymake file KEYWORD1 KEYWORD2 KEYWORD3</C>
 <Br/>
 
- on the command line. Using multiple files in one command is not
- supported as are scripts. Also, there is no direct interface to any of the
- polymake clients (like <C>intersction</C>).
- 
+ on the command line. Scripts are not supported.
+ From vertsion 0.7.2 on, there is limited client-support. All clients that are
+ called like 
+ <Br/>
+ <C>client outfile infile1 infile2 ... -option1 -option2</C>
+ <Br/>
+ can now be called from &GAP; via <Ref Meth="PolymakeClient"/>.
 
 
 <Section Label="chap:polymakeinstall">
@@ -72,13 +75,25 @@ know
       </ManSection>
 
 
+       <ManSection>
+        <Meth Name="SetPolymakeClientPaths" Arg="dirs"/>
+        <Description>
+         Defines directories which contain polymake
+         client programs. <C>SetPolymakeClientPaths(dirs)</C> sets
+         <Ref Var="POLYMAKE_CLIENT_PATHS"/>  to <A>dirs</A> which has to be a
+         list of directory objects.
+        </Description>
+       </ManSection>
+
       <Subsection Label="SetVarPermanently"><Heading>Setting variables permanently</Heading>
-       To permanently set the values of <Ref Var="POLYMAKE_COMMAND" /> and 
+       To permanently set the values of <Ref Var="POLYMAKE_COMMAND" />, <Ref
+Var="POLYMAKE_CLIENT_PATHS"/> and 
        <Ref Var="POLYMAKE_DATA_DIR"/>, add the lines
 
 <Listing>
 POLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");
 POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
+POLYMAKE_CLIENT_DIRS:=[Directory("/home/myclients/"),Directory("/home/moreclients/")];
 </Listing>
 
        to your <F>.gaprc</F> file (see <Ref Label="The .gaprc file"
