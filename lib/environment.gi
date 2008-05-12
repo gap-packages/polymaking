@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: environment.gi, v 0.7.1 2008/03/07 10:07:15 gap Exp $
+#H @(#)$Id: environment.gi, v 0.7.3 2008/05/12 14:57:12 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/environment_gi"):=
-	"@(#)$Id: environment.gi, v 0.7.1 2008/03/07   10:07:15  gap Exp $";
+	"@(#)$Id: environment.gi, v 0.7.3 2008/05/12   14:57:12  gap Exp $";
 SetInfoLevel(InfoPolymaking,1);
 
 # give the command which calles polymake. You may need to include the full path
@@ -55,6 +55,27 @@ InstallMethod(SetPolymakeCommand,[IsString],
 end);
 
 
+#############################################################################
+##
+## additional paths for polymake clients
+##
+if not IsBound(POLYMAKE_CLIENT_PATHS)
+   then
+    POLYMAKE_CLIENT_PATHS:=DirectoriesSystemPrograms();
+    MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
+fi;
+
+InstallMethod(SetPolymakeClientPaths,[IsDenseList],
+        function(dirs)
+    if not ForAll(dirs,IsDirectory)
+       then
+        Error("<dirs> must be a list of directories");
+    fi;
+    MakeReadWriteGlobal(POLYMAKE_CLIENT_PATHS);
+    POLYMAKE_CLIENT_PATHS:=dirs;
+    MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
+end);
+
 #
 # This directory will hold the files generated for polymake
 # It can be changed using "SetPolymakeDataDirectory"
@@ -74,4 +95,17 @@ InstallMethod(SetPolymakeDataDirectory,[IsDirectory],
 end);
 
 
+
+####
+### 
+##  Handling of last fail reason:
+#
+InstallValue(POLYMAKE_LAST_FAIL_REASON,"");
+
+InstallMethod(UpdatePolymakeFailReason,[IsString],
+        function(reason)
+    MakeReadWriteGlobal("POLYMAKE_LAST_FAIL_REASON");
+    POLYMAKE_LAST_FAIL_REASON:=reason;
+    MakeReadOnlyGlobal("POLYMAKE_LAST_FAIL_REASON");
+end);
 

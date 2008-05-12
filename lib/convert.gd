@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: convert.gd, v 0.7.1 2008/03/07 10:07:15 gap Exp $
+#H @(#)$Id: convert.gd, v 0.7.3 2008/05/12 14:57:12 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,21 +24,28 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/convert_gd"):=
-	"@(#)$Id: convert.gd, v 0.7.1 2008/03/07   10:07:15  gap Exp $";
+	"@(#)$Id: convert.gd, v 0.7.3 2008/05/12   14:57:12  gap Exp $";
 DeclareOperation("ConvertPolymakeOutputToGapNotation",[IsString]);
 DeclareOperation("SplitPolymakeOutputStringIntoBlocks",[IsString]);
 DeclareOperation("ConvertedObject",[IsString,IsDenseList]);
 
+DeclareOperation("ConverterSyntaxError",[IsString]);
+
 DeclareOperation("ConvertPolymakeNumber",[IsString]);
 
 DeclareOperation("ConvertPolymakeScalarToGAP",[IsDenseList]);
+DeclareOperation("ConvertPolymakeBoolToGAP",[IsDenseList]);
+DeclareOperation("ConvertPolymakeDescriptionToGAP",[IsDenseList]);
+
+DeclareOperation("ConvertPolymakeMatrixOrListOfSetsToGAP",[IsDenseList]);
+DeclareOperation("ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne",[IsDenseList]);
 
 DeclareOperation("ConvertPolymakeMatrixToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeMatrixToGAPKillOnes",[IsDenseList]);
 DeclareOperation("ConvertPolymakeVectorToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeVectorToGAPKillOne",[IsDenseList]);
+DeclareOperation("ConvertPolymakeIntVectorToGAPPlusOne",[IsDenseList]);
 
-DeclareOperation("ConvertPolymakeBoolToGAP",[IsDenseList]);
 
 DeclareOperation("ConvertPolymakeSetToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeListOfSetsToGAP",[IsDenseList]);

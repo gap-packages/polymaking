@@ -1,6 +1,8 @@
 <Chapter Label="chap:GlobalVars"><Heading>Global Variables</Heading>
 
- <Section Label="chap:InfoClass"><Heading>An InfoClass for debug purpose</Heading> 
+ <Section Label="chap:InfoClass"><Heading>Getting information about polymake
+output</Heading> 
+   
     <ManSection>
      <InfoClass Name="InfoPolymaking" />
     <Description>
@@ -10,6 +12,13 @@
     </Description>
    </ManSection>
 
+    <ManSection>
+     <Var Name="POLYMAKE_LAST_FAIL_REASON"/>
+    <Description>
+     Contains a string that explains the last occurence of <K>fail</K> as a
+     return value of <Ref Meth="Polymake"/>.
+    </Description>
+    </ManSection>
    </Section>
 
 
@@ -42,6 +51,15 @@
      <K>DirectoryTemporary</K>
      </Description>
    </ManSection>
+
+   <ManSection>
+    <Var Name="POLYMAKE_CLIENT_PATHS"/>
+     <Description>
+      A list of directories where polymake's the stand-alone clients live. By
+      default, <K>DirectoriesSystemPrograms</K> is used.
+     </Description>
+   </ManSection>
+
 
 </Section>
 
@@ -83,6 +101,12 @@ from the right. So <Package>polymaking</Package> converts such a vector to
 <Code>[a1,a2,a3,...]</Code> and the user is left with the problem of
 augmentation and left or right multiplication.
 <P/>
+Another area where the &GAP; object isn't a literal translation from the
+polymake world is combinatorics. In Polymake, list elements are enumerated
+starting from 0. &GAP; enumerates lists starting at 1. So the conversion
+process adds 1 to the numbers corresponding to vertices in facet lists, for
+example. 
+<P/>
 <Emph>Call for help:</Emph> As of version 0.7.0, most of the converters were
 assigned blindly to keywords. So some of them might not be suitable. If you
 find one of those, please tell me about it. Also, for a lot of keywords and
@@ -117,8 +141,10 @@ The conversion process is done by the following methods:
  <Meth Name="SplitPolymakeOutputStringIntoBlocks" Arg="string"/>
   <Returns>List of strings -- "blocks"--</Returns>
   <Description>
-    The string <A>string</A> is cut at the lines starting with an
-    upper case letter. The parts are returned as a list of
+    The string <A>string</A> is cut at the lines starting with an upper case
+    character and  consisting only of upper case
+    letters, numbers and underscore (&uscore;) characters. 
+    The parts are returned as a list of
     strings. The initial string <A>string</A> remains unchanged.
   </Description>
 </ManSection>
@@ -165,6 +191,20 @@ The conversion process is done by the following methods:
   </ManSection>
 
   <ManSection>
+   <Meth Name="ConvertPolymakeMatrixOrListOfSetsToGAP" Arg="list"/>
+   <Meth Name="ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne" Arg="list"/>
+    <Description>
+     Tries to decide if the list <A>list</A> of strings represents a matrix or
+     a list of sets by testing if they start with "{". It then calls either
+     <Ref Meth="ConvertPolymakeMatrixToGAP"/> or <Ref
+     Meth="ConvertPolymakeListOfSetsToGAP"/>.
+     The "PlusOne" version calls <Ref
+Meth="ConvertPolymakeListOfSetsToGAPPlusOne"/> if <A>list</A> represents a list
+of sets.
+    </Description>
+  </ManSection>
+
+  <ManSection>
   <Meth Name="ConvertPolymakeMatrixToGAP" Arg="list"/>
   <Meth Name="ConvertPolymakeMatrixToGAPKillOnes" Arg="list"/>
    <Description>
@@ -179,8 +219,11 @@ The conversion process is done by the following methods:
   <ManSection>
    <Meth Name="ConvertPolymakeVectorToGAP" Arg="list"/>
    <Meth Name="ConvertPolymakeVectorToGAPKillOne" Arg="list"/>
+   <Meth Name="ConvertPolymakeIntVectorToGAPPlusOne" Arg="list"/>
      <Description>
       As the corresponding "Matrix" version. Just for vectors.
+      <K>ConvertPolymakeIntVectorToGAPPlusOne</K> requires the vector to
+      contain integers. It also adds 1 to every entry.
      </Description>
   </ManSection>
 
@@ -189,7 +232,7 @@ The conversion process is done by the following methods:
    <Meth Name="ConvertPolymakeBoolToGAP" Arg="list"/>
      <Description>
       If <A>list</A> contains a single string, which is either
-      <M>0</M> or <M>1</M>, this function returns <K>false</K> or
+      0,false,1, or true this function returns <K>false</K> or
       <K>true</K>, respectively.
      </Description>
   </ManSection>
@@ -199,10 +242,23 @@ The conversion process is done by the following methods:
    <Meth Name="ConvertPolymakeSetToGAP" Arg="list"/>
      <Description>
 
-      Let <A>list</A> be a list containing single string, which is a
+      Let <A>list</A> be a list containing a single string, which is a
       list of numbers separated by whitespaces and enclosed by
       &obrace; and &cbrace; . The returned value is then a set of
       rational numbers (in the GAP sense).
+
+    </Description> 
+  </ManSection>
+
+  <ManSection>
+   <Meth Name="ConvertPolymakeListOfSetsToGAP" Arg="list"/>
+   <Meth Name="ConvertPolymakeListOfSetsToGAPPlusOne" Arg="list"/>
+     <Description>
+
+      Let <A>list</A> be a list containing several strings representing sets.
+      Then each of these strings is converted to a set of rational numbers and
+      the returned value is the list of all those sets.
+      The "PlusOne" version adds 1 to every entry.
 
     </Description> 
   </ManSection>
@@ -221,43 +277,59 @@ The conversion process is done by the following methods:
   <ManSection>
    <Meth Name="ConvertPolymakeHasseDiagramToGAP" Arg="list"/>
      <Returns>
-      List of sets of triples (of sets). The returned list is completely immutable.
+      <K>Record</K> with entries <C>.hasse</C> and <C>.faceindices</C>
      </Returns>
      <Description>
-      If <A>list</A> is a list of strings as output by polymake's
-      <C>HASSE&uscore;DIAGRAM</C> algorithm, then this function
-      returns a list of sets.<P/>
+      Takes a list <A>list</A> of strings (the <C>HASSE_DIAGRAM</C> returned by
+      polymake and split with <Ref
+      Meth="SplitPolymakeOutputStringIntoBlocks"/>) and returns a record 
+      containing a list of pairs <C>.hasse</C> and a list of lists of integers
+      <C>.faceindices</C>. Every pair in <C>.hasse</C> is of the form
+      <C>[[vertlist],[upfaces]]</C> where vertlist is a list of vertices (given
+      as integers)  and <C>[upfaces]</C> is a list of integers encoding the
+      faces in the next (higher) dimension as positions in the list
+      <C>.hasse</C>. If polymake returns special faces representing the full
+      object or the empty face, they are also included in <C>.hasse</C>.
+      <Br/>
+      
+      <C>.faceindices</C> is a list of lists of integers corresponding to the
+      indices of faces in each dimension in <C>.hasse</C>(possibly including
+      the extra faces). 
 
-      The <M>i</M>th entry represents the faces of dimension <M>i</M>.  There
-      is one entry for each dimension between <M>0</M> and the dimension of the
-      polyhedron. Note that the last entry consists of a list with exactly one
-      entry representing the whole polyhedron. 
-      <P/>
-
-      Every face is a list with three
-      entries <C>[vertices,invboundary,boundary]</C>
-      where <C>vertices</C> is a list of integers representing the
-      vertices of the face (and the number of such a vertex is that of
-      the vertex as a vertex of the full polyhedron).  The second
-      entry is a list of integers representing the positions of
-      the <M>i+1</M> faces containing the current face (in the
-      <M>i+1</M>st entry of the Hasse diagram). And the last entry is the list of <M>i-1</M>
-      faces containing the current face (numbered by position
-      in the <M>i-1</M>st entry in the Hasse diagram).
-
-      The faces with empty third entry are exactly the vertices while
-      the face with empty second entry is the face corresponding to
-      the whole poyhedron.  <P/>
-          
-      The way polymake returns Hasse diagrams and vertices makes sure
-      that the numbering of vertices is the same for the output of
-      <K>HASSE&uscore;DIAGRAM</K> and <K>VERTICES</K> (i.e. the <M>i</M>th
-      vertex of the vertex list is at position <M>i</M>
-      in the first entry of the Hasse diagram).
-      <P/>
-
-    </Description> 
- </ManSection>
+      <Br/>
+      Note that the order in which the faces are listed in <C>.hasse</C> is the
+      order they are output from polymake. In particular, the list might start
+      with vertices for one object and with facets for another.
+      </Description>
+   </ManSection>
+    
+<Example>
+<![CDATA[
+gap> square:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"2cube.poly");
+<polymake object. No properties known>
+gap> # "VERTICES" is converted using ConvertPolymakeMatrixToGAPKillOnes
+gap> Polymake(square,"VERTICES");
+[ [ -1, -1 ], [ 1, -1 ], [ -1, 1 ], [ 1, 1 ] ]
+gap> Polymake(square,"HASSE_DIAGRAM");
+rec(
+  hasse := [ [ [  ], [ 2, 3, 4, 5 ] ], [ [ 1 ], [ 6, 8 ] ], [ [ 2 ], [ 7, 8 ] ],
+      [ [ 3 ], [ 6, 9 ] ], [ [ 4 ], [ 7, 9 ] ], [ [ 1, 3 ], [ 10 ] ],
+      [ [ 2, 4 ], [ 10 ] ], [ [ 1, 2 ], [ 10 ] ], [ [ 3, 4 ], [ 10 ] ],
+      [ [ 1, 2, 3, 4 ], [  ] ] ],
+  faceindices := [ [ 1 ], [ 2, 3, 4, 5 ], [ 6, 7, 8, 9 ], [ 10 ] ] )
+gap> simp:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"tmp.top");
+<polymake object. No properties known>
+gap> Polymake(simp,"FACETS"); ## a very small simplicial complex
+[ [ 2, 4 ], [ 1, 2, 3 ] ]
+gap> Polymake(simp,"HASSE_DIAGRAM");
+rec( hasse := [ [ [  ], [  ] ], [ [ 1, 2, 3 ], [ 1 ] ], [ [ 2, 4 ], [ 1 ] ],
+      [ [ 1, 2 ], [ 2 ] ], [ [ 1, 3 ], [ 2 ] ], [ [ 2, 3 ], [ 2 ] ],
+      [ [ 2 ], [ 3, 4, 6 ] ], [ [ 4 ], [ 3 ] ], [ [ 1 ], [ 4, 5 ] ],
+      [ [ 3 ], [ 5, 6 ] ], [ [  ], [ 7, 8, 9, 10 ] ] ],
+  faceindices := [ [ 1 ], [ 2 ], [ 3, 4, 5, 6 ], [ 7, 8, 9, 10 ], [ 11 ] ] )
+gap> ## ... and this one starts with facets
+]]>
+</Example>
 
  </Section>
 
