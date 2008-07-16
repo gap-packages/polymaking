@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: construct.gd, v 0.7.3 2008/05/12 14:57:12 gap Exp $
+#H @(#)$Id: construct.gd, v 0.7.4 2008/07/16 16:11:50 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/construct_gd"):=
-	"@(#)$Id: construct.gd, v 0.7.3 2008/05/12   14:57:12  gap Exp $";
+	"@(#)$Id: construct.gd, v 0.7.4 2008/07/16   16:11:50  gap Exp $";
 DeclareOperation("CreateEmptyFile",[IsString]);
 
 DeclareOperation("CreatePolymakeObjectFromFile",[IsString]);

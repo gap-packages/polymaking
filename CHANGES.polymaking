@@ -1,3 +1,8 @@
+0.7.4:
+- fixed the "warning on startup" bug
+- test file written
+------------------
+
 0.7.3:
 - fixed an embarrassing bug. Now HASSE_DIAGRAM really does what it should.
 

@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: clients.gd, v 0.7.3 2008/05/12 14:57:12 gap Exp $
+#H @(#)$Id: clients.gd, v 0.7.4 2008/07/16 16:11:50 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,12 +24,10 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/clients_gd"):=
-	"@(#)$Id: clients.gd, v 0.7.3 2008/05/12   14:57:12  gap Exp $";
+	"@(#)$Id: clients.gd, v 0.7.4 2008/07/16   16:11:50  gap Exp $";
 #############################################################################
 ##
 ## PolymakeClient(client [,outfile] [,infiles] [,options])
-##
-##  three optional arguments. That's 8 methods plus a non-checking one.
 ##
 
 DeclareOperation("PolymakeClient",[IsString]);
@@ -39,10 +37,6 @@ DeclareOperation("PolymakeClient",[IsString,IsPolymakeObject]);
 DeclareOperation("PolymakeClient",[IsString,IsDenseList]);
 
 DeclareOperation("PolymakeClient",[IsString,IsPolymakeObject,IsDenseList]);
-
-DeclareOperation("PolymakeClient",[IsString,IsString]);
-
-DeclareOperation("PolymakeClient",[IsString,IsPolymakeObject,IsString]);
 
 DeclareOperation("PolymakeClient",[IsString,IsDenseList, IsString]);
 
