@@ -29,8 +29,6 @@ Revision.("/home/roeder/gap/polymaking/polymaking/lib/clients_gd"):=
 ##
 ## PolymakeClient(client [,outfile] [,infiles] [,options])
 ##
-##  three optional arguments. That's 8 methods plus a non-checking one.
-##
 
 DeclareOperation("PolymakeClient",[IsString]);
 
@@ -39,10 +37,6 @@ DeclareOperation("PolymakeClient",[IsString,IsPolymakeObject]);
 DeclareOperation("PolymakeClient",[IsString,IsDenseList]);
 
 DeclareOperation("PolymakeClient",[IsString,IsPolymakeObject,IsDenseList]);
-
-DeclareOperation("PolymakeClient",[IsString,IsString]);
-
-DeclareOperation("PolymakeClient",[IsString,IsPolymakeObject,IsString]);
 
 DeclareOperation("PolymakeClient",[IsString,IsDenseList, IsString]);
 

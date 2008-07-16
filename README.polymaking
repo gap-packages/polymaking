@@ -52,6 +52,7 @@ The GAPDoc package is needed to display the documentation.
 
 4. Type "LoadPackage("polymaking");" to load  polymaking package
 
+5. Run "Read("wherepolymakinglives/tst/test.gap");"
 
 
 			IMPORTANT NOTE!
