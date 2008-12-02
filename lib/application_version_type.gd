@@ -1,11 +1,11 @@
 #############################################################################
 ##
-#W environment.gd 			 polymaking Package		 Marc Roeder
+#W application_version_type.gd 			 polymaking Package		 Marc Roeder
 ##
 ##  
 
 ##
-#H @(#)$Id: environment.gd, v 0.7.6 2008/12/02 18:30:59 gap Exp $
+#H @(#)$Id: application_version_type.gd, v 0.7.6 2008/12/02 18:30:59 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,21 +23,6 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/home/roeder/gap/polymaking/polymaking/lib/environment_gd"):=
-	"@(#)$Id: environment.gd, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
-DeclareInfoClass("InfoPolymaking");
-
-DeclareOperation("SetPolymakeDataDirectory",[IsDirectory]);
-DeclareOperation("SetPolymakeCommand",[IsString]);
-
-DeclareOperation("SetPolymakeClientPaths",[IsDenseList]);
-        
-        
-##
-## keep track of the last thing tha caused Polymake to return fail:
-##
-DeclareGlobalVariable("POLYMAKE_LAST_FAIL_REASON");
-DeclareOperation("UpdatePolymakeFailReason",[IsString]);
-
-
-
+Revision.("/home/roeder/gap/polymaking/polymaking/lib/application_version_type_gd"):=
+	"@(#)$Id: application_version_type.gd, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
+DeclareOperation("CheckAppVerTypList",[IsDenseList]);

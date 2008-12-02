@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: construct.gi, v 0.7.5 2008/08/13 12:12:13 gap Exp $
+#H @(#)$Id: construct.gi, v 0.7.6 2008/12/02 18:30:59 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/construct_gi"):=
-	"@(#)$Id: construct.gi, v 0.7.5 2008/08/13   12:12:13  gap Exp $";
+	"@(#)$Id: construct.gi, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
 # just create an empty file:
 InstallMethod(CreateEmptyFile,[IsString],
         function(name)
@@ -75,6 +75,17 @@ InstallMethod(CreatePolymakeObject,[IsString,IsDirectory],
 end);
 
 
+
+InstallMethod(CreatePolymakeObject,[IsString,IsDirectory,IsDenseList],
+        function(prefix,dir,appvertyp)
+    local   poly;
+    poly:=CreatePolymakeObject(prefix,dir);
+    ClearPolymakeObject(poly,appvertyp);
+    return poly;
+end);
+       
+        
+        
 InstallMethod(CreatePolymakeObject,[IsDirectory],
         function(dir)
     local   name,  i,  newname;
@@ -82,10 +93,30 @@ InstallMethod(CreatePolymakeObject,[IsDirectory],
 end);
 
 
+
+InstallMethod(CreatePolymakeObject,[IsDirectory,IsDenseList],
+        function(dir,appvertyp)
+    local   poly;
+    poly:=CreatePolymakeObject(dir);
+    ClearPolymakeObject(poly,appvertyp);
+    return poly;
+end);
+
+
+
 InstallMethod(CreatePolymakeObject,[],
         function()
     local   dir,  name;
     return CreatePolymakeObject(POLYMAKE_DATA_DIR);
+end);
+
+
+InstallMethod(CreatePolymakeObject,[IsDenseList],
+        function(appvertyp)
+    local poly;
+    poly:=CreatePolymakeObject();
+    ClearPolymakeObject(poly,appvertyp);
+    return poly;
 end);
 
 

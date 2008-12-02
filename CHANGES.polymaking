@@ -1,3 +1,11 @@
+0.7.6:
+- bug fixed in SetPolymakeClientPaths
+- ClearPolymakeObject and CreatePolymakeObject can now be called with 
+   application and version information which will then be written to the 
+   new file. 
+- Package moved from Galway to Kaiserslautern
+------------------
+
 0.7.5:
 - changes in README.polymaking (thanks to Andreas Distler)
 - changed subtitle to something more descriptive
