@@ -75,6 +75,17 @@ InstallMethod(CreatePolymakeObject,[IsString,IsDirectory],
 end);
 
 
+
+InstallMethod(CreatePolymakeObject,[IsString,IsDirectory,IsDenseList],
+        function(prefix,dir,appvertyp)
+    local   poly;
+    poly:=CreatePolymakeObject(prefix,dir);
+    ClearPolymakeObject(poly,appvertyp);
+    return poly;
+end);
+       
+        
+        
 InstallMethod(CreatePolymakeObject,[IsDirectory],
         function(dir)
     local   name,  i,  newname;
@@ -82,10 +93,30 @@ InstallMethod(CreatePolymakeObject,[IsDirectory],
 end);
 
 
+
+InstallMethod(CreatePolymakeObject,[IsDirectory,IsDenseList],
+        function(dir,appvertyp)
+    local   poly;
+    poly:=CreatePolymakeObject(dir);
+    ClearPolymakeObject(poly,appvertyp);
+    return poly;
+end);
+
+
+
 InstallMethod(CreatePolymakeObject,[],
         function()
     local   dir,  name;
     return CreatePolymakeObject(POLYMAKE_DATA_DIR);
+end);
+
+
+InstallMethod(CreatePolymakeObject,[IsDenseList],
+        function(appvertyp)
+    local poly;
+    poly:=CreatePolymakeObject();
+    ClearPolymakeObject(poly,appvertyp);
+    return poly;
 end);
 
 

@@ -29,9 +29,14 @@ DeclareOperation("CreateEmptyFile",[IsString]);
 
 DeclareOperation("CreatePolymakeObjectFromFile",[IsString]);
 DeclareOperation("CreatePolymakeObjectFromFile",[IsDirectory,IsString]);
+
 DeclareOperation("CreatePolymakeObject",[]);
+DeclareOperation("CreatePolymakeObject",[IsDenseList]);
 DeclareOperation("CreatePolymakeObject",[IsDirectory]);
+DeclareOperation("CreatePolymakeObject",[IsDirectory,IsDenseList]);
 DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory]);
+DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory,IsDenseList]);
+
 DeclareOperation("ConvertMatrixToPolymakeString",[IsString,IsDenseList]);
 
 DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString]);

@@ -49,6 +49,7 @@ DeclareOperation("PropertyOfPolymakeObject",[IsPolymakeObject,IsString]);
 ###############################
 
 DeclareOperation("ClearPolymakeObject",[IsPolymakeObject]);
+DeclareOperation("ClearPolymakeObject",[IsPolymakeObject,IsDenseList]);
 
 DeclareOperation("UnbindKnownPropertyOfPolymakeObject",[IsPolymakeObject,IsString]);
 DeclareOperation("WriteKnownPropertyToPolymakeObject",[IsPolymakeObject,IsString,IsObject]);

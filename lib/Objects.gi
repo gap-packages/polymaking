@@ -172,6 +172,25 @@ InstallMethod(ClearPolymakeObject,
     Unbind(poly!.knownProperties);
 end);
 
+# clear known data. Clear file and then set application, version,type 
+# information
+InstallMethod(ClearPolymakeObject,
+        [IsPolymakeObject,IsDenseList],
+        function(poly,appvertyp)
+    local   appendstring;
+    if not CheckAppVerTypList(appvertyp)
+       then
+        Error("application, version, type not well-formed");
+    fi;
+    CreateEmptyFile(FullFilenameOfPolymakeObject(poly));
+    Unbind(poly!.knownProperties);
+    appendstring:=Concatenation(["_application ",appvertyp[1],"\n",
+                          "_version ",appvertyp[2],"\n",
+                          "_type ",appvertyp[3],"\n"]
+                          );
+    AppendToPolymakeObject(poly,appendstring);
+end);
+
 # Deleting a something known:
 #
 InstallMethod(UnbindKnownPropertyOfPolymakeObject,

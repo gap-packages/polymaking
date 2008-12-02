@@ -71,7 +71,7 @@ InstallMethod(SetPolymakeClientPaths,[IsDenseList],
        then
         Error("<dirs> must be a list of directories");
     fi;
-    MakeReadWriteGlobal(POLYMAKE_CLIENT_PATHS);
+    MakeReadWriteGlobal("POLYMAKE_CLIENT_PATHS");
     POLYMAKE_CLIENT_PATHS:=dirs;
     MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
 end);

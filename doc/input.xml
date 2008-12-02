@@ -20,8 +20,11 @@
 
    <ManSection>
     <Meth Name="CreatePolymakeObject" Arg=""/> 
+    <Meth Name="CreatePolymakeObject" Arg="appvertyp"/> 
     <Meth Name="CreatePolymakeObject" Arg="dir"/> 
+    <Meth Name="CreatePolymakeObject" Arg="dir appvertyp"/> 
     <Meth Name="CreatePolymakeObject" Arg="prefix, dir"/> 
+    <Meth Name="CreatePolymakeObject" Arg="prefix dir appvertyp"/> 
     <Returns><K>PolymakeObject</K></Returns>
       <Description>
 
@@ -34,10 +37,31 @@
       the current runtime. If a file of this name already exists, a
       number is appended separated by a dot (example: "poly1340" and
       "poly1340.1"). If <A>prefix</A> is given, the filename starts
-      with that prefix. 
+      with this prefix. 
 
+      Optionally, the file can be generated with a header specifying
+      application, version and type of the object. This is done by passing the
+      triple of strings <A>appvertyp</A> to 
+      <Ref Meth="CreatePolymakeObject"/>. A valid triple is 
+      <C>["polytope","2.3","RationalPolytope"]</C>. Validity is checked by 
+      <Ref Meth="CheckAppVerTypList"/>.
     </Description>
    </ManSection>
+
+
+   <ManSection>
+    <Meth Name="CheckAppVerTypList" Arg="appvertyp"/>
+    <Returns><K>bool</K></Returns>
+    <Description>
+      Checks if the triple <A>arppvertyp</A> of strings specifies an
+      application and type of polymake version 2.3. More specifically, the
+      first entry has to be an application from 
+      <C>["polytope","surface","topaz"]</C> and the third entry has to be a
+      type corresponding to the application given in the first entry. The
+      second entry is not checked.<Br/>
+    </Description>
+   </ManSection>
+
 
    <ManSection>
     <Meth Name="CreatePolymakeObjectFromFile" Arg="filename"/>
@@ -255,10 +279,16 @@ rec(
 
    <ManSection>
     <Meth Name="ClearPolymakeObject" Arg="poly"/>
+    <Meth Name="ClearPolymakeObject" Arg="poly appvertyp"/>
     <Returns>nothing</Returns>
     <Description>
      Deletes all known properties of the <K>PolymakeObject</K>
      <A>poly</A> and replaces its file with an empty one.
+     <Br/>
+     If the triple of strings <A>appvertyp</A> specifying application, version
+     and type (see <Ref Meth="CheckAppVerTypList"/>) is given, the file is
+     replaced with a file that contains only a header specifying application,
+     version and type of the polymake object.
     </Description>
    </ManSection>
 

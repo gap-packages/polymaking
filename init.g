@@ -4,3 +4,4 @@ ReadPackage( "polymaking", "lib/construct.gd");
 ReadPackage( "polymaking", "lib/convert.gd");
 ReadPackage("polymaking","lib/clients.gd");
 ReadPackage("polymaking","lib/ObjectConverters.gd");
+ReadPackage("polymaking","lib/application_version_type.gd");
