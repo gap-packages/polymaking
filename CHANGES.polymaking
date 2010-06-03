@@ -1,3 +1,12 @@
+0.7.8:
+
+------------------
+
+0.7.7:
+- package homepage changed
+
+------------------
+
 0.7.6:
 - bug fixed in SetPolymakeClientPaths
 - ClearPolymakeObject and CreatePolymakeObject can now be called with 
