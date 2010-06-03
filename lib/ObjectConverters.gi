@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: ObjectConverters.gi, v 0.7.6 2008/12/02 18:30:59 gap Exp $
+#H @(#)$Id: ObjectConverters.gi, v 0.7.8 2010/06/03 21:29:50 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,8 +23,8 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/home/roeder/gap/polymaking/polymaking/lib/ObjectConverters_gi"):=
-	"@(#)$Id: ObjectConverters.gi, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
+Revision.("/Users/roeder/gap/polymaking/polymaking/lib/ObjectConverters_gi"):=
+	"@(#)$Id: ObjectConverters.gi, v 0.7.8 2010/06/03   21:29:50  gap Exp $";
 InstallValue(ObjectConverters,
         rec(
             ALTSHULER_DET:=ConvertPolymakeScalarToGAP,
