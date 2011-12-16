@@ -3,7 +3,7 @@
                      [1XAn Interface for using [5Xpolymake[0X in [5XGAP[0X[0X
   
   
-                               ( Version 0.7.4 )
+                               ( Version 0.7.5 )
   
   
                                   Marc Roeder

@@ -10,15 +10,15 @@ PackageName := "polymaking",
 
 ##  This may be used by a default banner or on a Web page, should fit on
 ##  one line.
-Subtitle := "Using polymak(e)inG(AP)",
+Subtitle := "Interfacing the geometry software polymake",
 
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "0.7.4",
-Date := "16/07/2008",
+Version := "0.7.5",
+Date := "13/08/2008",
 
-ArchiveURL := "http://www.maths.nuigalway.ie/~roeder/CHA/polymaking/downloads/polymaking0_7_4",
+ArchiveURL := "http://www.maths.nuigalway.ie/~roeder/CHA/polymaking/downloads/polymaking0_7_5",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.

@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: convert.gd, v 0.7.4 2008/07/16 16:11:50 gap Exp $
+#H @(#)$Id: convert.gd, v 0.7.5 2008/08/13 12:12:13 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/convert_gd"):=
-	"@(#)$Id: convert.gd, v 0.7.4 2008/07/16   16:11:50  gap Exp $";
+	"@(#)$Id: convert.gd, v 0.7.5 2008/08/13   12:12:13  gap Exp $";
 DeclareOperation("ConvertPolymakeOutputToGapNotation",[IsString]);
 DeclareOperation("SplitPolymakeOutputStringIntoBlocks",[IsString]);
 DeclareOperation("ConvertedObject",[IsString,IsDenseList]);
