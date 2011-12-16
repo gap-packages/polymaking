@@ -15,10 +15,10 @@ Subtitle := "Using polymak(e)inG(AP)",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "0.7.3",
-Date := "12/05/2008",
+Version := "0.7.4",
+Date := "16/07/2008",
 
-ArchiveURL := "http://www.maths.nuigalway.ie/~roeder/CHA/polymaking/downloads/polymaking0_7_3",
+ArchiveURL := "http://www.maths.nuigalway.ie/~roeder/CHA/polymaking/downloads/polymaking0_7_4",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -268,7 +268,7 @@ Autoload := false,
 
 ##  *Optional*, but recommended: path relative to package root to a file which 
 ##  contains as many tests of the package functionality as sensible.
-#TestFile := "tst/testall.g",
+TestFile := "tst/testall.g",
 
 ##  *Optional*: Here you can list some keyword related to the topic 
 ##  of the package.

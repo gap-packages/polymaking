@@ -4,7 +4,6 @@ polymaking/README.polymaking
 polymaking/PackageInfo.g
 polymaking/LICENSE.txt
 polymaking/CHANGES.polymaking
-polymaking/doc/polymake.xml
 polymaking/doc/tmp.txt
 polymaking/doc/input.xml
 polymaking/doc/chap0.html
@@ -23,12 +22,14 @@ polymaking/doc/output.xml
 polymaking/doc/chap2.txt
 polymaking/doc/internals.xml
 polymaking/doc/chapInd.txt
-polymaking/doc/polymake.bib
 polymaking/doc/manual.css
 polymaking/doc/polymaking.bib
 polymaking/doc/polymaking.xml
 polymaking/doc/chap3.txt
 polymaking/doc/chap1.html
+polymaking/tst/test.gap
+polymaking/tst/testall.g
+polymaking/tst/polymaking.tst
 polymaking/lib/hasse_diagram_old.gi
 polymaking/lib/convert.gi
 polymaking/lib/ObjectConverters.gd
