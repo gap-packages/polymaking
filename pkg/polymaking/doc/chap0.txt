@@ -1,9 +1,9 @@
   
   
-                     [1XAn Interface for using [5Xpolymake[0X in [5XGAP[0X[0X
+                     [1XAn Interface for using [5Xpolymake[0m[1X in [5XGAP[0m[1X[0m
   
   
-                               ( Version 0.7.6 )
+                               ( Version 0.7.8 )
   
   
                                   Marc Roeder
@@ -11,46 +11,46 @@
   
   
   Marc Roeder
-      Email:    [7Xmailto:marc_roeder(at)web.de[0X
+      Email:    [7Xmailto:marc_roeder(at)web.de[0m
   
   
   Address: Marc Roeder, Department of Mathematics, NUI Galway, Irleland
   
   
   -------------------------------------------------------
-  [1XAbstract[0X
+  [1XAbstract[0m
   This  package  provides  a  very  basic interface to the polymake program by
   Ewgenij Gawrilow, Michael Joswig et al. [GJ]. The polymake program itself is
   not included.
   
   
   -------------------------------------------------------
-  [1XCopyright[0X
+  [1XCopyright[0m
   © 2007 Marc Roeder.
   
   This  package  is  distributed  under  the  terms  of the GNU General Public
   License version 2 or later (at your convenience). See the file "LICENSE.txt"
-  or [7Xhttp://www.gnu.org/copyleft/gpl.html[0X
+  or [7Xhttp://www.gnu.org/copyleft/gpl.html[0m
   
   
   -------------------------------------------------------
-  [1XAcknowledgements[0X
+  [1XAcknowledgements[0m
   This work has been supported by Marie Curie Grant No. MTKD-CT-2006-042685
   
   
   -------------------------------------------------------
   
   
-  [1XContent (polymaking)[0X
+  [1XContents (polymaking)[0X
   
-  1. Installation and Preface
+  1 Installation and Preface
     1.1 A few words about the installation of polymake
     1.2 Setting variables for external programs
       1.2-1 SetPolymakeDataDirectory
       1.2-2 SetPolymakeCommand
       1.2-3 SetPolymakeClientPaths
       1.2-4 Setting variables permanently
-  2. Polymake interaction
+  2 Polymake interaction
     2.1 Creating Polymake Objects
       2.1-1 CreateEmptyFile
       2.1-2 CreatePolymakeObject
@@ -78,7 +78,7 @@
     2.6 An Example
     2.7 Calling Clients
       2.7-1 PolymakeClient
-  3. Global Variables
+  3 Global Variables
     3.1 Getting information about polymake output
       3.1-1 InfoPolymaking
       3.1-2 POLYMAKE_LAST_FAIL_REASON
@@ -86,7 +86,7 @@
       3.2-1 POLYMAKE_COMMAND
       3.2-2 POLYMAKE_DATA_DIR
       3.2-3 POLYMAKE_CLIENT_PATHS
-  4. Converting Polymake Output
+  4 Converting Polymake Output
     4.1 The General Method
       4.1-1 Converter- Philosopy
       4.1-2 ConvertPolymakeOutputToGapNotation

@@ -1,10 +1,10 @@
   
-  [1X3. Global Variables[0X
+  [1X3 Global Variables[0X
   
   
   [1X3.1 Getting information about polymake output[0X
   
-  [1X3.1-1 InfoPolymaking[0X
+  [1X3.1-1 InfoPolymaking[0m
   
   [2X> InfoPolymaking__________________________________________________[0Xinfo class
   
@@ -12,41 +12,41 @@
   are shown. This is the default. And at level 0, the polymake package remains
   silent.
   
-  [1X3.1-2 POLYMAKE_LAST_FAIL_REASON[0X
+  [1X3.1-2 POLYMAKE_LAST_FAIL_REASON[0m
   
   [2X> POLYMAKE_LAST_FAIL_REASON__________________________________[0Xglobal variable
   
-  Contains a string that explains the last occurence of [9Xfail[0X as a return value
-  of [2XPolymake[0X ([14X2.5-1[0X).
+  Contains a string that explains the last occurence of [9Xfail[0m as a return value
+  of [2XPolymake[0m ([14X2.5-1[0m).
   
   
   [1X3.2 Variables for system interaction[0X
   
   The  variables  for  interaction  with  the system are contained in the file
-  [11Xenvironment.gi[0X.  Each  of these variables has a function to set it, see [14X1.2[0X.
-  If  [9XPOLYMAKE_COMMAND[0X  or  [9XPOLYMAKE_DATA_DIR[0X are set at startup, they are not
+  [11Xenvironment.gi[0m.  Each  of these variables has a function to set it, see [14X1.2[0m.
+  If  [9XPOLYMAKE_COMMAND[0m  or  [9XPOLYMAKE_DATA_DIR[0m are set at startup, they are not
   overwritten.  So  if  you  don't  want  (or don't have the rights) to modify
-  [11Xenvironment.gi[0X, you can set the variables in your [11X.gaprc[0X file.
+  [11Xenvironment.gi[0m, you can set the variables in your [11X.gaprc[0m file.
   
-  [1X3.2-1 POLYMAKE_COMMAND[0X
+  [1X3.2-1 POLYMAKE_COMMAND[0m
   
   [2X> POLYMAKE_COMMAND___________________________________________[0Xglobal variable
   
   This variable should contain the name of the polymake program in the form as
-  returned      by      [10XFilename[0X      So      a      probable     value     is
-  [10XFilename(Directory("/usr/local/bin"),"polymake")[0X.
+  returned      by      [10XFilename[0m      So      a      probable     value     is
+  [10XFilename(Directory("/usr/local/bin"),"polymake")[0m.
   
-  [1X3.2-2 POLYMAKE_DATA_DIR[0X
+  [1X3.2-2 POLYMAKE_DATA_DIR[0m
   
   [2X> POLYMAKE_DATA_DIR__________________________________________[0Xglobal variable
   
   In  this  directory the files for polymake will be created. By default, this
-  generates a temporary directory using [9XDirectoryTemporary[0X
+  generates a temporary directory using [9XDirectoryTemporary[0m
   
-  [1X3.2-3 POLYMAKE_CLIENT_PATHS[0X
+  [1X3.2-3 POLYMAKE_CLIENT_PATHS[0m
   
   [2X> POLYMAKE_CLIENT_PATHS______________________________________[0Xglobal variable
   
   A  list  of  directories  where  polymake's the stand-alone clients live. By
-  default, [9XDirectoriesSystemPrograms[0X is used.
+  default, [9XDirectoriesSystemPrograms[0m is used.
   

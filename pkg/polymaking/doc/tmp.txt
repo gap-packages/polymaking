@@ -1,1 +1,1 @@
-<!-- $Id: polymaking.xml, v 0.7.6 2008/12/02  18:30:59  gap Exp $-->\n
+<!-- $Id: polymaking.xml, v 0.7.8 2010/06/03  21:29:50  gap Exp $-->\n

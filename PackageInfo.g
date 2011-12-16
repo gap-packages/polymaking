@@ -15,10 +15,10 @@ Subtitle := "Interfacing the geometry software polymake",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "0.7.6",
-Date := "02/12/2008",
+Version := "0.7.8",
+Date := "03/06/2010",
 
-ArchiveURL := "http://www.mathematik.uni-kl.de/~roeder/polymaking/polymaking0_7_6",
+ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_7_8",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -98,7 +98,7 @@ Persons := [
     IsAuthor      := true,
     IsMaintainer  := true,
     Email         := "marc_roeder@web.de",
-    WWWHome       := "http://www.mathematik.uni-kl.de/~roeder/",
+    WWWHome       := "http://csserver.evansville.edu/~mroeder",
 #    PostalAddress := Concatenation( [
 #                     "Department of Mathematics\n",
 #                     "NUI Galway\n",
@@ -139,8 +139,8 @@ Status := "deposited",
 ##  the updating of package information on the GAP Website, and inclusion
 ##  and updating of the package in the GAP distribution.
 #
-           README_URL := "http://www.mathematik.uni-kl.de/~roeder/polymaking/README.polymaking",
-           PackageInfoURL := "http://www.mathematik.uni-kl.de/~roeder/polymaking/PackageInfo.g",
+           README_URL := "http://csserver.evansville.edu/~mroeder/polymaking/README.polymaking",
+           PackageInfoURL := "http://csserver.evansville.edu/~mroeder/polymaking/PackageInfo.g",
 
 ##  Here you  must provide a short abstract explaining the package content 
 ##  in HTML format (used on the package overview Web page) and an URL 
@@ -151,7 +151,7 @@ Status := "deposited",
 ##  
 AbstractHTML := "This package provides a very basic interface to the polymake program by Ewgenij Gawrilow, Michael Joswig et al.",
 
-PackageWWWHome := "http://www.mathematik.uni-kl.de/~roeder/polymaking.html",
+PackageWWWHome := "http://csserver.evansville.edu/~mroeder/polymaking.html",
                
 ##  Here is the information on the help books of the package, used for
 ##  loading into GAP's online help and maybe for an online copy of the 

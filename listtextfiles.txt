@@ -27,6 +27,7 @@ polymaking/doc/polymaking.bib
 polymaking/doc/polymaking.xml
 polymaking/doc/chap3.txt
 polymaking/doc/chap1.html
+polymaking/tst/test.gap
 polymaking/tst/testall.g
 polymaking/tst/polymaking.tst
 polymaking/lib/hasse_diagram_old.gi

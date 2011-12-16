@@ -1,5 +1,5 @@
   
-  [1X4. Converting Polymake Output[0X
+  [1X4 Converting Polymake Output[0X
   
   
   [1X4.1 The General Method[0X
@@ -15,172 +15,172 @@
         block  starts  with  a  line containing the keyword and continues with
         some lines of data.
   
-  (3)   for  each  of the blocks, the appropriate function of [10XObjectConverters[0X
+  (3)   for  each  of the blocks, the appropriate function of [10XObjectConverters[0m
         is  called.  Here  "appropriate"  just  means, that the keyword of the
         block coincides with the name of the function.
   
   (4)   The  output  of  the  conversion  function  is then added to the known
-        properties of the [10XPolymakeObject[0X for which [10XPolymake[0X was called.
+        properties of the [10XPolymakeObject[0m for which [10XPolymake[0m was called.
   
   
   [1X4.1-1 Converter- Philosopy[0X
   
   The converter functions should take meaningful polymake data into meaningful
-  [5XGAP[0X  data.  This  sometimes  means that the (mathematical) representation is
+  [5XGAP[0m  data.  This  sometimes  means that the (mathematical) representation is
   changed.  Here  is  an  example: polymake writes vectors as augmented affine
-  vectors of the form [10X1 a1 a2 a3...[0X which does not go very well with the usual
-  [5XGAP[0X  conventions  of column vectors and multiplying matrices from the right.
-  So  [5Xpolymaking[0X converts such a vector to [10X[a1,a2,a3,...][0X and the user is left
+  vectors of the form [10X1 a1 a2 a3...[0m which does not go very well with the usual
+  [5XGAP[0m  conventions  of column vectors and multiplying matrices from the right.
+  So  [5Xpolymaking[0m converts such a vector to [10X[a1,a2,a3,...][0m and the user is left
   with the problem of augmentation and left or right multiplication.
   
-  Another  area  where  the  [5XGAP[0X  object  isn't a literal translation from the
+  Another  area  where  the  [5XGAP[0m  object  isn't a literal translation from the
   polymake  world  is combinatorics. In Polymake, list elements are enumerated
-  starting  from  0.  [5XGAP[0X  enumerates  lists  starting at 1. So the conversion
+  starting  from  0.  [5XGAP[0m  enumerates  lists  starting at 1. So the conversion
   process  adds 1 to the numbers corresponding to vertices in facet lists, for
   example.
   
-  [13XCall  for  help:[0X  As  of version 0.7.0, most of the converters were assigned
+  [13XCall  for  help:[0m  As  of version 0.7.0, most of the converters were assigned
   blindly  to keywords. So some of them might not be suitable. If you find one
   of  those,  please  tell  me  about it. Also, for a lot of keywords and data
   types, there is no converter. Please tell me if you want a new converter.
   
   The conversion process is done by the following methods:
   
-  [1X4.1-2 ConvertPolymakeOutputToGapNotation[0X
+  [1X4.1-2 ConvertPolymakeOutputToGapNotation[0m
   
   [2X> ConvertPolymakeOutputToGapNotation( [0X[3Xstring[0X[2X ) _______________________[0Xmethod
   [6XReturns:[0X  Record  having polymake keywords as entry names and the respective
             converted polymake output as entries.
   
-  Given  a  the output of the polymake program as a string [3Xstring[0X, this method
-  first  calls  [2XSplitPolymakeOutputStringIntoBlocks[0X  ([14X4.1-3[0X).  For each of the
+  Given  a  the output of the polymake program as a string [3Xstring[0m, this method
+  first  calls  [2XSplitPolymakeOutputStringIntoBlocks[0m  ([14X4.1-3[0m).  For each of the
   returned  blocks, the name (=first line) of the block is read and the record
-  [2XObjectConverters[0X  ([14X4.1-4[0X)  is looked up for an entry with that name. If such
+  [2XObjectConverters[0m  ([14X4.1-4[0m)  is looked up for an entry with that name. If such
   an  entry exists, it (being a function!) is called and passed the block. The
   returned  value  is then given the name of the block and added to the record
-  returned by [10XConvertPolymakeOutputToGapNotation[0X.
+  returned by [10XConvertPolymakeOutputToGapNotation[0m.
   
-  [1X4.1-3 SplitPolymakeOutputStringIntoBlocks[0X
+  [1X4.1-3 SplitPolymakeOutputStringIntoBlocks[0m
   
   [2X> SplitPolymakeOutputStringIntoBlocks( [0X[3Xstring[0X[2X ) ______________________[0Xmethod
   [6XReturns:[0X  List of strings -- "blocks"--
   
-  The  string [3Xstring[0X is cut at the lines starting with an upper case character
+  The  string [3Xstring[0m is cut at the lines starting with an upper case character
   and  consisting  only  of  upper  case  letters,  numbers and underscore (_)
   characters.  The parts are returned as a list of strings. The initial string
-  [3Xstring[0X remains unchanged.
+  [3Xstring[0m remains unchanged.
   
-  [1X4.1-4 ObjectConverters[0X
+  [1X4.1-4 ObjectConverters[0m
   
   [2X> ObjectConverters___________________________________________[0Xglobal variable
   
   The  entries  of  this  record are labeled by polymake keywords. Each of the
-  entries  is  a  function which converts a string returned by polymake to [5XGAP[0X
+  entries  is  a  function which converts a string returned by polymake to [5XGAP[0m
   format.  So  far,  only  a few converters are implemented. To see which, try
-  [10XRecNames(ObjectConverters);[0X
+  [10XRecNames(ObjectConverters);[0m
   
   You can define new converters using the basic functions described in section
-  [14X4.2[0X.
+  [14X4.2[0m.
   
   
   [1X4.2 Conversion Functions[0X
   
-  The  following  functions  are  used  for  the functions in [2XObjectConverters[0X
-  ([14X4.1-4[0X).
+  The  following  functions  are  used  for  the functions in [2XObjectConverters[0m
+  ([14X4.1-4[0m).
   
-  [1X4.2-1 ConvertPolymakeNumber[0X
+  [1X4.2-1 ConvertPolymakeNumber[0m
   
   [2X> ConvertPolymakeNumber( [0X[3Xstring[0X[2X ) ____________________________________[0Xmethod
   
-  The  string  [3Xstring[0X is converted to a rational number. Unlike [10XRat[0X, it tests,
-  if  the  number represented by [3Xstring[0X is a floating point number an converts
+  The  string  [3Xstring[0m is converted to a rational number. Unlike [10XRat[0m, it tests,
+  if  the  number represented by [3Xstring[0m is a floating point number an converts
   it correctly. If this is the case, a waring is issued.
   
-  [1X4.2-2 ConvertPolymakeScalarToGAP[0X
+  [1X4.2-2 ConvertPolymakeScalarToGAP[0m
   
   [2X> ConvertPolymakeScalarToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
   
-  If  [3Xlist[0X  contains  a  single string, this string is converted into a number
-  using [2XConvertPolymakeNumber[0X ([14X4.2-1[0X).
+  If  [3Xlist[0m  contains  a  single string, this string is converted into a number
+  using [2XConvertPolymakeNumber[0m ([14X4.2-1[0m).
   
-  [1X4.2-3 ConvertPolymakeMatrixOrListOfSetsToGAP[0X
+  [1X4.2-3 ConvertPolymakeMatrixOrListOfSetsToGAP[0m
   
   [2X> ConvertPolymakeMatrixOrListOfSetsToGAP( [0X[3Xlist[0X[2X ) _____________________[0Xmethod
   [2X> ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne( [0X[3Xlist[0X[2X ) ______________[0Xmethod
   
-  Tries to decide if the list [3Xlist[0X of strings represents a matrix or a list of
+  Tries to decide if the list [3Xlist[0m of strings represents a matrix or a list of
   sets   by   testing   if   they   start  with  "{".  It  then  calls  either
-  [2XConvertPolymakeMatrixToGAP[0X    ([14X4.2-4[0X)    or   [2XConvertPolymakeListOfSetsToGAP[0X
-  ([14X4.2-8[0X).  The  "PlusOne" version calls [2XConvertPolymakeListOfSetsToGAPPlusOne[0X
-  ([14X4.2-8[0X) if [3Xlist[0X represents a list of sets.
+  [2XConvertPolymakeMatrixToGAP[0m    ([14X4.2-4[0m)    or   [2XConvertPolymakeListOfSetsToGAP[0m
+  ([14X4.2-8[0m).  The  "PlusOne" version calls [2XConvertPolymakeListOfSetsToGAPPlusOne[0m
+  ([14X4.2-8[0m) if [3Xlist[0m represents a list of sets.
   
-  [1X4.2-4 ConvertPolymakeMatrixToGAP[0X
+  [1X4.2-4 ConvertPolymakeMatrixToGAP[0m
   
   [2X> ConvertPolymakeMatrixToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
   [2X> ConvertPolymakeMatrixToGAPKillOnes( [0X[3Xlist[0X[2X ) _________________________[0Xmethod
   
-  The  list  [3Xlist[0X  of  strings  is  interpreted  as  a list of row vectors and
+  The  list  [3Xlist[0m  of  strings  is  interpreted  as  a list of row vectors and
   converted into a matrix. The "KillOnes" version removes the leading ones.
   
-  [1X4.2-5 ConvertPolymakeVectorToGAP[0X
+  [1X4.2-5 ConvertPolymakeVectorToGAP[0m
   
   [2X> ConvertPolymakeVectorToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
   [2X> ConvertPolymakeVectorToGAPKillOne( [0X[3Xlist[0X[2X ) __________________________[0Xmethod
   [2X> ConvertPolymakeIntVectorToGAPPlusOne( [0X[3Xlist[0X[2X ) _______________________[0Xmethod
   
   As    the    corresponding    "Matrix"    version.    Just    for   vectors.
-  [9XConvertPolymakeIntVectorToGAPPlusOne[0X   requires   the   vector   to  contain
+  [9XConvertPolymakeIntVectorToGAPPlusOne[0m   requires   the   vector   to  contain
   integers. It also adds 1 to every entry.
   
-  [1X4.2-6 ConvertPolymakeBoolToGAP[0X
+  [1X4.2-6 ConvertPolymakeBoolToGAP[0m
   
   [2X> ConvertPolymakeBoolToGAP( [0X[3Xlist[0X[2X ) ___________________________________[0Xmethod
   
-  If  [3Xlist[0X  contains  a single string, which is either 0,false,1, or true this
-  function returns [9Xfalse[0X or [9Xtrue[0X, respectively.
+  If  [3Xlist[0m  contains  a single string, which is either 0,false,1, or true this
+  function returns [9Xfalse[0m or [9Xtrue[0m, respectively.
   
-  [1X4.2-7 ConvertPolymakeSetToGAP[0X
+  [1X4.2-7 ConvertPolymakeSetToGAP[0m
   
   [2X> ConvertPolymakeSetToGAP( [0X[3Xlist[0X[2X ) ____________________________________[0Xmethod
   
-  Let  [3Xlist[0X  be  a list containing a single string, which is a list of numbers
+  Let  [3Xlist[0m  be  a list containing a single string, which is a list of numbers
   separated  by  whitespaces  and  enclosed by { and } . The returned value is
   then a set of rational numbers (in the GAP sense).
   
-  [1X4.2-8 ConvertPolymakeListOfSetsToGAP[0X
+  [1X4.2-8 ConvertPolymakeListOfSetsToGAP[0m
   
   [2X> ConvertPolymakeListOfSetsToGAP( [0X[3Xlist[0X[2X ) _____________________________[0Xmethod
   [2X> ConvertPolymakeListOfSetsToGAPPlusOne( [0X[3Xlist[0X[2X ) ______________________[0Xmethod
   
-  Let  [3Xlist[0X  be a list containing several strings representing sets. Then each
+  Let  [3Xlist[0m  be a list containing several strings representing sets. Then each
   of  these strings is converted to a set of rational numbers and the returned
   value  is  the list of all those sets. The "PlusOne" version adds 1 to every
   entry.
   
-  [1X4.2-9 ConvertPolymakeGraphToGAP[0X
+  [1X4.2-9 ConvertPolymakeGraphToGAP[0m
   
   [2X> ConvertPolymakeGraphToGAP( [0X[3Xlist[0X[2X ) __________________________________[0Xmethod
   
-  Let [3Xlist[0X be a list of strings representing sets (that is, a list of integers
+  Let [3Xlist[0m be a list of strings representing sets (that is, a list of integers
   enclosed  by  {  and }). Then a record is returned containing two sets named
-  [10X.vertices[0X and [10X.edges[0X.
+  [10X.vertices[0m and [10X.edges[0m.
   
-  [1X4.2-10 ConvertPolymakeHasseDiagramToGAP[0X
+  [1X4.2-10 ConvertPolymakeHasseDiagramToGAP[0m
   
   [2X> ConvertPolymakeHasseDiagramToGAP( [0X[3Xlist[0X[2X ) ___________________________[0Xmethod
-  [6XReturns:[0X  [9XRecord[0X with entries [10X.hasse[0X and [10X.faceindices[0X
+  [6XReturns:[0X  [9XRecord[0m with entries [10X.hasse[0m and [10X.faceindices[0m
   
-  Takes  a  list  [3Xlist[0X  of strings (the [10XHASSE_DIAGRAM[0X returned by polymake and
-  split with [2XSplitPolymakeOutputStringIntoBlocks[0X ([14X4.1-3[0X)) and returns a record
-  containing  a  list  of  pairs  [10X.hasse[0X  and  a  list  of  lists  of integers
-  [10X.faceindices[0X.  Every  pair  in  [10X.hasse[0X is of the form [10X[[vertlist],[upfaces]][0X
-  where  vertlist is a list of vertices (given as integers) and [10X[upfaces][0X is a
+  Takes  a  list  [3Xlist[0m  of strings (the [10XHASSE_DIAGRAM[0m returned by polymake and
+  split with [2XSplitPolymakeOutputStringIntoBlocks[0m ([14X4.1-3[0m)) and returns a record
+  containing  a  list  of  pairs  [10X.hasse[0m  and  a  list  of  lists  of integers
+  [10X.faceindices[0m.  Every  pair  in  [10X.hasse[0m is of the form [10X[[vertlist],[upfaces]][0m
+  where  vertlist is a list of vertices (given as integers) and [10X[upfaces][0m is a
   list  of  integers  encoding  the  faces  in  the next (higher) dimension as
-  positions in the list [10X.hasse[0X. If polymake returns special faces representing
-  the full object or the empty face, they are also included in [10X.hasse[0X.
-  [10X.faceindices[0X  is a list of lists of integers corresponding to the indices of
-  faces in each dimension in [10X.hasse[0X(possibly including the extra faces).
-  Note  that  the  order  in which the faces are listed in [10X.hasse[0X is the order
+  positions in the list [10X.hasse[0m. If polymake returns special faces representing
+  the full object or the empty face, they are also included in [10X.hasse[0m.
+  [10X.faceindices[0m  is a list of lists of integers corresponding to the indices of
+  faces in each dimension in [10X.hasse[0m(possibly including the extra faces).
+  Note  that  the  order  in which the faces are listed in [10X.hasse[0m is the order
   they  are  output  from  polymake.  In particular, the list might start with
   vertices for one object and with facets for another.
   

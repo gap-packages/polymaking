@@ -18,7 +18,7 @@
 <div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap1.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap3.html">Next Chapter</a>&nbsp;  </div>
 
 <p><a id="X86C82DCF81362F41" name="X86C82DCF81362F41"></a></p>
-<div class="ChapSects"><a href="chap2.html#X86C82DCF81362F41">2. <span class="Heading">Polymake interaction</span></a>
+<div class="ChapSects"><a href="chap2.html#X86C82DCF81362F41">2 <span class="Heading">Polymake interaction</span></a>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X83D426D5855D1FD6">2.1 <span class="Heading">Creating Polymake Objects</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C87B1807E036A85">2.1-1 CreateEmptyFile</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8625E7E2845F1634">2.1-2 CreatePolymakeObject</a></span>
@@ -55,7 +55,7 @@
 </div>
 </div>
 
-<h3>2. <span class="Heading">Polymake interaction</span></h3>
+<h3>2 <span class="Heading">Polymake interaction</span></h3>
 
 <p><a id="X83D426D5855D1FD6" name="X83D426D5855D1FD6"></a></p>
 
@@ -290,7 +290,7 @@ rec(
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; Polymake</code>( <var class="Arg">poly, option[, :[, PolymakeNolookup]]</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <p>This method calls the polymake program (see <code class="func">POLYMAKE_COMMAND</code> (<a href="chap3.html#X7B35A5217C8C7B04"><b>3.2-1</b></a>)) with the option <var class="Arg">option</var>. You may use several keywords such as <code class="code">"DIM VERTICES"</code> as an option. The returned value is cut into blocks starting with keywords (which are taken from output and not looked up in <var class="Arg">option</var>). Each block is then interpreted and translated into <strong class="pkg">GAP</strong> readable form. This translation is done using the functions given in <code class="func">ObjectConverters</code> (<a href="chap4.html#X83199F737F4BE4FD"><b>4.1-4</b></a>). The first line of each block of polymake output is taken as a keyword and the according entry in <code class="func">ObjectConverters</code> (<a href="chap4.html#X83199F737F4BE4FD"><b>4.1-4</b></a>) is called to convert the block into <strong class="pkg">GAP</strong> readable form. If no conversion function is known, an info string is printed and <code class="keyw">fail</code> is returned. If only one keyword has been given as <var class="Arg">option</var>, <code class="code">Polymake</code> returns the result of the conversion operation. If more than one keyword has been given or the output consists of more than one block, <code class="code">Polymake</code> returns <code class="keyw">fail</code>. In any case, the calculated values for each block are stored as known properties of the <code class="keyw">PolymakeObject</code> <var class="Arg">poly</var> as long as they are not <code class="keyw">fail</code>. If <code class="keyw">Polymake</code> is called with an option that corresponds to a name of a known property of <var class="Arg">poly</var>, the known property is returned. In this case, there is no call of the external program. (see below for suppression of this feature).</p>
 
-<p>Note that the command <code class="keyw">Polymake</code> returns <code class="keyw">fail</code> if nothing is returned by the program polymake or more than one block of data is returned. For example, the returned value of <code class="code">Polymake(poly,"VISUAL")</code> is always <code class="keyw">fail</code>. Likewise, <code class="code">Polymake(poly,"POINTS VERTICES")</code> will return <code class="keyw">fail</code> (but may add new known properties to <var class="Arg">poly</var>). For a description of the conversion functions, see chapter <a href="chap4.html#X7D23E80E841CDD67"><b>4.</b></a>.</p>
+<p>Note that the command <code class="keyw">Polymake</code> returns <code class="keyw">fail</code> if nothing is returned by the program polymake or more than one block of data is returned. For example, the returned value of <code class="code">Polymake(poly,"VISUAL")</code> is always <code class="keyw">fail</code>. Likewise, <code class="code">Polymake(poly,"POINTS VERTICES")</code> will return <code class="keyw">fail</code> (but may add new known properties to <var class="Arg">poly</var>). For a description of the conversion functions, see chapter <a href="chap4.html#X7D23E80E841CDD67"><b>4</b></a>.</p>
 
 <p>If the option <var class="Arg">PolymakeNolookup</var> is set to anything else than false, the polymake program is called even if <var class="Arg">poly</var> already has a known property with name <var class="Arg">option</var>.</p>
 
