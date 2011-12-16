@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: Objects.gi, v 0.7.1 2008/03/07 10:07:15 gap Exp $
+#H @(#)$Id: Objects.gi, v 0.7.3 2008/05/12 14:57:12 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/Objects_gi"):=
-	"@(#)$Id: Objects.gi, v 0.7.1 2008/03/07   10:07:15  gap Exp $";
+	"@(#)$Id: Objects.gi, v 0.7.3 2008/05/12   14:57:12  gap Exp $";
 PolymakeObjectFamily:=NewFamily("PolymakeObjectFamily",IsPolymakeObject);
 PolymakeObject:=NewType(PolymakeObjectFamily,IsPolymakeObjectRep);
 
@@ -44,7 +44,13 @@ InstallMethod(ViewObj,
         function(poly)
     local compnames;
     compnames:=NamesOfComponents(poly);
-    Print("<polymake object");
+    if "knownProperties" in compnames 
+      and "DESCRIPTION" in NamesKnownPropertiesOfPolymakeObject(poly)
+      then
+        Print("<",PropertyOfPolymakeObject(poly,"DESCRIPTION"));
+    else
+        Print("<polymake object");
+    fi;
     if not "knownProperties" in compnames
        then
         Print(". No properties known");
@@ -58,7 +64,13 @@ InstallMethod(PrintObj,
         function(poly)
     local compnames;
     compnames:=NamesOfComponents(poly);
-    Print("<polymake object ",FilenameOfPolymakeObject(poly));
+    if "knownProperties" in compnames 
+      and "DESCRIPTION" in NamesKnownPropertiesOfPolymakeObject(poly)
+      then
+        Print("<",PropertyOfPolymakeObject(poly,"DESCRIPTION"));
+    else
+        Print("<polymake object");
+    fi;
     if not "knownProperties" in compnames
        then
         Print(". No properties known");

@@ -33,6 +33,12 @@
   So  [5Xpolymaking[0X converts such a vector to [10X[a1,a2,a3,...][0X and the user is left
   with the problem of augmentation and left or right multiplication.
   
+  Another  area  where  the  [5XGAP[0X  object  isn't a literal translation from the
+  polymake  world  is combinatorics. In Polymake, list elements are enumerated
+  starting  from  0.  [5XGAP[0X  enumerates  lists  starting at 1. So the conversion
+  process  adds 1 to the numbers corresponding to vertices in facet lists, for
+  example.
+  
   [13XCall  for  help:[0X  As  of version 0.7.0, most of the converters were assigned
   blindly  to keywords. So some of them might not be suitable. If you find one
   of  those,  please  tell  me  about it. Also, for a lot of keywords and data
@@ -59,9 +65,10 @@
   [2X> SplitPolymakeOutputStringIntoBlocks( [0X[3Xstring[0X[2X ) ______________________[0Xmethod
   [6XReturns:[0X  List of strings -- "blocks"--
   
-  The  string  [3Xstring[0X  is cut at the lines starting with an upper case letter.
-  The  parts  are  returned  as  a  list of strings. The initial string [3Xstring[0X
-  remains unchanged.
+  The  string [3Xstring[0X is cut at the lines starting with an upper case character
+  and  consisting  only  of  upper  case  letters,  numbers and underscore (_)
+  characters.  The parts are returned as a list of strings. The initial string
+  [3Xstring[0X remains unchanged.
   
   [1X4.1-4 ObjectConverters[0X
   
@@ -96,7 +103,18 @@
   If  [3Xlist[0X  contains  a  single string, this string is converted into a number
   using [2XConvertPolymakeNumber[0X ([14X4.2-1[0X).
   
-  [1X4.2-3 ConvertPolymakeMatrixToGAP[0X
+  [1X4.2-3 ConvertPolymakeMatrixOrListOfSetsToGAP[0X
+  
+  [2X> ConvertPolymakeMatrixOrListOfSetsToGAP( [0X[3Xlist[0X[2X ) _____________________[0Xmethod
+  [2X> ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne( [0X[3Xlist[0X[2X ) ______________[0Xmethod
+  
+  Tries to decide if the list [3Xlist[0X of strings represents a matrix or a list of
+  sets   by   testing   if   they   start  with  "{".  It  then  calls  either
+  [2XConvertPolymakeMatrixToGAP[0X    ([14X4.2-4[0X)    or   [2XConvertPolymakeListOfSetsToGAP[0X
+  ([14X4.2-8[0X).  The  "PlusOne" version calls [2XConvertPolymakeListOfSetsToGAPPlusOne[0X
+  ([14X4.2-8[0X) if [3Xlist[0X represents a list of sets.
+  
+  [1X4.2-4 ConvertPolymakeMatrixToGAP[0X
   
   [2X> ConvertPolymakeMatrixToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
   [2X> ConvertPolymakeMatrixToGAPKillOnes( [0X[3Xlist[0X[2X ) _________________________[0Xmethod
@@ -104,29 +122,42 @@
   The  list  [3Xlist[0X  of  strings  is  interpreted  as  a list of row vectors and
   converted into a matrix. The "KillOnes" version removes the leading ones.
   
-  [1X4.2-4 ConvertPolymakeVectorToGAP[0X
+  [1X4.2-5 ConvertPolymakeVectorToGAP[0X
   
   [2X> ConvertPolymakeVectorToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
   [2X> ConvertPolymakeVectorToGAPKillOne( [0X[3Xlist[0X[2X ) __________________________[0Xmethod
+  [2X> ConvertPolymakeIntVectorToGAPPlusOne( [0X[3Xlist[0X[2X ) _______________________[0Xmethod
   
-  As the corresponding "Matrix" version. Just for vectors.
+  As    the    corresponding    "Matrix"    version.    Just    for   vectors.
+  [9XConvertPolymakeIntVectorToGAPPlusOne[0X   requires   the   vector   to  contain
+  integers. It also adds 1 to every entry.
   
-  [1X4.2-5 ConvertPolymakeBoolToGAP[0X
+  [1X4.2-6 ConvertPolymakeBoolToGAP[0X
   
   [2X> ConvertPolymakeBoolToGAP( [0X[3Xlist[0X[2X ) ___________________________________[0Xmethod
   
-  If  [3Xlist[0X  contains  a  single  string, which is either 0 or 1, this function
-  returns [9Xfalse[0X or [9Xtrue[0X, respectively.
+  If  [3Xlist[0X  contains  a single string, which is either 0,false,1, or true this
+  function returns [9Xfalse[0X or [9Xtrue[0X, respectively.
   
-  [1X4.2-6 ConvertPolymakeSetToGAP[0X
+  [1X4.2-7 ConvertPolymakeSetToGAP[0X
   
   [2X> ConvertPolymakeSetToGAP( [0X[3Xlist[0X[2X ) ____________________________________[0Xmethod
   
-  Let  [3Xlist[0X  be  a  list  containing single string, which is a list of numbers
+  Let  [3Xlist[0X  be  a list containing a single string, which is a list of numbers
   separated  by  whitespaces  and  enclosed by { and } . The returned value is
   then a set of rational numbers (in the GAP sense).
   
-  [1X4.2-7 ConvertPolymakeGraphToGAP[0X
+  [1X4.2-8 ConvertPolymakeListOfSetsToGAP[0X
+  
+  [2X> ConvertPolymakeListOfSetsToGAP( [0X[3Xlist[0X[2X ) _____________________________[0Xmethod
+  [2X> ConvertPolymakeListOfSetsToGAPPlusOne( [0X[3Xlist[0X[2X ) ______________________[0Xmethod
+  
+  Let  [3Xlist[0X  be a list containing several strings representing sets. Then each
+  of  these strings is converted to a set of rational numbers and the returned
+  value  is  the list of all those sets. The "PlusOne" version adds 1 to every
+  entry.
+  
+  [1X4.2-9 ConvertPolymakeGraphToGAP[0X
   
   [2X> ConvertPolymakeGraphToGAP( [0X[3Xlist[0X[2X ) __________________________________[0Xmethod
   
@@ -134,33 +165,50 @@
   enclosed  by  {  and }). Then a record is returned containing two sets named
   [10X.vertices[0X and [10X.edges[0X.
   
-  [1X4.2-8 ConvertPolymakeHasseDiagramToGAP[0X
+  [1X4.2-10 ConvertPolymakeHasseDiagramToGAP[0X
   
   [2X> ConvertPolymakeHasseDiagramToGAP( [0X[3Xlist[0X[2X ) ___________________________[0Xmethod
-  [6XReturns:[0X  List of sets of triples (of sets). The returned list is completely
-            immutable.
+  [6XReturns:[0X  [9XRecord[0X with entries [10X.hasse[0X and [10X.faceindices[0X
   
-  If  [3Xlist[0X  is  a  list  of  strings  as  output  by  polymake's [10XHASSE_DIAGRAM[0X
-  algorithm, then this function returns a list of sets.
+  Takes  a  list  [3Xlist[0X  of strings (the [10XHASSE_DIAGRAM[0X returned by polymake and
+  split with [2XSplitPolymakeOutputStringIntoBlocks[0X ([14X4.1-3[0X)) and returns a record
+  containing  a  list  of  pairs  [10X.hasse[0X  and  a  list  of  lists  of integers
+  [10X.faceindices[0X.  Every  pair  in  [10X.hasse[0X is of the form [10X[[vertlist],[upfaces]][0X
+  where  vertlist is a list of vertices (given as integers) and [10X[upfaces][0X is a
+  list  of  integers  encoding  the  faces  in  the next (higher) dimension as
+  positions in the list [10X.hasse[0X. If polymake returns special faces representing
+  the full object or the empty face, they are also included in [10X.hasse[0X.
+  [10X.faceindices[0X  is a list of lists of integers corresponding to the indices of
+  faces in each dimension in [10X.hasse[0X(possibly including the extra faces).
+  Note  that  the  order  in which the faces are listed in [10X.hasse[0X is the order
+  they  are  output  from  polymake.  In particular, the list might start with
+  vertices for one object and with facets for another.
   
-  The  ith  entry  represents the faces of dimension i. There is one entry for
-  each  dimension between 0 and the dimension of the polyhedron. Note that the
-  last  entry consists of a list with exactly one entry representing the whole
-  polyhedron.
-  
-  Every  face  is  a  list  with three entries [10X[vertices,invboundary,boundary][0X
-  where  [10Xvertices[0X  is a list of integers representing the vertices of the face
-  (and  the  number  of such a vertex is that of the vertex as a vertex of the
-  full  polyhedron).  The  second entry is a list of integers representing the
-  positions  of  the i+1 faces containing the current face (in the i+1st entry
-  of  the  Hasse  diagram).  And  the  last  entry  is  the  list of i-1 faces
-  containing  the current face (numbered by position in the i-1st entry in the
-  Hasse  diagram).  The  faces with empty third entry are exactly the vertices
-  while  the  face  with  empty  second entry is the face corresponding to the
-  whole poyhedron.
-  
-  The  way  polymake  returns  Hasse diagrams and vertices makes sure that the
-  numbering  of  vertices  is  the  same  for  the output of [9XHASSE_DIAGRAM[0X and
-  [9XVERTICES[0X  (i.e.  the  ith  vertex of the vertex list is at position i in the
-  first entry of the Hasse diagram).
+  [4X---------------------------  Example  ----------------------------[0X
+    [4X[0X
+    [4Xgap> square:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"2cube.poly");[0X
+    [4X<polymake object. No properties known>[0X
+    [4Xgap> # "VERTICES" is converted using ConvertPolymakeMatrixToGAPKillOnes[0X
+    [4Xgap> Polymake(square,"VERTICES");[0X
+    [4X[ [ -1, -1 ], [ 1, -1 ], [ -1, 1 ], [ 1, 1 ] ][0X
+    [4Xgap> Polymake(square,"HASSE_DIAGRAM");[0X
+    [4Xrec([0X
+    [4X  hasse := [ [ [  ], [ 2, 3, 4, 5 ] ], [ [ 1 ], [ 6, 8 ] ], [ [ 2 ], [ 7, 8 ] ],[0X
+    [4X      [ [ 3 ], [ 6, 9 ] ], [ [ 4 ], [ 7, 9 ] ], [ [ 1, 3 ], [ 10 ] ],[0X
+    [4X      [ [ 2, 4 ], [ 10 ] ], [ [ 1, 2 ], [ 10 ] ], [ [ 3, 4 ], [ 10 ] ],[0X
+    [4X      [ [ 1, 2, 3, 4 ], [  ] ] ],[0X
+    [4X  faceindices := [ [ 1 ], [ 2, 3, 4, 5 ], [ 6, 7, 8, 9 ], [ 10 ] ] )[0X
+    [4Xgap> simp:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"tmp.top");[0X
+    [4X<polymake object. No properties known>[0X
+    [4Xgap> Polymake(simp,"FACETS"); ## a very small simplicial complex[0X
+    [4X[ [ 2, 4 ], [ 1, 2, 3 ] ][0X
+    [4Xgap> Polymake(simp,"HASSE_DIAGRAM");[0X
+    [4Xrec( hasse := [ [ [  ], [  ] ], [ [ 1, 2, 3 ], [ 1 ] ], [ [ 2, 4 ], [ 1 ] ],[0X
+    [4X      [ [ 1, 2 ], [ 2 ] ], [ [ 1, 3 ], [ 2 ] ], [ [ 2, 3 ], [ 2 ] ],[0X
+    [4X      [ [ 2 ], [ 3, 4, 6 ] ], [ [ 4 ], [ 3 ] ], [ [ 1 ], [ 4, 5 ] ],[0X
+    [4X      [ [ 3 ], [ 5, 6 ] ], [ [  ], [ 7, 8, 9, 10 ] ] ],[0X
+    [4X  faceindices := [ [ 1 ], [ 2 ], [ 3, 4, 5, 6 ], [ 7, 8, 9, 10 ], [ 11 ] ] )[0X
+    [4Xgap> ## ... and this one starts with facets[0X
+    [4X[0X
+  [4X------------------------------------------------------------------[0X
   

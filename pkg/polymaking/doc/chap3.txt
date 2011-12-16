@@ -2,7 +2,7 @@
   [1X3. Global Variables[0X
   
   
-  [1X3.1 An InfoClass for debug purpose[0X
+  [1X3.1 Getting information about polymake output[0X
   
   [1X3.1-1 InfoPolymaking[0X
   
@@ -11,6 +11,13 @@
   If  set to at least 2, the output of polymake is shown. At level 1, warnings
   are shown. This is the default. And at level 0, the polymake package remains
   silent.
+  
+  [1X3.1-2 POLYMAKE_LAST_FAIL_REASON[0X
+  
+  [2X> POLYMAKE_LAST_FAIL_REASON__________________________________[0Xglobal variable
+  
+  Contains a string that explains the last occurence of [9Xfail[0X as a return value
+  of [2XPolymake[0X ([14X2.5-1[0X).
   
   
   [1X3.2 Variables for system interaction[0X
@@ -35,4 +42,11 @@
   
   In  this  directory the files for polymake will be created. By default, this
   generates a temporary directory using [9XDirectoryTemporary[0X
+  
+  [1X3.2-3 POLYMAKE_CLIENT_PATHS[0X
+  
+  [2X> POLYMAKE_CLIENT_PATHS______________________________________[0Xglobal variable
+  
+  A  list  of  directories  where  polymake's the stand-alone clients live. By
+  default, [9XDirectoriesSystemPrograms[0X is used.
   

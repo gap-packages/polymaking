@@ -23,7 +23,7 @@
 <h1>An Interface for using <strong class="pkg">polymake</strong> in <strong class="pkg">GAP</strong></h1>
 
 <p>( Version
-0.7.1
+0.7.3
 
  )</p>
 
@@ -62,7 +62,8 @@ Marc Roeder, Department of Mathematics, NUI Galway, Irleland</p>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap1.html#X851C596486F918F0">1.2 <span class="Heading">Setting variables for external programs</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X794A38E981F9E76F">1.2-1 SetPolymakeDataDirectory</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X854645287BC9303E">1.2-2 SetPolymakeCommand</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7943B579846BDB76">1.2-3 <span class="Heading">Setting variables permanently</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X862304F37C28FE78">1.2-3 SetPolymakeClientPaths</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7943B579846BDB76">1.2-4 <span class="Heading">Setting variables permanently</span></a>
 </span>
 </div>
 </div>
@@ -97,14 +98,20 @@ Marc Roeder, Department of Mathematics, NUI Galway, Irleland</p>
 </div>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X7B5623E3821CC0D0">2.6 <span class="Heading">An Example</span></a>
 </div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X8721882779D8EA95">2.7 <span class="Heading">Calling Clients</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7B7BFA407F54D37E">2.7-1 PolymakeClient</a></span>
+</div>
 </div>
 <div class="ContChap"><a href="chap3.html#X7D9044767BEB1523">3. <span class="Heading">Global Variables</span></a>
-<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X79216F7882C42BC6">3.1 <span class="Heading">An InfoClass for debug purpose</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X86AC0C6B807BEBDE">3.1 <span class="Heading">Getting information about polymake
+output</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X85BA7A3D7C698B68">3.1-1 InfoPolymaking</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79E1C63D8516D334">3.1-2 POLYMAKE_LAST_FAIL_REASON</a></span>
 </div>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X7B786DAF80136FF4">3.2 <span class="Heading">Variables for system interaction</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B35A5217C8C7B04">3.2-1 POLYMAKE_COMMAND</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7C07B16B873BA46D">3.2-2 POLYMAKE_DATA_DIR</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X875BDBAE8075192A">3.2-3 POLYMAKE_CLIENT_PATHS</a></span>
 </div>
 </div>
 <div class="ContChap"><a href="chap4.html#X7D23E80E841CDD67">4. <span class="Heading">Converting Polymake Output</span></a>
@@ -118,12 +125,14 @@ Marc Roeder, Department of Mathematics, NUI Galway, Irleland</p>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap4.html#X7FF4170183C83CC1">4.2 <span class="Heading">Conversion Functions</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7FC98443862DB83F">4.2-1 ConvertPolymakeNumber</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F2A1C2C808E4A07">4.2-2 ConvertPolymakeScalarToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X817C6B4180BF6365">4.2-3 ConvertPolymakeMatrixToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X85F7F6787D346CC0">4.2-4 ConvertPolymakeVectorToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X87B6F9867EE800C7">4.2-5 ConvertPolymakeBoolToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X846B284085825FEA">4.2-6 ConvertPolymakeSetToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7EBECAA07F8B58D8">4.2-7 ConvertPolymakeGraphToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F4BA33C86137259">4.2-8 ConvertPolymakeHasseDiagramToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X82A7FF9983EB61E2">4.2-3 ConvertPolymakeMatrixOrListOfSetsToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X817C6B4180BF6365">4.2-4 ConvertPolymakeMatrixToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X85F7F6787D346CC0">4.2-5 ConvertPolymakeVectorToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X87B6F9867EE800C7">4.2-6 ConvertPolymakeBoolToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X846B284085825FEA">4.2-7 ConvertPolymakeSetToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7E7886D68356F592">4.2-8 ConvertPolymakeListOfSetsToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7EBECAA07F8B58D8">4.2-9 ConvertPolymakeGraphToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F4BA33C86137259">4.2-10 ConvertPolymakeHasseDiagramToGAP</a></span>
 </div>
 </div>
 <br />

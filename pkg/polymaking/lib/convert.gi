@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: convert.gi, v 0.7.1 2008/03/07 10:07:15 gap Exp $
+#H @(#)$Id: convert.gi, v 0.7.3 2008/05/12 14:57:12 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,11 +24,12 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/convert_gi"):=
-	"@(#)$Id: convert.gi, v 0.7.1 2008/03/07   10:07:15  gap Exp $";
+	"@(#)$Id: convert.gi, v 0.7.3 2008/05/12   14:57:12  gap Exp $";
 InstallMethod(ConvertPolymakeOutputToGapNotation,[IsString],
         function(string)
     local   split,  blockpositions,  splitblocks,  returnlist,  
             splitblock,  name,  rest,  object;
+    
     
     splitblocks:=SplitPolymakeOutputStringIntoBlocks(string);
     returnlist:=[];
@@ -41,18 +42,25 @@ InstallMethod(ConvertPolymakeOutputToGapNotation,[IsString],
             Unbind(rest[Size(rest)]);
         fi;
 #        Apply(rest,NormalizedWhitespace);
-        if IsBound(ObjectConverters.(name))
+        
+        if rest=["==UNDEF=="]
+           then
+            Info(InfoPolymaking,1,Concatenation("polymake declares object ",name," undefined"));
+            UpdatePolymakeFailReason(Concatenation("polymake declares ",name," undefined"));
+            Add(returnlist,rec(name:=name,object:=fail));
+        elif IsBound(ObjectConverters.(name))
            then
             object:=ObjectConverters.(name)(rest);
             if object<>fail 
                then
                 Add(returnlist,rec(name:=name,object:=object));
             else
-                Info(InfoPolymaking,1,"Conversion failed. Maybe invalid output from polymake. This value is not stored");
+                Info(InfoPolymaking,1,"Conversion failed. Maybe invalid output from polymake. Record not updated for this block");
                 Add(returnlist, rec(name:=name,object:=fail));
             fi; 
         else
             Info(InfoPolymaking,1,"No Method to convert ", name,". Record not updated for this block");
+            UpdatePolymakeFailReason(Concatenation("polymaking doesn't know how to convert ",name," to GAP"));
             Add(returnlist, rec(name:=name,object:=fail));
         fi;
     od;
@@ -77,7 +85,8 @@ InstallMethod(SplitPolymakeOutputStringIntoBlocks,[IsString],
         line:=Remove(lines,1);
         if not IsEmptyString(line) 
            then
-            if IsUpperAlphaChar(line[1])
+            if IsUpperAlphaChar(line[1]) 
+               and ForAll(line,c->IsUpperAlphaChar(c) or c='_' or IsDigitChar(c))
                then
                 if blocks=[] and newblock=[]
                    then
@@ -99,10 +108,25 @@ InstallMethod(SplitPolymakeOutputStringIntoBlocks,[IsString],
 end);
 
 
+#############################################################################
+##
+## update the fail reason in case of syntax errors:
+##
+InstallMethod(ConverterSyntaxError,[IsString],
+        function(methname)
+    UpdatePolymakeFailReason(
+            Concatenation("input for converter method ",methname, " syntactically incorrect (cast an error and went into break loop)")
+            );
+    Error("incorrect input");
+end);
 
+
+#############################################################################
 # Now the different conversion methods:
-####################
-
+#############################################################################
+##
+## Basics, numbers and bools:
+##
 InstallMethod(ConvertPolymakeNumber,[IsString],
         function(string)
     local   sstring,  denom,  enum;
@@ -115,31 +139,94 @@ InstallMethod(ConvertPolymakeNumber,[IsString],
         return enum/denom;
     elif string=""
       then
-        Error("string is empty");
+        ConverterSyntaxError("ConvertPolymakeNumber");
+        return fail;
     else
         return Rat(string);
     fi;
 end);
 
+
 InstallMethod(ConvertPolymakeScalarToGAP,[IsDenseList],
         function(stringlist)
     if Size(stringlist)<>1
        then
-        Error("list ist too long to be converted to a scalar");
-        return fail;
+        ConverterSyntaxError("ConvertPolymakeScalarToGAP");
+        return fail;    
     else
         return ConvertPolymakeNumber(stringlist[1]);
     fi;
 end);
 
+
+InstallMethod(ConvertPolymakeBoolToGAP,[IsDenseList],
+        function(stringlist)
+    if Size(stringlist)<>1
+       then
+        ConverterSyntaxError("ConvertPolymakeBoolToGAP");
+        return fail;
+    elif stringlist[1]="1" or stringlist[1]="true"
+      then 
+        return true;
+    elif stringlist[1]="0" or stringlist[1]="false"
+      then
+        return false;
+    else
+        UpdatePolymakeFailReason("Boolean conversion failed, the returned value wasn't 0, 1, true, or false. Error cast");
+        Error("Conversion failed");
+    fi;
+end);
+
+InstallMethod(ConvertPolymakeDescriptionToGAP,[IsDenseList],
+        function(stringlist)
+    return JoinStringsWithSeparator(stringlist," ");
+end);
+
+#############################################################################
+##
+## MATRICES AND LISTS OF SETS:
+##
+## Unfortunately some of the keywords that return matrices
+## might also return lists of sets (this is a polytope/topaz problem).
+## So we try to guess the type if necessary.
+##
+InstallMethod(ConvertPolymakeMatrixOrListOfSetsToGAP,[IsDenseList],
+        function(stringlist)
+    
+    if ForAll(stringlist,i->i[1]='{')
+      then
+        return ConvertPolymakeListOfSetsToGAP(stringlist);     
+    elif ForAll(stringlist,i->not ('{' in i or '}' in i))
+      then
+            return ConvertPolymakeMatrixToGAP(stringlist);
+    else
+        UpdatePolymakeFailReason("ConvertPolymakeMatrixOrListOfSetsToGAP couldn't decide what to do. Error cast");
+        Error("don't know if this is a matrix or a list of sets ");
+        return fail;
+    fi;
+end);
+
+
+InstallMethod(ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne,[IsDenseList],
+        function(stringlist)
+    
+    if ForAll(stringlist,i->i[1]='{')
+      then
+        return ConvertPolymakeListOfSetsToGAPPlusOne(stringlist);     
+    elif ForAll(stringlist,i->not ('{' in i or '}' in i))
+      then
+            return ConvertPolymakeMatrixToGAP(stringlist);
+    else
+        UpdatePolymakeFailReason("ConvertPolymakeMatrixOrListOfSetsToGAP couldn't decide what to do. Error cast");
+        Error("don't know if this is a matrix or a list of sets ");
+        return fail;
+    fi;
+end);
+
+                
 InstallMethod(ConvertPolymakeMatrixToGAP,[IsDenseList],
         function(stringlist)
     local returnmatrix, string, vector;
-    if stringlist=["==UNDEF=="]
-       then
-        Error("polymake declares this object undefined");
-        return fail;
-    fi;
     returnmatrix:=[];
     for string in stringlist
       do
@@ -155,6 +242,14 @@ InstallMethod(ConvertPolymakeMatrixToGAPKillOnes,[IsDenseList],
         function(stringlist)
     local   returnmatrix;
     returnmatrix:=ConvertPolymakeMatrixToGAP(stringlist);
+    if not IsMatrix(returnmatrix) 
+       or Size(returnmatrix[1])<2
+       or not ForAll(returnmatrix,i->i[1]=1)
+       then
+        Error("returnmatrix is not a matrix or too small");
+        UpdatePolymakeFailReason("Error in ConvertPolymakeMatrixToGAPKillOnes. The returned object is either not a matrix, has fewer than 2 columns or doesn't have all ones in the first column. (Error cast)");
+        return fail;
+    fi;
     if returnmatrix<>fail
        then
         return List(returnmatrix,i->i{[2..Size(i)]});    #kill leading ones
@@ -163,13 +258,16 @@ InstallMethod(ConvertPolymakeMatrixToGAPKillOnes,[IsDenseList],
     fi;
 end);
 
-
+#############################################################################
+##
+## Vectors
+##
 InstallMethod(ConvertPolymakeVectorToGAP,[IsDenseList],
         function(stringlist)
     local   vector;
     if Size(stringlist)<>1
        then
-        Error("list ist too long to be converted to a vector");
+        ConverterSyntaxError("ConvertPolymakeVectorToGAP");
         return fail;
     else
         vector:=SplitString(stringlist[1]," ");
@@ -183,34 +281,45 @@ InstallMethod(ConvertPolymakeVectorToGAPKillOne,[IsDenseList],
         function(stringlist)
     local   vector;
     vector:=ConvertPolymakeVectorToGAP(stringlist);
+    if not IsVector(vector) or Size(vector)<2
+       or vector[1]<>1
+       then
+        Error("vector is not a vector or too small");
+        UpdatePolymakeFailReason("Error in ConvertPolymakeVectorToGAPKillOne. The returned object is either not a vector or has fewer than 2 columns or doesn't start with 1. (Error cast)");
+        return fail;
+    fi;
     return vector{[2..Size(vector)]};
 end);
 
 
-InstallMethod(ConvertPolymakeBoolToGAP,[IsDenseList],
+InstallMethod(ConvertPolymakeIntVectorToGAPPlusOne,[IsDenseList],
         function(stringlist)
-    if Size(stringlist)<>1
+    local   vec;
+    
+    vec:=ConvertPolymakeVectorToGAP(stringlist);
+    if not ForAll(vec,IsInt)
        then
-        Error("list ist too long to be converted to a boolean");
+        Error("Vector is not a vector of integers as expected");
+        UpdatePolymakeFailReason("Error in ConvertPolymakeIntVectorToGAPPlusOne. The returned vector did not consist of integers. Error cast");
         return fail;
-    elif stringlist[1]="1"
-      then 
-        return true;
-    elif stringlist[1]="0"
-      then
-        return false;
     else
-        Error("Conversion failed");
+        return vec+1;
     fi;
 end);
+        
 
 
+
+#############################################################################
+##
+## Sets, Sets of Sets, Lists of Sets
+##
 InstallMethod(ConvertPolymakeSetToGAP,[IsDenseList],
         function(stringlist)
     local   entries;
     if not Size(stringlist)=1 and IsString(stringlist[1])
        then
-        Error("malformed string");
+        ConverterSyntaxError("ConvertPolymakeSetToGAP");
         return fail;
     else
         entries:=ReplacedString(ReplacedString(stringlist[1],"{",""),"}","");
@@ -228,7 +337,8 @@ InstallMethod(ConvertPolymakeSetOfSetsToGAP,[IsDenseList],
     returnlist:=[];
     if Size(stringlist)<> 1 or not IsString(stringlist[1])
        then
-        Error("<stringlist> must have exactly one entry");
+        ConverterSyntaxError("ConvertPolymakeSetOfSetsToGAP");
+        return fail;
     fi;
     line:=stringlist[1];
     newlist:=ReplacedString(line{[2..Size(line)-1]},"} {","},{");
@@ -241,7 +351,27 @@ InstallMethod(ConvertPolymakeSetOfSetsToGAP,[IsDenseList],
 end);
 
 
-        
+InstallMethod(ConvertPolymakeListOfSetsToGAP,[IsDenseList],
+        function(stringlist)
+    return List(stringlist,s->ConvertPolymakeSetToGAP([s]));
+end);
+
+
+InstallMethod(ConvertPolymakeListOfSetsToGAPPlusOne,[IsDenseList],
+        function(stringlist)
+    return List(stringlist,s->ConvertPolymakeSetToGAP([s])+1);
+end);
+
+
+#############################################################################
+##
+## More complex stuff:
+##
+
+#############################################################################
+##
+## Graphs:
+##
 InstallMethod(ConvertPolymakeGraphToGAP,[IsDenseList],
         function(stringlist)
     local   edgelist,  edge,  vertices;
@@ -258,17 +388,19 @@ end);
     
 
 
-
+#############################################################################
+##
+## Hasse Diagrams:
+##
 InstallMethod(ConvertPolymakeHasseDiagramToGAP,[IsDenseList],
        function(stringlist)
     local   startnumbers,  rest,  nodes,  node,  stringpair,  
-            faceblocks,  facenumber,  permlist,  pi,  maxnode,  i,  
-            upface,  blockindex,  downshift,  upshift,  face,  
-            returnrec,  modgens,  elts;
+            faceblocks,  facenumber,  i,  faceindices;
     
     ###
     # convert the first line to a list of integers
     # and remove the leading "<" from the rest.
+    # Throw away the last line, as it only consists of ">"
     ###
     startnumbers:=List(SplitString(stringlist[1]," "),ConvertPolymakeNumber);
     rest:=stringlist{[2..Size(stringlist)-1]};
@@ -287,55 +419,16 @@ InstallMethod(ConvertPolymakeHasseDiagramToGAP,[IsDenseList],
         Add(nodes,List(stringpair,i->ConvertPolymakeSetToGAP([i])));
     od;
     
-    faceblocks:=List([2..Size(startnumbers)],i->[startnumbers[i-1]+1..startnumbers[i]]);
-    facenumber:=startnumbers[Size(startnumbers)]+1;
-
-    if Size(nodes[2][1])>1
-       then
-        Info(InfoPolymaking,1,"polymake returned dual Hasse diagram. Recovering original");
-        ####
-        # if the Hasse diagram ends in a list of points,
-        # we do some strange permutation and renumbering to get a Hasse 
-        # diagram starting with points (and the dimension of the faces 
-        # increases as we proceed down)
-        ####
-        Apply(faceblocks,i->Reversed(facenumber-i+1));
-        permlist:=[facenumber];
-        Append(permlist,Concatenation(faceblocks));
-        Add(permlist,1);
-        
-        pi:=PermList(permlist);
-        nodes:=Permuted(nodes,pi);
-            # now we have the faces in ascending order. But the second 
-            # column is still wrong. So we do some renumbering:
-        #permlist[1]:=Size(nodes);
-        #pi2:=PermList(permlist); 
-        for node in nodes
-          do
-            node[2]:=OnSets(node[2]+1,pi)-1;
-        od;
-    fi;
+    startnumbers:=Concatenation([0],startnumbers);
     
-    ####
-    # now the Hasse <nodes>diagram starts with a list of points (i.e. 
-    # the faces are ordered ascendingly wrt dimension), this will work:
-    ####
-    Remove(nodes,1);
-    Apply(nodes,i->Concatenation(i,[[]]));
-    maxnode:=Size(nodes);
-#    Remove(nodes,maxnode);
-    for i in [1..maxnode]#-1]
+    faceblocks:=List([2..Size(startnumbers)],i->[startnumbers[i-1]..startnumbers[i]-1]);
+    facenumber:=startnumbers[Size(startnumbers)]+1;
+    Apply(faceblocks,i->i+1);
+    Add(faceblocks,[facenumber]);
+    
+    for i in [1..facenumber]
       do
-        Apply(nodes[i][1],i->i+1);
-#        if nodes[i][2]=[maxnode]
-#           then
-#            nodes[i][2]:=[];
-#        else
-            for upface in nodes[i][2]
-              do
-                AddSet(nodes[upface][3],i);
-            od;
-#        fi;
+        Apply(nodes[i],i->i+1);
     od;
     
     for node in nodes
@@ -343,55 +436,19 @@ InstallMethod(ConvertPolymakeHasseDiagramToGAP,[IsDenseList],
         Apply(node,Set);
     od;
     
-    Apply(faceblocks,i->i-1);
-    Add(faceblocks,[maxnode]);
-    #
-    # And now we split the nodes of the Hasse diagram according to dimension.
-    # This was added when the function was already complete. So this is 
-    # probably not the right order of doing things. But I didn't want to 
-    # rewrite the renumbering part above...
-    #
-    faceblocks:=Set(faceblocks);
-    for blockindex in [1..Size(faceblocks)]
-      do
-        nodes[blockindex]:=nodes{faceblocks[blockindex]};
-    od;
-    while Size(nodes)>Size(faceblocks)
-      do
-        Remove(nodes);
-    od;     
-    for blockindex in [1..Size(nodes)]
-      do
-        if blockindex>1
-           then
-            downshift:=-faceblocks[blockindex-1][1]+1;
-        else
-            downshift:=0;
-        fi;
-        if blockindex<Size(nodes)
-           then
-            upshift:=-faceblocks[blockindex+1][1]+1;
-        else
-            upshift:=0;
-        fi;
-        for face in nodes[blockindex]
-          do
-            face[2]:=face[2]+upshift;
-            face[3]:=face[3]+downshift;
-        od;
-    od;
-    
-    #ForAll(faceblocks,IsRange);
-#    returnrec:=rec(hasse:=nodes, 
-#                   modgens:=List(nodes,n->List(n,i->i[1])),
-#                   elts:=[]);    #faceindices:=Set(faceblocks));
-#   return returnrec;
     MakeImmutable(nodes);
-    return nodes;
+    MakeImmutable(faceblocks);
+    return rec(hasse:=nodes, 
+                faceindices:=Set(faceblocks)
+                );
 end);
 
 
 
+#############################################################################
+##
+## Face Lattices:
+##
 InstallMethod(ConvertPolymakeFaceLatticeToGAP,[IsDenseList],
         function(stringlist)
     local   returnlist,  line,  faces;
@@ -409,16 +466,6 @@ InstallMethod(ConvertPolymakeFaceLatticeToGAP,[IsDenseList],
 end);
 
 
-InstallMethod(ConvertPolymakeListOfSetsToGAP,[IsDenseList],
-        function(stringlist)
-    return List(stringlist,s->ConvertPolymakeSetToGAP([s]));
-end);
-
-
-InstallMethod(ConvertPolymakeListOfSetsToGAPPlusOne,[IsDenseList],
-        function(stringlist)
-    return List(stringlist,s->ConvertPolymakeSetToGAP([s])+1);
-end);
 
 #############################################################################
 ##

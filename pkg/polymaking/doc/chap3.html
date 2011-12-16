@@ -19,20 +19,24 @@
 
 <p><a id="X7D9044767BEB1523" name="X7D9044767BEB1523"></a></p>
 <div class="ChapSects"><a href="chap3.html#X7D9044767BEB1523">3. <span class="Heading">Global Variables</span></a>
-<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X79216F7882C42BC6">3.1 <span class="Heading">An InfoClass for debug purpose</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X86AC0C6B807BEBDE">3.1 <span class="Heading">Getting information about polymake
+output</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X85BA7A3D7C698B68">3.1-1 InfoPolymaking</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X79E1C63D8516D334">3.1-2 POLYMAKE_LAST_FAIL_REASON</a></span>
 </div>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap3.html#X7B786DAF80136FF4">3.2 <span class="Heading">Variables for system interaction</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7B35A5217C8C7B04">3.2-1 POLYMAKE_COMMAND</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X7C07B16B873BA46D">3.2-2 POLYMAKE_DATA_DIR</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap3.html#X875BDBAE8075192A">3.2-3 POLYMAKE_CLIENT_PATHS</a></span>
 </div>
 </div>
 
 <h3>3. <span class="Heading">Global Variables</span></h3>
 
-<p><a id="X79216F7882C42BC6" name="X79216F7882C42BC6"></a></p>
+<p><a id="X86AC0C6B807BEBDE" name="X86AC0C6B807BEBDE"></a></p>
 
-<h4>3.1 <span class="Heading">An InfoClass for debug purpose</span></h4>
+<h4>3.1 <span class="Heading">Getting information about polymake
+output</span></h4>
 
 <p><a id="X85BA7A3D7C698B68" name="X85BA7A3D7C698B68"></a></p>
 
@@ -40,6 +44,13 @@
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; InfoPolymaking</code></td><td class="tdright">( info class )</td></tr></table></div>
 <p>If set to at least 2, the output of polymake is shown. At level 1, warnings are shown. This is the default. And at level 0, the polymake package remains silent.</p>
+
+<p><a id="X79E1C63D8516D334" name="X79E1C63D8516D334"></a></p>
+
+<h5>3.1-2 POLYMAKE_LAST_FAIL_REASON</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; POLYMAKE_LAST_FAIL_REASON</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>Contains a string that explains the last occurence of <code class="keyw">fail</code> as a return value of <code class="func">Polymake</code> (<a href="chap2.html#X7DBA99E87EC51D53"><b>2.5-1</b></a>).</p>
 
 <p><a id="X7B786DAF80136FF4" name="X7B786DAF80136FF4"></a></p>
 
@@ -60,6 +71,13 @@
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; POLYMAKE_DATA_DIR</code></td><td class="tdright">( global variable )</td></tr></table></div>
 <p>In this directory the files for polymake will be created. By default, this generates a temporary directory using <code class="keyw">DirectoryTemporary</code></p>
+
+<p><a id="X875BDBAE8075192A" name="X875BDBAE8075192A"></a></p>
+
+<h5>3.2-3 POLYMAKE_CLIENT_PATHS</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; POLYMAKE_CLIENT_PATHS</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>A list of directories where polymake's the stand-alone clients live. By default, <code class="keyw">DirectoriesSystemPrograms</code> is used.</p>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap2.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chap4.html">Next Chapter</a>&nbsp;  </div>

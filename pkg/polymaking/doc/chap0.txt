@@ -3,7 +3,7 @@
                      [1XAn Interface for using [5Xpolymake[0X in [5XGAP[0X[0X
   
   
-                               ( Version 0.7.1 )
+                               ( Version 0.7.3 )
   
   
                                   Marc Roeder
@@ -48,7 +48,8 @@
     1.2 Setting variables for external programs
       1.2-1 SetPolymakeDataDirectory
       1.2-2 SetPolymakeCommand
-      1.2-3 Setting variables permanently
+      1.2-3 SetPolymakeClientPaths
+      1.2-4 Setting variables permanently
   2. Polymake interaction
     2.1 Creating Polymake Objects
       2.1-1 CreateEmptyFile
@@ -74,12 +75,16 @@
     2.5 Calling Polymake and converting its output
       2.5-1 Polymake
     2.6 An Example
+    2.7 Calling Clients
+      2.7-1 PolymakeClient
   3. Global Variables
-    3.1 An InfoClass for debug purpose
+    3.1 Getting information about polymake output
       3.1-1 InfoPolymaking
+      3.1-2 POLYMAKE_LAST_FAIL_REASON
     3.2 Variables for system interaction
       3.2-1 POLYMAKE_COMMAND
       3.2-2 POLYMAKE_DATA_DIR
+      3.2-3 POLYMAKE_CLIENT_PATHS
   4. Converting Polymake Output
     4.1 The General Method
       4.1-1 Converter- Philosopy
@@ -89,12 +94,14 @@
     4.2 Conversion Functions
       4.2-1 ConvertPolymakeNumber
       4.2-2 ConvertPolymakeScalarToGAP
-      4.2-3 ConvertPolymakeMatrixToGAP
-      4.2-4 ConvertPolymakeVectorToGAP
-      4.2-5 ConvertPolymakeBoolToGAP
-      4.2-6 ConvertPolymakeSetToGAP
-      4.2-7 ConvertPolymakeGraphToGAP
-      4.2-8 ConvertPolymakeHasseDiagramToGAP
+      4.2-3 ConvertPolymakeMatrixOrListOfSetsToGAP
+      4.2-4 ConvertPolymakeMatrixToGAP
+      4.2-5 ConvertPolymakeVectorToGAP
+      4.2-6 ConvertPolymakeBoolToGAP
+      4.2-7 ConvertPolymakeSetToGAP
+      4.2-8 ConvertPolymakeListOfSetsToGAP
+      4.2-9 ConvertPolymakeGraphToGAP
+      4.2-10 ConvertPolymakeHasseDiagramToGAP
   
   
   -------------------------------------------------------

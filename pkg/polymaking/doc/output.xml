@@ -1,6 +1,7 @@
    <Section><Heading>Calling Polymake and converting its output</Heading>
+
    <ManSection>
-   <Meth Name="Polymake" Arg="poly,option [: [PolymakeNolookup]]"/>
+   <Meth Name="Polymake" Arg="poly option [: [PolymakeNolookup]]"/>
     <Description>
     
      This method calls the polymake program (see <Ref
@@ -16,7 +17,8 @@
      The first line of each block of polymake output is taken as a
      keyword and the according entry in <Ref Var="ObjectConverters"/>
      is called to convert the block into &GAP; readable form. If no
-     such conversion function exists, an error is issued.
+     conversion function is known, an info string is printed and <K>fail</K> is
+     returned.
 
      If only one keyword has been given as <A>option</A>,
      <C>Polymake</C> returns the result of the conversion operation.
@@ -25,7 +27,7 @@
 
      In any case, the calculated values for each block are stored as
      known properties of the <K>PolymakeObject</K> <A>poly</A> as long
-     as they are not <K>fail</K>. 
+     as they are not <K>fail</K>.
 
      If <K>Polymake</K> is called with an option that corresponds to a
      name of a known property of <A>poly</A>, the known property is
@@ -48,6 +50,12 @@
      already has a known property with name <A>option</A>.
   </Description>
   </ManSection>
+
+  Note that whenever <Ref Meth="Polymake"/> returns <K>fail</K>, a description
+  of the problem is stored in  <Ref Var="POLYMAKE_LAST_FAIL_REASON"/>.
+  If you call <Ref Meth="Polymake"/> with more than one keyword, 
+  <Ref Var="POLYMAKE_LAST_FAIL_REASON"/> is changed before polymake is
+  called. So any further reason to return <K>fail</K> will overwrite it.
 
   </Section>
 
@@ -84,3 +92,62 @@
     </Example>    
 
    </Section>
+
+<Section><Heading>Calling Clients</Heading>
+
+<ManSection>
+<Meth Name="PolymakeClient" Arg="clientname [,outobject] [,inobjects]
+[,options]"/>
+<Meth Name="PolymakeClientNC" Arg="clientname ,outobject ,inobjects ,options"/>
+   <Returns>PolymakeObject</Returns>   
+  <Description>
+   Any client program that has a command line syntax like 
+   <Br/>
+    <C>clientname outfile infile1 infile2... -option1 -option2...</C>
+   <Br/>
+   can be called using <K>PolymakeClient</K>. Any output of the client to the
+   terminal is ignored (but a warning  is printed if this happens).
+   <Br/>
+   <A>clientname</A> must be given as a string without path. Polymaking looks
+   for clients in the directories listed in <Ref
+Var="POLYMAKE_CLIENT_PATHS"/>.
+<Br/>
+   The client program is called and passed the file corresponding to
+   the PolymakeObject <A>outobject</A>, the files of the PolymakeObjects in
+   the list <A>inobjects</A> and finally the string <A>options</A>.
+   If no PolymakeObject <A>outobject</A> is given, a new object is created.
+   <K>PolymakeClient</K> returns the PolymakeObject <A>outobject</A> if it was
+   given, otherwise a new PolymakeObject is returned.
+<Br/>
+   <K>PolymakeClientNC</K> does not perform any checks on the input objects.
+<Br/>
+   <Emph>Important:</Emph> <K>PolymakeClient</K> does not change the known
+    properties of  <A>outfile</A>. This can lead to inconsistencies if you
+    "recycle" files. So if you know that a client will overwrite the output
+    file, consider using <Ref Meth="ClearPolymakeObject"/> on the output
+    PolymakeObject before calling the client.
+  </Description>
+</ManSection>
+
+<Example>
+<![CDATA[
+gap> rand:=PolymakeClient("rand_sphere","3 15");
+<polymake object. No properties known>
+gap> Polymake(rand,"N_VERTICES");
+15
+gap> cube:=PolymakeClient("cube","3");
+gap> Polymake(cube,"N_VERTICES");
+8
+gap> PolymakeClient("pyramid",rand,[cube]);
+<polymake object>
+gap> IsIdenticalObj(last,rand);
+true
+gap> ## the file of <rand> has changed, but polymaking doesn't know about it:
+gap> Polymake(rand,"N_VERTICES");
+15
+gap> Polymake(rand,"N_VERTICES":PolymakeNolookup);
+9
+]]>
+</Example>
+
+</Section>

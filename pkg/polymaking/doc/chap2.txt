@@ -235,7 +235,7 @@
   
   [1X2.5-1 Polymake[0X
   
-  [2X> Polymake( [0X[3Xpolyoption[, :[, PolymakeNolookup]][0X[2X ) ____________________[0Xmethod
+  [2X> Polymake( [0X[3Xpoly, option[, :[, PolymakeNolookup]][0X[2X ) __________________[0Xmethod
   
   This  method  calls the polymake program (see [2XPOLYMAKE_COMMAND[0X ([14X3.2-1[0X)) with
   the option [3Xoption[0X. You may use several keywords such as [10X"DIM VERTICES"[0X as an
@@ -245,15 +245,15 @@
   using  the  functions  given  in [2XObjectConverters[0X ([14X4.1-4[0X). The first line of
   each  block of polymake output is taken as a keyword and the according entry
   in [2XObjectConverters[0X ([14X4.1-4[0X) is called to convert the block into [5XGAP[0X readable
-  form. If no such conversion function exists, an error is issued. If only one
-  keyword  has  been  given  as  [3Xoption[0X,  [10XPolymake[0X  returns  the result of the
-  conversion  operation. If more than one keyword has been given or the output
-  consists  of  more  than  one block, [10XPolymake[0X returns [9Xfail[0X. In any case, the
-  calculated  values  for  each  block  are  stored as known properties of the
-  [9XPolymakeObject[0X [3Xpoly[0X as long as they are not [9Xfail[0X. If [9XPolymake[0X is called with
-  an  option that corresponds to a name of a known property of [3Xpoly[0X, the known
-  property  is  returned.  In  this  case,  there  is  no call of the external
-  program. (see below for suppression of this feature).
+  form. If no conversion function is known, an info string is printed and [9Xfail[0X
+  is  returned. If only one keyword has been given as [3Xoption[0X, [10XPolymake[0X returns
+  the  result  of  the conversion operation. If more than one keyword has been
+  given  or the output consists of more than one block, [10XPolymake[0X returns [9Xfail[0X.
+  In  any  case,  the  calculated  values  for  each block are stored as known
+  properties  of  the  [9XPolymakeObject[0X  [3Xpoly[0X  as  long as they are not [9Xfail[0X. If
+  [9XPolymake[0X  is  called  with  an  option that corresponds to a name of a known
+  property  of [3Xpoly[0X, the known property is returned. In this case, there is no
+  call of the external program. (see below for suppression of this feature).
   
   Note  that  the  command [9XPolymake[0X returns [9Xfail[0X if nothing is returned by the
   program  polymake  or  more than one block of data is returned. For example,
@@ -265,6 +265,11 @@
   If  the  option  [3XPolymakeNolookup[0X  is  set  to anything else than false, the
   polymake  program  is  called even if [3Xpoly[0X already has a known property with
   name [3Xoption[0X.
+  
+  Note  that  whenever  [2XPolymake[0X returns [9Xfail[0X, a description of the problem is
+  stored  in [2XPOLYMAKE_LAST_FAIL_REASON[0X ([14X3.1-2[0X). If you call [2XPolymake[0X with more
+  than  one  keyword,  [2XPOLYMAKE_LAST_FAIL_REASON[0X  ([14X3.1-2[0X)  is  changed  before
+  polymake is called. So any further reason to return [9Xfail[0X will overwrite it.
   
   
   [1X2.6 An Example[0X
@@ -298,5 +303,52 @@
     [4X    2[0X
     [4X    [0X
     [4X    [0X
+  [4X------------------------------------------------------------------[0X
+  
+  
+  [1X2.7 Calling Clients[0X
+  
+  [1X2.7-1 PolymakeClient[0X
+  
+  [2X> PolymakeClient( [0X[3Xclientname[, outobject][, inobjects][, options][0X[2X ) __[0Xmethod
+  [2X> PolymakeClientNC( [0X[3Xclientname, outobject, inobjects, options[0X[2X ) ______[0Xmethod
+  [6XReturns:[0X  PolymakeObject
+  
+  Any client program that has a command line syntax like
+  [10Xclientname outfile infile1 infile2... -option1 -option2...[0X
+  can be called using [9XPolymakeClient[0X. Any output of the client to the terminal
+  is ignored (but a warning is printed if this happens).
+  [3Xclientname[0X  must  be  given  as  a string without path. Polymaking looks for
+  clients in the directories listed in [2XPOLYMAKE_CLIENT_PATHS[0X ([14X3.2-3[0X).
+  The  client  program  is  called  and  passed  the file corresponding to the
+  PolymakeObject  [3Xoutobject[0X,  the  files  of  the  PolymakeObjects in the list
+  [3Xinobjects[0X  and finally the string [3Xoptions[0X. If no PolymakeObject [3Xoutobject[0X is
+  given,  a  new  object is created. [9XPolymakeClient[0X returns the PolymakeObject
+  [3Xoutobject[0X if it was given, otherwise a new PolymakeObject is returned.
+  [9XPolymakeClientNC[0X does not perform any checks on the input objects.
+  [13XImportant:[0X  [9XPolymakeClient[0X  does not change the known properties of [3Xoutfile[0X.
+  This can lead to inconsistencies if you "recycle" files. So if you know that
+  a  client will overwrite the output file, consider using [2XClearPolymakeObject[0X
+  ([14X2.4-6[0X) on the output PolymakeObject before calling the client.
+  
+  [4X---------------------------  Example  ----------------------------[0X
+    [4X[0X
+    [4Xgap> rand:=PolymakeClient("rand_sphere","3 15");[0X
+    [4X<polymake object. No properties known>[0X
+    [4Xgap> Polymake(rand,"N_VERTICES");[0X
+    [4X15[0X
+    [4Xgap> cube:=PolymakeClient("cube","3");[0X
+    [4Xgap> Polymake(cube,"N_VERTICES");[0X
+    [4X8[0X
+    [4Xgap> PolymakeClient("pyramid",rand,[cube]);[0X
+    [4X<polymake object>[0X
+    [4Xgap> IsIdenticalObj(last,rand);[0X
+    [4Xtrue[0X
+    [4Xgap> ## the file of <rand> has changed, but polymaking doesn't know about it:[0X
+    [4Xgap> Polymake(rand,"N_VERTICES");[0X
+    [4X15[0X
+    [4Xgap> Polymake(rand,"N_VERTICES":PolymakeNolookup);[0X
+    [4X9[0X
+    [4X[0X
   [4X------------------------------------------------------------------[0X
   

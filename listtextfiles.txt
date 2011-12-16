@@ -29,13 +29,17 @@ polymaking/doc/polymaking.bib
 polymaking/doc/polymaking.xml
 polymaking/doc/chap3.txt
 polymaking/doc/chap1.html
+polymaking/lib/hasse_diagram_old.gi
 polymaking/lib/convert.gi
 polymaking/lib/ObjectConverters.gd
 polymaking/lib/convert.gd
+polymaking/lib/clients.gd
 polymaking/lib/environment.gi
 polymaking/lib/environment.gd
+polymaking/lib/clients.gi
 polymaking/lib/construct.gi
 polymaking/lib/ObjectConverters.gi
 polymaking/lib/construct.gd
+polymaking/lib/hasse_diagram.gi
 polymaking/lib/Objects.gd
 polymaking/lib/Objects.gi
