@@ -22,8 +22,11 @@
   [1X2.1-2 CreatePolymakeObject[0X
   
   [2X> CreatePolymakeObject( [0X[3X[0X[2X ) ___________________________________________[0Xmethod
+  [2X> CreatePolymakeObject( [0X[3Xappvertyp[0X[2X ) __________________________________[0Xmethod
   [2X> CreatePolymakeObject( [0X[3Xdir[0X[2X ) ________________________________________[0Xmethod
+  [2X> CreatePolymakeObject( [0X[3Xdir, appvertyp[0X[2X ) _____________________________[0Xmethod
   [2X> CreatePolymakeObject( [0X[3Xprefix, dir[0X[2X ) ________________________________[0Xmethod
+  [2X> CreatePolymakeObject( [0X[3Xprefix, dir, appvertyp[0X[2X ) _____________________[0Xmethod
   [6XReturns:[0X  [9XPolymakeObject[0X
   
   If  called  without  arguments,  this  method generates an empty file in the
@@ -32,9 +35,25 @@
   If  [3Xprefix[0X  is  not  given,  the file is called [11XpolyN[0X where [9XN[0X is the current
   runtime.  If  a  file  of  this  name  already  exists, a number is appended
   separated  by  a  dot  (example:  "poly1340" and "poly1340.1"). If [3Xprefix[0X is
-  given, the filename starts with that prefix.
+  given,  the  filename  starts  with this prefix. Optionally, the file can be
+  generated  with  a  header  specifying  application, version and type of the
+  object.  This  is  done  by  passing  the  triple  of  strings  [3Xappvertyp[0X to
+  [2XCreatePolymakeObject[0X.           A          valid          triple          is
+  [10X["polytope","2.3","RationalPolytope"][0X.     Validity     is     checked    by
+  [2XCheckAppVerTypList[0X ([14X2.1-3[0X).
   
-  [1X2.1-3 CreatePolymakeObjectFromFile[0X
+  [1X2.1-3 CheckAppVerTypList[0X
+  
+  [2X> CheckAppVerTypList( [0X[3Xappvertyp[0X[2X ) ____________________________________[0Xmethod
+  [6XReturns:[0X  [9Xbool[0X
+  
+  Checks if the triple [3Xarppvertyp[0X of strings specifies an application and type
+  of  polymake  version  2.3.  More specifically, the first entry has to be an
+  application  from  [10X["polytope","surface","topaz"][0X and the third entry has to
+  be  a  type  corresponding  to the application given in the first entry. The
+  second entry is not checked.
+  
+  [1X2.1-4 CreatePolymakeObjectFromFile[0X
   
   [2X> CreatePolymakeObjectFromFile( [0X[3Xfilename[0X[2X ) ___________________________[0Xmethod
   [2X> CreatePolymakeObjectFromFile( [0X[3Xdir, filename[0X[2X ) ______________________[0Xmethod
@@ -206,10 +225,15 @@
   [1X2.4-6 ClearPolymakeObject[0X
   
   [2X> ClearPolymakeObject( [0X[3Xpoly[0X[2X ) ________________________________________[0Xmethod
+  [2X> ClearPolymakeObject( [0X[3Xpoly, appvertyp[0X[2X ) _____________________________[0Xmethod
   [6XReturns:[0X  nothing
   
   Deletes  all  known  properties  of the [9XPolymakeObject[0X [3Xpoly[0X and replaces its
   file with an empty one.
+  If  the triple of strings [3Xappvertyp[0X specifying application, version and type
+  (see  [2XCheckAppVerTypList[0X ([14X2.1-3[0X)) is given, the file is replaced with a file
+  that  contains only a header specifying application, version and type of the
+  polymake object.
   
   There  are  also methods to manipulate the known values without touching the
   file of the [9XPolymakeObject[0X:

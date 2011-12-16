@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: construct.gd, v 0.7.5 2008/08/13 12:12:13 gap Exp $
+#H @(#)$Id: construct.gd, v 0.7.6 2008/12/02 18:30:59 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,14 +24,19 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/construct_gd"):=
-	"@(#)$Id: construct.gd, v 0.7.5 2008/08/13   12:12:13  gap Exp $";
+	"@(#)$Id: construct.gd, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
 DeclareOperation("CreateEmptyFile",[IsString]);
 
 DeclareOperation("CreatePolymakeObjectFromFile",[IsString]);
 DeclareOperation("CreatePolymakeObjectFromFile",[IsDirectory,IsString]);
+
 DeclareOperation("CreatePolymakeObject",[]);
+DeclareOperation("CreatePolymakeObject",[IsDenseList]);
 DeclareOperation("CreatePolymakeObject",[IsDirectory]);
+DeclareOperation("CreatePolymakeObject",[IsDirectory,IsDenseList]);
 DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory]);
+DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory,IsDenseList]);
+
 DeclareOperation("ConvertMatrixToPolymakeString",[IsString,IsDenseList]);
 
 DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString]);

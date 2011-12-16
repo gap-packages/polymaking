@@ -27,7 +27,6 @@ polymaking/doc/polymaking.bib
 polymaking/doc/polymaking.xml
 polymaking/doc/chap3.txt
 polymaking/doc/chap1.html
-polymaking/tst/test.gap
 polymaking/tst/testall.g
 polymaking/tst/polymaking.tst
 polymaking/lib/hasse_diagram_old.gi
@@ -42,5 +41,7 @@ polymaking/lib/construct.gi
 polymaking/lib/ObjectConverters.gi
 polymaking/lib/construct.gd
 polymaking/lib/hasse_diagram.gi
+polymaking/lib/application_version_type.gi
+polymaking/lib/application_version_type.gd
 polymaking/lib/Objects.gd
 polymaking/lib/Objects.gi

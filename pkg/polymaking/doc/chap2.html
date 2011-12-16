@@ -22,7 +22,8 @@
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X83D426D5855D1FD6">2.1 <span class="Heading">Creating Polymake Objects</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7C87B1807E036A85">2.1-1 CreateEmptyFile</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8625E7E2845F1634">2.1-2 CreatePolymakeObject</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7801F05A81E23EED">2.1-3 CreatePolymakeObjectFromFile</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X8135E88E87DD1551">2.1-3 CheckAppVerTypList</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X7801F05A81E23EED">2.1-4 CreatePolymakeObjectFromFile</a></span>
 </div>
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap2.html#X7D9EBB0383B9BD1C">2.2 <span class="Heading">Accessing Properties of Polymake Objects</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap2.html#X86D967C684B27108">2.2-1 DirectoryOfPolymakeObject</a></span>
@@ -76,15 +77,27 @@
 <h5>2.1-2 CreatePolymakeObject</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObject</code>( <var class="Arg"></var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObject</code>( <var class="Arg">appvertyp</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObject</code>( <var class="Arg">dir</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObject</code>( <var class="Arg">dir, appvertyp</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObject</code>( <var class="Arg">prefix, dir</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObject</code>( <var class="Arg">prefix, dir, appvertyp</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <p><b>Returns: </b><code class="keyw">PolymakeObject</code></p>
 
-<p>If called without arguments, this method generates an empty file in the directory defined by <code class="func">POLYMAKE_DATA_DIR</code> (<a href="chap3.html#X7C07B16B873BA46D"><b>3.2-2</b></a>). If a directory <var class="Arg">dir</var> is given (this directory must exist), an empty file is generated in this directory. If <var class="Arg">prefix</var> is not given, the file is called <code class="file">polyN</code> where <code class="keyw">N</code> is the current runtime. If a file of this name already exists, a number is appended separated by a dot (example: "poly1340" and "poly1340.1"). If <var class="Arg">prefix</var> is given, the filename starts with that prefix.</p>
+<p>If called without arguments, this method generates an empty file in the directory defined by <code class="func">POLYMAKE_DATA_DIR</code> (<a href="chap3.html#X7C07B16B873BA46D"><b>3.2-2</b></a>). If a directory <var class="Arg">dir</var> is given (this directory must exist), an empty file is generated in this directory. If <var class="Arg">prefix</var> is not given, the file is called <code class="file">polyN</code> where <code class="keyw">N</code> is the current runtime. If a file of this name already exists, a number is appended separated by a dot (example: "poly1340" and "poly1340.1"). If <var class="Arg">prefix</var> is given, the filename starts with this prefix. Optionally, the file can be generated with a header specifying application, version and type of the object. This is done by passing the triple of strings <var class="Arg">appvertyp</var> to <code class="func">CreatePolymakeObject</code>. A valid triple is <code class="code">["polytope","2.3","RationalPolytope"]</code>. Validity is checked by <code class="func">CheckAppVerTypList</code> (<a href="chap2.html#X8135E88E87DD1551"><b>2.1-3</b></a>).</p>
+
+<p><a id="X8135E88E87DD1551" name="X8135E88E87DD1551"></a></p>
+
+<h5>2.1-3 CheckAppVerTypList</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CheckAppVerTypList</code>( <var class="Arg">appvertyp</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b><code class="keyw">bool</code></p>
+
+<p>Checks if the triple <var class="Arg">arppvertyp</var> of strings specifies an application and type of polymake version 2.3. More specifically, the first entry has to be an application from <code class="code">["polytope","surface","topaz"]</code> and the third entry has to be a type corresponding to the application given in the first entry. The second entry is not checked.<br /></p>
 
 <p><a id="X7801F05A81E23EED" name="X7801F05A81E23EED"></a></p>
 
-<h5>2.1-3 CreatePolymakeObjectFromFile</h5>
+<h5>2.1-4 CreatePolymakeObjectFromFile</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObjectFromFile</code>( <var class="Arg">filename</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; CreatePolymakeObjectFromFile</code>( <var class="Arg">dir, filename</var> )</td><td class="tdright">( method )</td></tr></table></div>
@@ -245,9 +258,10 @@ rec(
 <h5>2.4-6 ClearPolymakeObject</h5>
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ClearPolymakeObject</code>( <var class="Arg">poly</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ClearPolymakeObject</code>( <var class="Arg">poly, appvertyp</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <p><b>Returns: </b>nothing</p>
 
-<p>Deletes all known properties of the <code class="keyw">PolymakeObject</code> <var class="Arg">poly</var> and replaces its file with an empty one.</p>
+<p>Deletes all known properties of the <code class="keyw">PolymakeObject</code> <var class="Arg">poly</var> and replaces its file with an empty one. <br /> If the triple of strings <var class="Arg">appvertyp</var> specifying application, version and type (see <code class="func">CheckAppVerTypList</code> (<a href="chap2.html#X8135E88E87DD1551"><b>2.1-3</b></a>)) is given, the file is replaced with a file that contains only a header specifying application, version and type of the polymake object.</p>
 
 <p>There are also methods to manipulate the known values without touching the file of the <code class="keyw">PolymakeObject</code>:</p>
 

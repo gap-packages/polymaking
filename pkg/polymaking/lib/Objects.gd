@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: Objects.gd, v 0.7.5 2008/08/13 12:12:13 gap Exp $
+#H @(#)$Id: Objects.gd, v 0.7.6 2008/12/02 18:30:59 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/Objects_gd"):=
-	"@(#)$Id: Objects.gd, v 0.7.5 2008/08/13   12:12:13  gap Exp $";
+	"@(#)$Id: Objects.gd, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
 DeclareCategory("IsPolymakeObject",IsObject);
 
 DeclareRepresentation("IsPolymakeObjectRep",
@@ -49,6 +49,7 @@ DeclareOperation("PropertyOfPolymakeObject",[IsPolymakeObject,IsString]);
 ###############################
 
 DeclareOperation("ClearPolymakeObject",[IsPolymakeObject]);
+DeclareOperation("ClearPolymakeObject",[IsPolymakeObject,IsDenseList]);
 
 DeclareOperation("UnbindKnownPropertyOfPolymakeObject",[IsPolymakeObject,IsString]);
 DeclareOperation("WriteKnownPropertyToPolymakeObject",[IsPolymakeObject,IsString,IsObject]);

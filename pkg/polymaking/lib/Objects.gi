@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: Objects.gi, v 0.7.5 2008/08/13 12:12:13 gap Exp $
+#H @(#)$Id: Objects.gi, v 0.7.6 2008/12/02 18:30:59 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/Objects_gi"):=
-	"@(#)$Id: Objects.gi, v 0.7.5 2008/08/13   12:12:13  gap Exp $";
+	"@(#)$Id: Objects.gi, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
 PolymakeObjectFamily:=NewFamily("PolymakeObjectFamily",IsPolymakeObject);
 PolymakeObject:=NewType(PolymakeObjectFamily,IsPolymakeObjectRep);
 
@@ -170,6 +170,25 @@ InstallMethod(ClearPolymakeObject,
         function(poly)
     CreateEmptyFile(FullFilenameOfPolymakeObject(poly));
     Unbind(poly!.knownProperties);
+end);
+
+# clear known data. Clear file and then set application, version,type 
+# information
+InstallMethod(ClearPolymakeObject,
+        [IsPolymakeObject,IsDenseList],
+        function(poly,appvertyp)
+    local   appendstring;
+    if not CheckAppVerTypList(appvertyp)
+       then
+        Error("application, version, type not well-formed");
+    fi;
+    CreateEmptyFile(FullFilenameOfPolymakeObject(poly));
+    Unbind(poly!.knownProperties);
+    appendstring:=Concatenation(["_application ",appvertyp[1],"\n",
+                          "_version ",appvertyp[2],"\n",
+                          "_type ",appvertyp[3],"\n"]
+                          );
+    AppendToPolymakeObject(poly,appendstring);
 end);
 
 # Deleting a something known:

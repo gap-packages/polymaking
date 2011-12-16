@@ -6,6 +6,8 @@
   [2XAppendPointlistToPolymakeObject[0X  2.4-2
   [2XAppendToPolymakeObject[0X  2.4-1
   [2XAppendVertexlistToPolymakeObject[0X  2.4-3
+  [2XCheckAppVerTypList[0X  2.1-3
+  [2XClearPolymakeObject[0X  2.4-6
   [2XClearPolymakeObject[0X  2.4-6
   [2XConvertMatrixToPolymakeString[0X  2.4-5
   [2XConvertPolymakeBoolToGAP[0X  4.2-6
@@ -28,8 +30,11 @@
   [2XCreatePolymakeObject[0X  2.1-2
   [2XCreatePolymakeObject[0X  2.1-2
   [2XCreatePolymakeObject[0X  2.1-2
-  [2XCreatePolymakeObjectFromFile[0X  2.1-3
-  [2XCreatePolymakeObjectFromFile[0X  2.1-3
+  [2XCreatePolymakeObject[0X  2.1-2
+  [2XCreatePolymakeObject[0X  2.1-2
+  [2XCreatePolymakeObject[0X  2.1-2
+  [2XCreatePolymakeObjectFromFile[0X  2.1-4
+  [2XCreatePolymakeObjectFromFile[0X  2.1-4
   [2XDirectoryOfPolymakeObject[0X  2.2-1
   [2XFilenameOfPolymakeObject[0X  2.2-2
   [2XFullFilenameOfPolymakeObject[0X  2.2-3

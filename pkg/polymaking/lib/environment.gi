@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: environment.gi, v 0.7.5 2008/08/13 12:12:13 gap Exp $
+#H @(#)$Id: environment.gi, v 0.7.6 2008/12/02 18:30:59 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("/home/roeder/gap/polymaking/polymaking/lib/environment_gi"):=
-	"@(#)$Id: environment.gi, v 0.7.5 2008/08/13   12:12:13  gap Exp $";
+	"@(#)$Id: environment.gi, v 0.7.6 2008/12/02   18:30:59  gap Exp $";
 SetInfoLevel(InfoPolymaking,1);
 
 # give the command which calles polymake. You may need to include the full path
@@ -71,7 +71,7 @@ InstallMethod(SetPolymakeClientPaths,[IsDenseList],
        then
         Error("<dirs> must be a list of directories");
     fi;
-    MakeReadWriteGlobal(POLYMAKE_CLIENT_PATHS);
+    MakeReadWriteGlobal("POLYMAKE_CLIENT_PATHS");
     POLYMAKE_CLIENT_PATHS:=dirs;
     MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
 end);
