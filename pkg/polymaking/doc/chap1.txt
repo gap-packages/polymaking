@@ -1,0 +1,69 @@
+  
+  [1X1. Installation and Preface[0X
+  
+  To  install  the package, just unpack it in your packages directory (usually
+  [10X~/gap/pkg[0X  for  local  installation).  To use [5Xpolymaking[0X, you need a working
+  installation of the program polymake [7Xhttp://www.math.tu-berlin.de/polymake/[0X.
+  The  package  has  been tested on linux and Mac OS X (10.4 and 10.5). But it
+  should be as platform independent as [5XGAP[0X and polymake.
+  
+  The  interaction  with  polymake is restricted to writing files and carrying
+  out simple operations looking like
+  [10Xpolymake file KEYWORD1 KEYWORD2 KEYWORD3[0X
+  on the command line. Using multiple files in one command is not supported as
+  are  scripts.  Also,  there  is  no  direct interface to any of the polymake
+  clients (like [10Xintersction[0X).
+  
+  
+  [1X1.1 A few words about the installation of polymake[0X
+  
+  [5Xpolymaking[0X  will  try  to  guess  the location of polymake. If this fails, a
+  warning is issued at load time ([9XInfoWarning[0X level 1). Note that the guessing
+  procedure  is  suppressed when [2XPOLYMAKE_COMMAND[0X ([14X3.2-1[0X) is set manually (see
+  [14X1.2-3[0X).
+  Note  that  polymake  calls  other external functions ("clients") to do some
+  work  for  it. These functions must be either in the path from which GAP was
+  called  or in a path listed in the [9XPATH[0X environment variable. You can set it
+  using the shell command
+  [10Xsetenv PATH ${PATH}:<your polymakepath>[0X
+  The  general  rule  is:  If  [5Xpolymaking[0X  finds  polymake by itself, there is
+  nothing to worry about.
+  
+  
+  [1X1.2 Setting variables for external programs[0X
+  
+  As [5Xpolymaking[0X uses the program polymake, it needs to know where this program
+  lives. The communication with polymake is done by writing files for polymake
+  and  reading  its output (as returned to standard output "the prompt"). Note
+  that the interface does not read any polymake file.
+  
+  [1X1.2-1 SetPolymakeDataDirectory[0X
+  
+  [2X> SetPolymakeDataDirectory( [0X[3Xdir[0X[2X ) ____________________________________[0Xmethod
+  
+  Sets  the  directory  in  which  all  polymake files are created to [3Xdir[0X. The
+  standard  place  for these files is a temporary directory generated when the
+  package is loaded. This manipulates [2XPOLYMAKE_DATA_DIR[0X ([14X3.2-2[0X).
+  
+  [1X1.2-2 SetPolymakeCommand[0X
+  
+  [2X> SetPolymakeCommand( [0X[3Xcommand[0X[2X ) ______________________________________[0Xmethod
+  
+  Sets  the  name  for  the  polymake  program  to  [3Xcommand[0X.  This manipulates
+  [2XPOLYMAKE_COMMAND[0X ([14X3.2-1[0X).
+  
+  
+  [1X1.2-3 Setting variables permanently[0X
+  
+  To   permanently   set   the   values   of   [2XPOLYMAKE_COMMAND[0X   ([14X3.2-1[0X)  and
+  [2XPOLYMAKE_DATA_DIR[0X ([14X3.2-2[0X), add the lines
+  
+  [4X------------------------------------------------------------------[0X
+    [4XPOLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");[0X
+    [4XPOLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");[0X
+  [4X------------------------------------------------------------------[0X
+  
+  to  your  [11X.gaprc[0X file (see [14XReference: The .gaprc file[0X). Note that these have
+  to  be  [13Xbefore[0X  the  [10XLoadPackage("polymaking");[0X  line. Or you can change the
+  values of the above variables by editing [11Xlib/environment.gi[0X
+  

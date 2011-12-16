@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>GAP (polymaking) - Chapter 4: Converting Polymake Output</title>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+<meta name="generator" content="GAPDoc2HTML" />
+<link rel="stylesheet" type="text/css" href="manual.css" />
+</head>
+<body>
+
+
+<div class="chlinktop"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<div class="chlinkprevnexttop">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap3.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chapBib.html">Next Chapter</a>&nbsp;  </div>
+
+<p><a id="X7D23E80E841CDD67" name="X7D23E80E841CDD67"></a></p>
+<div class="ChapSects"><a href="chap4.html#X7D23E80E841CDD67">4. <span class="Heading">Converting Polymake Output</span></a>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap4.html#X862D57D87A244DE2">4.1 <span class="Heading">The General Method</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7CDBEA427EE69C71">4.1-1 <span class="Heading">Converter- Philosopy</span></a>
+</span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7EB6D80C816CF667">4.1-2 ConvertPolymakeOutputToGapNotation</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X841D81327C6F6E29">4.1-3 SplitPolymakeOutputStringIntoBlocks</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X83199F737F4BE4FD">4.1-4 ObjectConverters</a></span>
+</div>
+<div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap4.html#X7FF4170183C83CC1">4.2 <span class="Heading">Conversion Functions</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7FC98443862DB83F">4.2-1 ConvertPolymakeNumber</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F2A1C2C808E4A07">4.2-2 ConvertPolymakeScalarToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X817C6B4180BF6365">4.2-3 ConvertPolymakeMatrixToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X85F7F6787D346CC0">4.2-4 ConvertPolymakeVectorToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X87B6F9867EE800C7">4.2-5 ConvertPolymakeBoolToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X846B284085825FEA">4.2-6 ConvertPolymakeSetToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7EBECAA07F8B58D8">4.2-7 ConvertPolymakeGraphToGAP</a></span>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F4BA33C86137259">4.2-8 ConvertPolymakeHasseDiagramToGAP</a></span>
+</div>
+</div>
+
+<h3>4. <span class="Heading">Converting Polymake Output</span></h3>
+
+<p><a id="X862D57D87A244DE2" name="X862D57D87A244DE2"></a></p>
+
+<h4>4.1 <span class="Heading">The General Method</span></h4>
+
+<p>When polymake is called, its output is read as a string and then processed as follows:</p>
+
+<ol>
+<li><p>the lines containing upper case letters are found. These are treated as lines containing the keywords. Each of those lines marks the beginning of a block of data.</p>
+
+</li>
+<li><p>The string is then cut into a list of blocks (also strings). Each block starts with a line containing the keyword and continues with some lines of data.</p>
+
+</li>
+<li><p>for each of the blocks, the appropriate function of <code class="code">ObjectConverters</code> is called. Here "appropriate" just means, that the keyword of the block coincides with the name of the function.</p>
+
+</li>
+<li><p>The output of the conversion function is then added to the known properties of the <code class="code">PolymakeObject</code> for which <code class="code">Polymake</code> was called.</p>
+
+</li>
+</ol>
+<p><a id="X7CDBEA427EE69C71" name="X7CDBEA427EE69C71"></a></p>
+
+<h5>4.1-1 <span class="Heading">Converter- Philosopy</span></h5>
+
+<p>The converter functions should take meaningful polymake data into meaningful <strong class="pkg">GAP</strong> data. This sometimes means that the (mathematical) representation is changed. Here is an example: polymake writes vectors as augmented affine vectors of the form <code class="code">1 a1 a2 a3...</code> which does not go very well with the usual <strong class="pkg">GAP</strong> conventions of column vectors and multiplying matrices from the right. So <strong class="pkg">polymaking</strong> converts such a vector to <code class="code">[a1,a2,a3,...]</code> and the user is left with the problem of augmentation and left or right multiplication.</p>
+
+<p><em>Call for help:</em> As of version 0.7.0, most of the converters were assigned blindly to keywords. So some of them might not be suitable. If you find one of those, please tell me about it. Also, for a lot of keywords and data types, there is no converter. Please tell me if you want a new converter.</p>
+
+<p>The conversion process is done by the following methods:</p>
+
+<p><a id="X7EB6D80C816CF667" name="X7EB6D80C816CF667"></a></p>
+
+<h5>4.1-2 ConvertPolymakeOutputToGapNotation</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeOutputToGapNotation</code>( <var class="Arg">string</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>Record having polymake keywords as entry names and the respective converted polymake output as entries.</p>
+
+<p>Given a the output of the polymake program as a string <var class="Arg">string</var>, this method first calls <code class="func">SplitPolymakeOutputStringIntoBlocks</code> (<a href="chap4.html#X841D81327C6F6E29"><b>4.1-3</b></a>). For each of the returned blocks, the name (=first line) of the block is read and the record <code class="func">ObjectConverters</code> (<a href="chap4.html#X83199F737F4BE4FD"><b>4.1-4</b></a>) is looked up for an entry with that name. If such an entry exists, it (being a function!) is called and passed the block. The returned value is then given the name of the block and added to the record returned by <code class="code">ConvertPolymakeOutputToGapNotation</code>.</p>
+
+<p><a id="X841D81327C6F6E29" name="X841D81327C6F6E29"></a></p>
+
+<h5>4.1-3 SplitPolymakeOutputStringIntoBlocks</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SplitPolymakeOutputStringIntoBlocks</code>( <var class="Arg">string</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>List of strings -- "blocks"--</p>
+
+<p>The string <var class="Arg">string</var> is cut at the lines starting with an upper case letter. The parts are returned as a list of strings. The initial string <var class="Arg">string</var> remains unchanged.</p>
+
+<p><a id="X83199F737F4BE4FD" name="X83199F737F4BE4FD"></a></p>
+
+<h5>4.1-4 ObjectConverters</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ObjectConverters</code></td><td class="tdright">( global variable )</td></tr></table></div>
+<p>The entries of this record are labeled by polymake keywords. Each of the entries is a function which converts a string returned by polymake to <strong class="pkg">GAP</strong> format. So far, only a few converters are implemented. To see which, try <code class="code">RecNames(ObjectConverters);</code></p>
+
+<p>You can define new converters using the basic functions described in section <a href="chap4.html#X7FF4170183C83CC1"><b>4.2</b></a>.</p>
+
+<p><a id="X7FF4170183C83CC1" name="X7FF4170183C83CC1"></a></p>
+
+<h4>4.2 <span class="Heading">Conversion Functions</span></h4>
+
+<p>The following functions are used for the functions in <code class="func">ObjectConverters</code> (<a href="chap4.html#X83199F737F4BE4FD"><b>4.1-4</b></a>).</p>
+
+<p><a id="X7FC98443862DB83F" name="X7FC98443862DB83F"></a></p>
+
+<h5>4.2-1 ConvertPolymakeNumber</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeNumber</code>( <var class="Arg">string</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>The string <var class="Arg">string</var> is converted to a rational number. Unlike <code class="code">Rat</code>, it tests, if the number represented by <var class="Arg">string</var> is a floating point number an converts it correctly. If this is the case, a waring is issued.</p>
+
+<p><a id="X7F2A1C2C808E4A07" name="X7F2A1C2C808E4A07"></a></p>
+
+<h5>4.2-2 ConvertPolymakeScalarToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeScalarToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>If <var class="Arg">list</var> contains a single string, this string is converted into a number using <code class="func">ConvertPolymakeNumber</code> (<a href="chap4.html#X7FC98443862DB83F"><b>4.2-1</b></a>).</p>
+
+<p><a id="X817C6B4180BF6365" name="X817C6B4180BF6365"></a></p>
+
+<h5>4.2-3 ConvertPolymakeMatrixToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeMatrixToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeMatrixToGAPKillOnes</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>The list <var class="Arg">list</var> of strings is interpreted as a list of row vectors and converted into a matrix. The "KillOnes" version removes the leading ones.</p>
+
+<p><a id="X85F7F6787D346CC0" name="X85F7F6787D346CC0"></a></p>
+
+<h5>4.2-4 ConvertPolymakeVectorToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeVectorToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeVectorToGAPKillOne</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>As the corresponding "Matrix" version. Just for vectors.</p>
+
+<p><a id="X87B6F9867EE800C7" name="X87B6F9867EE800C7"></a></p>
+
+<h5>4.2-5 ConvertPolymakeBoolToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeBoolToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>If <var class="Arg">list</var> contains a single string, which is either 0 or 1, this function returns <code class="keyw">false</code> or <code class="keyw">true</code>, respectively.</p>
+
+<p><a id="X846B284085825FEA" name="X846B284085825FEA"></a></p>
+
+<h5>4.2-6 ConvertPolymakeSetToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeSetToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>Let <var class="Arg">list</var> be a list containing single string, which is a list of numbers separated by whitespaces and enclosed by { and } . The returned value is then a set of rational numbers (in the GAP sense).</p>
+
+<p><a id="X7EBECAA07F8B58D8" name="X7EBECAA07F8B58D8"></a></p>
+
+<h5>4.2-7 ConvertPolymakeGraphToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeGraphToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p>Let <var class="Arg">list</var> be a list of strings representing sets (that is, a list of integers enclosed by { and }). Then a record is returned containing two sets named <code class="code">.vertices</code> and <code class="code">.edges</code>.</p>
+
+<p><a id="X7F4BA33C86137259" name="X7F4BA33C86137259"></a></p>
+
+<h5>4.2-8 ConvertPolymakeHasseDiagramToGAP</h5>
+
+<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeHasseDiagramToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
+<p><b>Returns: </b>List of sets of triples (of sets). The returned list is completely immutable.</p>
+
+<p>If <var class="Arg">list</var> is a list of strings as output by polymake's <code class="code">HASSE_DIAGRAM</code> algorithm, then this function returns a list of sets.</p>
+
+<p>The ith entry represents the faces of dimension i. There is one entry for each dimension between 0 and the dimension of the polyhedron. Note that the last entry consists of a list with exactly one entry representing the whole polyhedron.</p>
+
+<p>Every face is a list with three entries <code class="code">[vertices,invboundary,boundary]</code> where <code class="code">vertices</code> is a list of integers representing the vertices of the face (and the number of such a vertex is that of the vertex as a vertex of the full polyhedron). The second entry is a list of integers representing the positions of the i+1 faces containing the current face (in the i+1st entry of the Hasse diagram). And the last entry is the list of i-1 faces containing the current face (numbered by position in the i-1st entry in the Hasse diagram). The faces with empty third entry are exactly the vertices while the face with empty second entry is the face corresponding to the whole poyhedron.</p>
+
+<p>The way polymake returns Hasse diagrams and vertices makes sure that the numbering of vertices is the same for the output of <code class="keyw">HASSE_DIAGRAM</code> and <code class="keyw">VERTICES</code> (i.e. the ith vertex of the vertex list is at position i in the first entry of the Hasse diagram).</p>
+
+
+<div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap3.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chapBib.html">Next Chapter</a>&nbsp;  </div>
+
+
+<div class="chlinkbot"><span class="chlink1">Goto Chapter: </span><a href="chap0.html">Top</a>  <a href="chap1.html">1</a>  <a href="chap2.html">2</a>  <a href="chap3.html">3</a>  <a href="chap4.html">4</a>  <a href="chapBib.html">Bib</a>  <a href="chapInd.html">Ind</a>  </div>
+
+<hr />
+<p class="foot">generated by <a href="http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc">GAPDoc2HTML</a></p>
+</body>
+</html>

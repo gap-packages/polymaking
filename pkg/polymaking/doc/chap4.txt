@@ -1,0 +1,166 @@
+  
+  [1X4. Converting Polymake Output[0X
+  
+  
+  [1X4.1 The General Method[0X
+  
+  When  polymake  is called, its output is read as a string and then processed
+  as follows:
+  
+  (1)   the  lines  containing upper case letters are found. These are treated
+        as  lines  containing  the  keywords.  Each  of  those lines marks the
+        beginning of a block of data.
+  
+  (2)   The  string  is  then  cut  into a list of blocks (also strings). Each
+        block  starts  with  a  line containing the keyword and continues with
+        some lines of data.
+  
+  (3)   for  each  of the blocks, the appropriate function of [10XObjectConverters[0X
+        is  called.  Here  "appropriate"  just  means, that the keyword of the
+        block coincides with the name of the function.
+  
+  (4)   The  output  of  the  conversion  function  is then added to the known
+        properties of the [10XPolymakeObject[0X for which [10XPolymake[0X was called.
+  
+  
+  [1X4.1-1 Converter- Philosopy[0X
+  
+  The converter functions should take meaningful polymake data into meaningful
+  [5XGAP[0X  data.  This  sometimes  means that the (mathematical) representation is
+  changed.  Here  is  an  example: polymake writes vectors as augmented affine
+  vectors of the form [10X1 a1 a2 a3...[0X which does not go very well with the usual
+  [5XGAP[0X  conventions  of column vectors and multiplying matrices from the right.
+  So  [5Xpolymaking[0X converts such a vector to [10X[a1,a2,a3,...][0X and the user is left
+  with the problem of augmentation and left or right multiplication.
+  
+  [13XCall  for  help:[0X  As  of version 0.7.0, most of the converters were assigned
+  blindly  to keywords. So some of them might not be suitable. If you find one
+  of  those,  please  tell  me  about it. Also, for a lot of keywords and data
+  types, there is no converter. Please tell me if you want a new converter.
+  
+  The conversion process is done by the following methods:
+  
+  [1X4.1-2 ConvertPolymakeOutputToGapNotation[0X
+  
+  [2X> ConvertPolymakeOutputToGapNotation( [0X[3Xstring[0X[2X ) _______________________[0Xmethod
+  [6XReturns:[0X  Record  having polymake keywords as entry names and the respective
+            converted polymake output as entries.
+  
+  Given  a  the output of the polymake program as a string [3Xstring[0X, this method
+  first  calls  [2XSplitPolymakeOutputStringIntoBlocks[0X  ([14X4.1-3[0X).  For each of the
+  returned  blocks, the name (=first line) of the block is read and the record
+  [2XObjectConverters[0X  ([14X4.1-4[0X)  is looked up for an entry with that name. If such
+  an  entry exists, it (being a function!) is called and passed the block. The
+  returned  value  is then given the name of the block and added to the record
+  returned by [10XConvertPolymakeOutputToGapNotation[0X.
+  
+  [1X4.1-3 SplitPolymakeOutputStringIntoBlocks[0X
+  
+  [2X> SplitPolymakeOutputStringIntoBlocks( [0X[3Xstring[0X[2X ) ______________________[0Xmethod
+  [6XReturns:[0X  List of strings -- "blocks"--
+  
+  The  string  [3Xstring[0X  is cut at the lines starting with an upper case letter.
+  The  parts  are  returned  as  a  list of strings. The initial string [3Xstring[0X
+  remains unchanged.
+  
+  [1X4.1-4 ObjectConverters[0X
+  
+  [2X> ObjectConverters___________________________________________[0Xglobal variable
+  
+  The  entries  of  this  record are labeled by polymake keywords. Each of the
+  entries  is  a  function which converts a string returned by polymake to [5XGAP[0X
+  format.  So  far,  only  a few converters are implemented. To see which, try
+  [10XRecNames(ObjectConverters);[0X
+  
+  You can define new converters using the basic functions described in section
+  [14X4.2[0X.
+  
+  
+  [1X4.2 Conversion Functions[0X
+  
+  The  following  functions  are  used  for  the functions in [2XObjectConverters[0X
+  ([14X4.1-4[0X).
+  
+  [1X4.2-1 ConvertPolymakeNumber[0X
+  
+  [2X> ConvertPolymakeNumber( [0X[3Xstring[0X[2X ) ____________________________________[0Xmethod
+  
+  The  string  [3Xstring[0X is converted to a rational number. Unlike [10XRat[0X, it tests,
+  if  the  number represented by [3Xstring[0X is a floating point number an converts
+  it correctly. If this is the case, a waring is issued.
+  
+  [1X4.2-2 ConvertPolymakeScalarToGAP[0X
+  
+  [2X> ConvertPolymakeScalarToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
+  
+  If  [3Xlist[0X  contains  a  single string, this string is converted into a number
+  using [2XConvertPolymakeNumber[0X ([14X4.2-1[0X).
+  
+  [1X4.2-3 ConvertPolymakeMatrixToGAP[0X
+  
+  [2X> ConvertPolymakeMatrixToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
+  [2X> ConvertPolymakeMatrixToGAPKillOnes( [0X[3Xlist[0X[2X ) _________________________[0Xmethod
+  
+  The  list  [3Xlist[0X  of  strings  is  interpreted  as  a list of row vectors and
+  converted into a matrix. The "KillOnes" version removes the leading ones.
+  
+  [1X4.2-4 ConvertPolymakeVectorToGAP[0X
+  
+  [2X> ConvertPolymakeVectorToGAP( [0X[3Xlist[0X[2X ) _________________________________[0Xmethod
+  [2X> ConvertPolymakeVectorToGAPKillOne( [0X[3Xlist[0X[2X ) __________________________[0Xmethod
+  
+  As the corresponding "Matrix" version. Just for vectors.
+  
+  [1X4.2-5 ConvertPolymakeBoolToGAP[0X
+  
+  [2X> ConvertPolymakeBoolToGAP( [0X[3Xlist[0X[2X ) ___________________________________[0Xmethod
+  
+  If  [3Xlist[0X  contains  a  single  string, which is either 0 or 1, this function
+  returns [9Xfalse[0X or [9Xtrue[0X, respectively.
+  
+  [1X4.2-6 ConvertPolymakeSetToGAP[0X
+  
+  [2X> ConvertPolymakeSetToGAP( [0X[3Xlist[0X[2X ) ____________________________________[0Xmethod
+  
+  Let  [3Xlist[0X  be  a  list  containing single string, which is a list of numbers
+  separated  by  whitespaces  and  enclosed by { and } . The returned value is
+  then a set of rational numbers (in the GAP sense).
+  
+  [1X4.2-7 ConvertPolymakeGraphToGAP[0X
+  
+  [2X> ConvertPolymakeGraphToGAP( [0X[3Xlist[0X[2X ) __________________________________[0Xmethod
+  
+  Let [3Xlist[0X be a list of strings representing sets (that is, a list of integers
+  enclosed  by  {  and }). Then a record is returned containing two sets named
+  [10X.vertices[0X and [10X.edges[0X.
+  
+  [1X4.2-8 ConvertPolymakeHasseDiagramToGAP[0X
+  
+  [2X> ConvertPolymakeHasseDiagramToGAP( [0X[3Xlist[0X[2X ) ___________________________[0Xmethod
+  [6XReturns:[0X  List of sets of triples (of sets). The returned list is completely
+            immutable.
+  
+  If  [3Xlist[0X  is  a  list  of  strings  as  output  by  polymake's [10XHASSE_DIAGRAM[0X
+  algorithm, then this function returns a list of sets.
+  
+  The  ith  entry  represents the faces of dimension i. There is one entry for
+  each  dimension between 0 and the dimension of the polyhedron. Note that the
+  last  entry consists of a list with exactly one entry representing the whole
+  polyhedron.
+  
+  Every  face  is  a  list  with three entries [10X[vertices,invboundary,boundary][0X
+  where  [10Xvertices[0X  is a list of integers representing the vertices of the face
+  (and  the  number  of such a vertex is that of the vertex as a vertex of the
+  full  polyhedron).  The  second entry is a list of integers representing the
+  positions  of  the i+1 faces containing the current face (in the i+1st entry
+  of  the  Hasse  diagram).  And  the  last  entry  is  the  list of i-1 faces
+  containing  the current face (numbered by position in the i-1st entry in the
+  Hasse  diagram).  The  faces with empty third entry are exactly the vertices
+  while  the  face  with  empty  second entry is the face corresponding to the
+  whole poyhedron.
+  
+  The  way  polymake  returns  Hasse diagrams and vertices makes sure that the
+  numbering  of  vertices  is  the  same  for  the output of [9XHASSE_DIAGRAM[0X and
+  [9XVERTICES[0X  (i.e.  the  ith  vertex of the vertex list is at position i in the
+  first entry of the Hasse diagram).
+  

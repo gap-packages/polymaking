@@ -1,0 +1,38 @@
+  
+  [1X3. Global Variables[0X
+  
+  
+  [1X3.1 An InfoClass for debug purpose[0X
+  
+  [1X3.1-1 InfoPolymaking[0X
+  
+  [2X> InfoPolymaking__________________________________________________[0Xinfo class
+  
+  If  set to at least 2, the output of polymake is shown. At level 1, warnings
+  are shown. This is the default. And at level 0, the polymake package remains
+  silent.
+  
+  
+  [1X3.2 Variables for system interaction[0X
+  
+  The  variables  for  interaction  with  the system are contained in the file
+  [11Xenvironment.gi[0X.  Each  of these variables has a function to set it, see [14X1.2[0X.
+  If  [9XPOLYMAKE_COMMAND[0X  or  [9XPOLYMAKE_DATA_DIR[0X are set at startup, they are not
+  overwritten.  So  if  you  don't  want  (or don't have the rights) to modify
+  [11Xenvironment.gi[0X, you can set the variables in your [11X.gaprc[0X file.
+  
+  [1X3.2-1 POLYMAKE_COMMAND[0X
+  
+  [2X> POLYMAKE_COMMAND___________________________________________[0Xglobal variable
+  
+  This variable should contain the name of the polymake program in the form as
+  returned      by      [10XFilename[0X      So      a      probable     value     is
+  [10XFilename(Directory("/usr/local/bin"),"polymake")[0X.
+  
+  [1X3.2-2 POLYMAKE_DATA_DIR[0X
+  
+  [2X> POLYMAKE_DATA_DIR__________________________________________[0Xglobal variable
+  
+  In  this  directory the files for polymake will be created. By default, this
+  generates a temporary directory using [9XDirectoryTemporary[0X
+  

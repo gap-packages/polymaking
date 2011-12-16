@@ -1,0 +1,93 @@
+ <Chapter Label="chap:environment"><Heading>Installation and Preface</Heading> 
+ 
+ To install the package, just unpack it in your packages directory
+ (usually <C>~/gap/pkg</C> for local installation). 
+
+ To use <Package>polymaking</Package>, you need a working installation of the program
+ polymake <URL>http://www.math.tu-berlin.de/polymake/</URL>. The
+ package has been tested on linux and Mac OS X (10.4 and 10.5). 
+ But it should be as platform independent as &GAP; and polymake.
+ <P/>
+ The interaction with polymake is restricted to writing files and
+ carrying out simple operations looking like 
+
+ <Br/>
+<C>polymake file KEYWORD1 KEYWORD2 KEYWORD3</C>
+<Br/>
+
+ on the command line. Using multiple files in one command is not
+ supported as are scripts. Also, there is no direct interface to any of the
+ polymake clients (like <C>intersction</C>).
+ 
+
+
+<Section Label="chap:polymakeinstall">
+<Heading>A few words about the installation of polymake</Heading>
+
+<Package>polymaking</Package> will try to guess the location of polymake. If
+this fails, a warning is issued at load time (<K>InfoWarning</K> level 1). Note
+that the guessing procedure is suppressed when <Ref Var="POLYMAKE_COMMAND" />
+is set manually (see <Ref Label="SetVarPermanently"/>).
+<Br/>
+Note that polymake calls other external functions ("clients") to do some work
+for it. These functions must be either in the path from which GAP was called or
+in a path listed in the <K>PATH</K> environment variable.
+You can set it using the shell command 
+<Br/>
+<Code><![CDATA[setenv PATH ${PATH}:<your polymakepath>]]></Code>
+<Br/>
+The general rule is: If <Package>polymaking</Package> finds polymake by itself,
+there is nothing to worry about. 
+</Section> 
+ 
+ 
+ 
+   <Section Label="chap:varsetters">
+   <Heading>Setting variables for external programs</Heading>
+
+      As <Package>polymaking</Package> uses the program polymake, it needs to
+know
+      where this program lives. The communication with polymake is done
+      by writing files for polymake and reading its output (as returned to
+      standard output "the prompt"). Note that the interface does not read any
+      polymake file.
+
+
+      <ManSection>
+       <Meth Name="SetPolymakeDataDirectory" Arg="dir" />
+        <Description>
+	 Sets the directory in which all polymake files are created to
+	 <A>dir</A>. The standard place for these files is a temporary
+	 directory generated when the package is loaded. This
+	 manipulates <Ref Var="POLYMAKE_DATA_DIR"/>.  
+	</Description>
+	</ManSection>
+
+      <ManSection>
+       <Meth Name="SetPolymakeCommand" Arg="command"/>
+        <Description>
+        Sets the name for the polymake program to <A>command</A>. This
+        manipulates <Ref Var="POLYMAKE_COMMAND"/>.
+	</Description>
+      </ManSection>
+
+
+      <Subsection Label="SetVarPermanently"><Heading>Setting variables permanently</Heading>
+       To permanently set the values of <Ref Var="POLYMAKE_COMMAND" /> and 
+       <Ref Var="POLYMAKE_DATA_DIR"/>, add the lines
+
+<Listing>
+POLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");
+POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
+</Listing>
+
+       to your <F>.gaprc</F> file (see <Ref Label="The .gaprc file"
+       BookName="ref"></Ref>). Note that these have to be
+       <Emph>before</Emph> the <C>LoadPackage("polymaking");</C> line.
+       Or you can change the values of the above variables by editing
+       <F>lib/environment.gi</F>
+      </Subsection>
+
+
+   </Section> 
+   </Chapter>

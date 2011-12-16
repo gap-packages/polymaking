@@ -1,0 +1,293 @@
+   <Section Label="creatingPolymakeObjects"><Heading>Creating Polymake Objects</Heading>
+
+   The interaction with the polymake program is done via files. So a 
+   <K>PolymakeObject</K> is mainly a pointer to a file and a list of
+   known properties of the object. These properties need not be stored
+   in the file. Whenever polymake is called, the returned value is
+   read from standard output and stored in the <K>PolymakeObject</K>
+   corresponding to the file for which polymake is called.
+
+   <ManSection>
+    <Meth Name="CreateEmptyFile" Arg="filename" />
+     <Returns>nothing</Returns>
+     <Description>
+      Creates an empty file with name <A>filename</A>. Note that
+      <A>filename</A> has to include the full path and the directory
+      for the file must exist.
+     </Description>
+   </ManSection>
+
+
+   <ManSection>
+    <Meth Name="CreatePolymakeObject" Arg=""/> 
+    <Meth Name="CreatePolymakeObject" Arg="dir"/> 
+    <Meth Name="CreatePolymakeObject" Arg="prefix, dir"/> 
+    <Returns><K>PolymakeObject</K></Returns>
+      <Description>
+
+      If called without arguments, this method generates an empty file
+      in the directory defined by <Ref Var="POLYMAKE_DATA_DIR"/>.
+
+      If a directory <A>dir</A> is given (this directory must exist),
+      an empty file is generated in this directory.  If <A>prefix</A>
+      is not given, the file is called <F>polyN</F> where <K>N</K> is
+      the current runtime. If a file of this name already exists, a
+      number is appended separated by a dot (example: "poly1340" and
+      "poly1340.1"). If <A>prefix</A> is given, the filename starts
+      with that prefix. 
+
+    </Description>
+   </ManSection>
+
+   <ManSection>
+    <Meth Name="CreatePolymakeObjectFromFile" Arg="filename"/>
+    <Meth Name="CreatePolymakeObjectFromFile" Arg="dir filename"/>
+    <Returns><K>PolymakeObject</K></Returns>
+    <Description> 
+
+     This method generates a <K>PolymakeObject</K> corresponding to
+     the file <A>filename</A> in the directory <A>dir</A>. If
+     <A>dir</A> is not given, the <K>POLYMAKE&uscore;DATA&uscore;DIR</K> is
+     used.If no file with name <A>filename</A> exists in <A>dir</A> (or
+     <K>POLYMAKE&uscore;DATA&uscore;DIR</K>, respectively), an empty file is created.
+     
+     Note that the contents of the file do not matter for the
+     generation of the object. In particular, the object does not know
+     any of the properties that might be encoded in the file. The only
+     way to transfer information from files to <K>PolymakeObject</K>s
+     is via <Ref Meth="Polymake"/>.
+
+    </Description>
+   </ManSection>
+
+</Section>
+
+
+
+<Section Label="accessingProperties"><Heading>Accessing Properties of Polymake Objects</Heading>
+
+A <K>PolymakeObject</K> contains information about the directory of
+its file, the name of its file and about properties calculated by
+calling <Ref Meth="Polymake"/>. The properties returned by the
+<K>polymake</K> program are stored under the name <K>polymake</K>
+assigns to them (that is, the name of the data block in the
+corresponding file).
+
+The following methods can be used to access the information stored in
+a <K>PolymakeObject</K>. But be careful! All functions return the
+actual object. No copies are made. So if you change one of the
+returned objects, you change the <K>PolymakeObject</K> itself.
+
+   <ManSection> 
+    <Meth Name="DirectoryOfPolymakeObject" Arg="poly"/>
+     <Returns>Directory</Returns>
+    <Description>
+      Returns the directory of the file associated with <A>poly</A>.
+    </Description>
+   </ManSection>
+
+   <ManSection>
+    <Meth Name="FilenameOfPolymakeObject" Arg="poly"/>
+    <Returns>String</Returns>
+    <Description>
+    Returns the name of the file associated with <A>poly</A>. This
+    does only mean the name of the <Emph>file</Emph>, not the full
+    path. For the full path and file name see 
+    <Ref Meth="FullFilenameOfPolymakeObject"/>
+    </Description>
+   </ManSection>
+
+   <ManSection>
+    <Meth Name="FullFilenameOfPolymakeObject" Arg="poly"/> 
+    <Returns>String</Returns>
+    <Description>
+    Returns the file associated with the <K>PolymakeObject</K>
+    <A>poly</A> with its complete path.
+    </Description>
+  </ManSection>
+
+  <ManSection>
+   <Meth Name="NamesKnownPropertiesOfPolymakeObject" Arg="poly"/>
+   <Returns>List of Strings</Returns>
+    <Description>
+    Returns a list of the names of all known properties. This does
+    only include the properties returned by <Ref Meth="Polymake"/>,
+    <C>"dir"</C> and <C>"filename"</C> are not included. If no
+    properties are known, <K>fail</K> is returned.
+   </Description>
+  </ManSection>
+
+
+  <ManSection>
+   <Meth Name="KnownPropertiesOfPolymakeObject" Arg="poly"/>
+   <Returns>Record</Returns>
+    <Description>
+    Returns the record of all known properties. If no
+    properties are known, <K>fail</K> is returned.
+   </Description>
+  </ManSection>
+    
+
+  <ManSection>
+   <Meth Name="PropertyOfPolymakeObject" Arg="poly name"/>
+   <Description> 
+   Returns the value of the property <A>name</A> if it
+   is known. If the value is not known, <K>fail</K> is returned.
+   <A>name</A> must be a <K>String</K>.
+   </Description>
+  </ManSection>
+
+</Section>
+
+
+<Section Label="Exmaple:createAndAccess">
+<Heading>Example: Creating and Accessing Polymake Objects</Heading>
+
+Suppose the file <F>/tmp/threecube.poly</F> contains the three
+dimensional cube in polymake form (as generated by the command line
+<C>cube /tmp/threecube.poly 3 1</C> ). Now generate a
+<K>PolymakeObject</K> from this file and call <Ref Meth="Polymake"/>
+to make the vertices of the cube known to the object.
+
+<Example>
+<![CDATA[
+### suppose we have a polymake file /tmp/threecube.poly
+### containing a cube in three dimensions
+gap> cube:=CreatePolymakeObjectFromFile(Directory("/tmp"),"threecube.poly");
+<polymake object. No properties known>
+gap> FilenameOfPolymakeObject(cube);
+"threecube.poly"
+gap> FullFilenameOfPolymakeObject(cube);
+"/tmp/threecube.poly"
+   #nothing is known about the cube:
+gap> NamesKnownPropertiesOfPolymakeObject(cube);  
+fail
+gap> Polymake(cube,"VERTICES");
+[ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ], [ -1, -1, 1 ], 
+  [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ]  
+   # Now <cube> knows its vertices:
+gap> Print(cube);
+<polymake object threecube.poly. Properties known: [ "VERTICES" ]>
+gap> PropertyOfPolymakeObject(cube,"VERTICES");
+[ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ], [ -1, -1, 1 ],
+  [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ]
+gap> KnownPropertiesOfPolymakeObject(cube);
+rec(
+  VERTICES := [ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ],
+      [ -1, -1, 1 ], [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ] )
+]]>
+</Example>
+
+
+
+
+
+</Section>
+
+<Section Label="WritingToObjects">
+<Heading>Writing to Polymake Objects</Heading>
+   To transfer data from &GAP; to polymake, the following methods can
+   be used. But bear in mind that none of these functions test if the
+   resulting polymake file is still consistent.
+
+   <ManSection>
+    <Meth Name="AppendToPolymakeObject" Arg="poly string"/>
+    <Returns>nothing</Returns>
+    <Description>
+     This appends the string <A>string</A> to the file associated to
+     the <K>PolymakeObject</K>
+     <A>poly</A>. It is not tested if the string is syntactically
+     correct as a part of a polymake file. It is also not tested if
+     the string is compatible with the data already contained in the
+     file.
+    </Description>    
+   </ManSection>
+
+   INEQUALITIES, POINTS and VERTICES can be appended to a polymake object using
+   the following functions:
+
+   <ManSection>
+   <Meth Name="AppendPointlistToPolymakeObject" Arg="poly pointlist"/>
+   <Returns>nothing</Returns>
+   <Description>
+      Takes a list <A>pointlist</A> of vectors and converts it into a
+      string which represents a polymake block labeled "POINTS". This
+      string is then added to the file associated with <A>poly</A>.
+      The "POINTS" block of the file associated with <A>poly</A> then
+      contains points with leading ones, as polymake uses affine
+      notation.
+   </Description>
+   </ManSection>
+
+   <ManSection>
+   <Meth Name="AppendVertexlistToPolymakeObject" Arg="poly pointlist"/>
+   <Returns>nothing</Returns>
+   <Description>
+      Does the same as <C>AppendPointlistToPolymakeObject</C>, but with
+      "VERTICES" instead of "POINTS".
+   </Description>
+   </ManSection>
+
+   <ManSection>
+   <Meth Name="AppendInequalitiesToPolymakeObject" Arg="poly ineqlist"/>
+   <Returns>nothing</Returns>
+   <Description>
+     Just appends the inequalities given in <A>ineqlist</A> to  the polymake
+     object <A> poly</A> (with caption "INEQUALITIES"). Note that this does 
+     not check if an "INEQUALITIES" section does already exist in the file 
+     associated with <A>poly</A>.
+   </Description>
+   </ManSection>
+
+
+  <ManSection>
+   <Meth  Name="ConvertMatrixToPolymakeString" Arg="name matrix"/>
+   <Returns>String</Returns>
+   <Description>
+    This function takes a matrix <A>matrix</A> and converts it to a
+    string. This string can then be appended to a polymake file via
+    <Ref Meth="AppendToPolymakeObject"/> to form a block of data labeled
+    <A>name</A>.
+
+    This may be used to write blocks like INEQUALITIES or FACETS.
+   </Description>
+   </ManSection>
+
+   <ManSection>
+    <Meth Name="ClearPolymakeObject" Arg="poly"/>
+    <Returns>nothing</Returns>
+    <Description>
+     Deletes all known properties of the <K>PolymakeObject</K>
+     <A>poly</A> and replaces its file with an empty one.
+    </Description>
+   </ManSection>
+
+   
+   There are also methods to manipulate the known values without
+   touching the file of the <K>PolymakeObject</K>:
+
+
+   <ManSection>
+    <Meth Name="WriteKnownPropertyToPolymakeObject" Arg="poly name data"/>
+    <Description>
+     Takes the object <A>data</A> and writes it to the known
+     properties section of the <K>PolymakeObject</K> <A>poly</A>. The
+     string <A>name</A> is used as the name of the property. If a
+     property with that name already exists, it is overwritten.
+     Again, there is no check if <A>data</A> is consistent, correct or
+     meaningful.
+    </Description>
+   </ManSection>
+
+   <ManSection>
+    <Meth Name="UnbindKnownPropertyOfPolymakeObject" Arg="poly name"/>
+
+    <Description>
+     If the <K>PolymakeObject</K> <A>poly</A> has a property with name
+     <A>name</A>, that property is unbound. If there is no such
+     property, <K>fail</K> is returned.
+    </Description>
+   </ManSection>   
+
+</Section>
+

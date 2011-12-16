@@ -1,0 +1,2 @@
+polymaking/doc/manual.pdf
+polymaking/doc/manual.dvi
