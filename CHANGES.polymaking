@@ -1,3 +1,13 @@
+0.7.9:
+
+- support for two "next-generation" keywords:
+  - "FACES" calls "HASSE_DIAGRAM->FACES"
+  - "DIMS"  calls "HASSE_DIAGRAM->DIMS"
+  these two keywords cannot be used with old versions of polymake.
+
+- test changed: tests of unsupported features in recent polymake
+  versions removed (clients, some keywords), "FACES DIMS" tested.------------------
+
 0.7.8:
 
 ------------------

@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: convert.gi, v 0.7.8 2010/06/03 21:29:50 gap Exp $
+#H @(#)$Id: convert.gi, v 0.7.9 2013/10/27 18:26:19 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,8 +23,8 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/Users/roeder/gap/polymaking/polymaking/lib/convert_gi"):=
-	"@(#)$Id: convert.gi, v 0.7.8 2010/06/03   21:29:50  gap Exp $";
+Revision.("convert_gi"):=
+	"@(#)$Id: convert.gi, v 0.7.9 2013/10/27   18:26:19  gap Exp $";
 InstallMethod(ConvertPolymakeOutputToGapNotation,[IsString],
         function(string)
     local   split,  blockpositions,  splitblocks,  returnlist,  
@@ -86,14 +86,14 @@ InstallMethod(SplitPolymakeOutputStringIntoBlocks,[IsString],
         if not IsEmptyString(line) 
            then
             if IsUpperAlphaChar(line[1]) 
-               and ForAll(line,c->IsUpperAlphaChar(c) or c='_' or IsDigitChar(c))
+               and ForAll(line,c->IsUpperAlphaChar(c) or c in ['_','-','>'] or IsDigitChar(c))
                then
                 if blocks=[] and newblock=[]
                    then
-                    newblock:=[line];
+                    newblock:=[MapKeyWordFromPolymakeFormat(line)];
                 else
                     Add(blocks,ShallowCopy(newblock));
-                    newblock:=[line];
+                    newblock:=[MapKeyWordFromPolymakeFormat(line)];
                 fi;
             else
                 Add(newblock,line);
