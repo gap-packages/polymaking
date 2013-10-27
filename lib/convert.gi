@@ -23,7 +23,7 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/Users/roeder/gap/polymaking/polymaking/lib/convert_gi"):=
+Revision.("convert_gi"):=
 	"@(#)$Id$";
 InstallMethod(ConvertPolymakeOutputToGapNotation,[IsString],
         function(string)
@@ -86,14 +86,14 @@ InstallMethod(SplitPolymakeOutputStringIntoBlocks,[IsString],
         if not IsEmptyString(line) 
            then
             if IsUpperAlphaChar(line[1]) 
-               and ForAll(line,c->IsUpperAlphaChar(c) or c='_' or IsDigitChar(c))
+               and ForAll(line,c->IsUpperAlphaChar(c) or c in ['_','-','>'] or IsDigitChar(c))
                then
                 if blocks=[] and newblock=[]
                    then
-                    newblock:=[line];
+                    newblock:=[MapKeyWordFromPolymakeFormat(line)];
                 else
                     Add(blocks,ShallowCopy(newblock));
-                    newblock:=[line];
+                    newblock:=[MapKeyWordFromPolymakeFormat(line)];
                 fi;
             else
                 Add(newblock,line);

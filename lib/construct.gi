@@ -23,7 +23,7 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/Users/roeder/gap/polymaking/polymaking/lib/construct_gi"):=
+Revision.("construct_gi"):=
 	"@(#)$Id$";
 # just create an empty file:
 InstallMethod(CreateEmptyFile,[IsString],
@@ -264,6 +264,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
            then
             returnval:=PropertyOfPolymakeObject(polygon,splitoption[1]);
         else
+	    Apply(splitoption, MapKeyWordToPolymakeFormat);
             returnedstring:=callPolymake(polygon,splitoption);
             if returnedstring.status <>0
                then
@@ -300,6 +301,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
         fi;
         if Size(splitoption)>0
            then
+	    Apply(splitoption, MapKeyWordToPolymakeFormat);
             returnedstring:=callPolymake(polygon,splitoption);
             if returnedstring.status <>0
                then

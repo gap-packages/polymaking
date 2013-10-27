@@ -1,6 +1,6 @@
 #############################################################################
 ##
-#W ObjectConverters.gd 			 polymaking Package		 Marc Roeder
+#W workaround_maps.gd 			 polymaking Package		 Marc Roeder
 ##
 ##  
 
@@ -23,8 +23,7 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("ObjectConverters_gd"):=
+Revision.("workaround_maps_gd"):=
 	"@(#)$Id$";
-DeclareGlobalVariable("ObjectConverters","Functions to convert polymake output to gap");
-
-                      
+DeclareOperation("MapKeyWordToPolymakeFormat",[IsString]);
+DeclareOperation("MapKeyWordFromPolymakeFormat",[IsString]);

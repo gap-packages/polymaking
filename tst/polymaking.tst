@@ -29,45 +29,15 @@ gap> Polymake(poly,"N_FACETS");
 14
 gap> Polymake(poly,"VOLUME");
 56551499691708521629/103286715323123543904000
-## test the cube client:
-##
-gap> cube:=PolymakeClient("cube","3");
-<polymake object. No properties known>
-gap> Polymake(cube,"N_VERTICES");
-8
-gap> Polymake(cube,"N_FACETS");
-6
-gap> int:=PolymakeClient("intersection",[cube,poly]);
-<polymake object. No properties known>
-gap> Polymake(int,"VOLUME");
-56551499691708521629/103286715323123543904000
-gap> Polymake(int,"VOLUME")=Polymake(poly,"VOLUME");
-true
-gap> Polymake(cube,"FACE_LATTICE");
-[ [ [ 1, 2, 3, 4 ], [ 1, 2, 5, 6 ], [ 1, 3, 5, 7 ], [ 2, 4, 6, 8 ],
-      [ 3, 4, 7, 8 ], [ 5, 6, 7, 8 ] ],
-  [ [ 1, 2 ], [ 1, 3 ], [ 1, 5 ], [ 2, 4 ], [ 2, 6 ], [ 3, 4 ], [ 3, 7 ],
-      [ 4, 8 ], [ 5, 6 ], [ 5, 7 ], [ 6, 8 ], [ 7, 8 ] ],
-  [ [ 1 ], [ 2 ], [ 3 ], [ 4 ], [ 5 ], [ 6 ], [ 7 ], [ 8 ] ] ]
-gap> Polymake(cube,"HASSE_DIAGRAM");;
-
 
 ## test external files:
 gap> dir:=Directory(Filename(DirectoriesPackageLibrary("polymaking"),"../tst/"));;
 gap> plane:=CreatePolymakeObjectFromFile(dir,"pplane.poly");
 <polymake object. No properties known>
-gap> Polymake(plane,"EULER_CHARACTERISTIC");
-0
-gap> Polymake(plane,"PSEUDO_MANIFOLD");
-true
-gap> Polymake(plane,"DESCRIPTION");
-"The projective plane."
-gap> Polymake(plane,"CONNECTED");
-true
-gap> hasse:=Polymake(plane,"HASSE_DIAGRAM");;
-gap> IsRecord(hasse);
-true
-gap> RecNames(hasse);
-[ "hasse", "faceindices" ]
+
+gap> Polymake(plane,"FACES DIMS");;
+fail
+gap> Polymake(plant, "DIMS");
+[ 1, 11, 26, 32 ]
 
 gap> STOP_TEST("polymaking.tst", 10000);

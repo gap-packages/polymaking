@@ -23,7 +23,7 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/Users/roeder/gap/polymaking/polymaking/lib/environment_gd"):=
+Revision.("environment_gd"):=
 	"@(#)$Id$";
 DeclareInfoClass("InfoPolymaking");
 
