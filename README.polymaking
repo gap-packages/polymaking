@@ -1,4 +1,4 @@
-(C)2007-2008 by Marc Roeder, 
+(C)2007-2013 by Marc Roeder, 
 National University of Ireland, Galway
 
 
@@ -20,6 +20,10 @@ license version 2 or later (at your descretion).
 		------------
  polymaking requires GAP version 4.4. It also needs polymake to be
 installed.  The GAPDoc package is needed to display the documentation.
+polymaking was written for the "first generation" polymake which was
+called as a command-line tool. Using it with a current ("next generation")
+version of polymake will result in longer runtimes and fewer supported
+keywords/features. 
 
 
 		Installation
@@ -77,7 +81,7 @@ context you do. For some keywords, the method for conversion was
 actually guessed.
 
 So if you find a bug or strange behaviour, please send a bug report to 
-marc_roeder@web.de.
+roeder.marc@gmail.com .
 
 Thanks,
 marc

@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: environment.gi, v 0.7.8 2010/06/03 21:29:50 gap Exp $
+#H @(#)$Id: environment.gi, v 0.7.9 2013/10/27 18:26:19 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,8 +23,8 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/Users/roeder/gap/polymaking/polymaking/lib/environment_gi"):=
-	"@(#)$Id: environment.gi, v 0.7.8 2010/06/03   21:29:50  gap Exp $";
+Revision.("environment_gi"):=
+	"@(#)$Id: environment.gi, v 0.7.9 2013/10/27   18:26:19  gap Exp $";
 SetInfoLevel(InfoPolymaking,1);
 
 # give the command which calles polymake. You may need to include the full path

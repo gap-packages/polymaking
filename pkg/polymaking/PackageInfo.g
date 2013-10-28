@@ -15,10 +15,10 @@ Subtitle := "Interfacing the geometry software polymake",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "0.7.8",
-Date := "03/06/2010",
+Version := "0.7.9",
+Date := "27/10/2013",
 
-ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_7_8",
+ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_7_9",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.
@@ -217,7 +217,7 @@ Dependencies := rec(
   # (no automatic test will be done for this, do this in your 
   # 'AvailabilityTest' function below)
   # ExternalConditions := []
-  ExternalConditions := ["polymake (http://www.math.tu-berlin.de/polymake/) must be installed"]
+  ExternalConditions := ["polymake (http://www.polymake.org) must be installed"]
 ),
 
 ##  Provide a test function for the availability of this package.

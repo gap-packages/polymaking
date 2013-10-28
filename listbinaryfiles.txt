@@ -1,3 +1,4 @@
-polymaking/doc/manual.pdf
 polymaking/doc/manual.dvi
+polymaking/doc/manual.pdf
+polymaking/doc/manual.six
 polymaking/tst/pplane.poly

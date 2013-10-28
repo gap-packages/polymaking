@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: ObjectConverters.gi, v 0.7.8 2010/06/03 21:29:50 gap Exp $
+#H @(#)$Id: ObjectConverters.gi, v 0.7.9 2013/10/27 18:26:19 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,8 +23,8 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("/Users/roeder/gap/polymaking/polymaking/lib/ObjectConverters_gi"):=
-	"@(#)$Id: ObjectConverters.gi, v 0.7.8 2010/06/03   21:29:50  gap Exp $";
+Revision.("ObjectConverters_gi"):=
+	"@(#)$Id: ObjectConverters.gi, v 0.7.9 2013/10/27   18:26:19  gap Exp $";
 InstallValue(ObjectConverters,
         rec(
             ALTSHULER_DET:=ConvertPolymakeScalarToGAP,
@@ -48,7 +48,8 @@ InstallValue(ObjectConverters,
                            CONNECTIVITY:=ConvertPolymakeScalarToGAP,
                            DESCRIPTION:=ConvertPolymakeDescriptionToGAP,
                            DIAMETER:=ConvertPolymakeScalarToGAP,
-                           DIM:=ConvertPolymakeScalarToGAP,
+			   			   DIMS:=ConvertPolymakeVectorToGAP,  ## done using mapping-hack
+			   			   DIM:=ConvertPolymakeScalarToGAP,
                            DUAL_COLORING:=ConvertPolymakeIntVectorToGAPPlusOne,
                            DUAL_CONNECTED:=ConvertPolymakeBoolToGAP,
                            DUAL_CONNECTED_COMPONENTS:=ConvertPolymakeListOfSetsToGAPPlusOne,
@@ -66,6 +67,7 @@ InstallValue(ObjectConverters,
                            EVEN:=ConvertPolymakeBoolToGAP,
                            F_VECTOR:=ConvertPolymakeVectorToGAP,
                            F2_VECTOR:=ConvertPolymakeMatrixToGAP,
+			   			   FACES:=ConvertPolymakeListOfSetsToGAPPlusOne,
                            FACE_LATTICE:=ConvertPolymakeFaceLatticeToGAP,
                            FACET_DEGREES:=ConvertPolymakeVectorToGAP,
                            FACETS:=ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne,
