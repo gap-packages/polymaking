@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: environment.gi, v 0.7.9 2013/10/27 18:26:19 gap Exp $
+#H @(#)$Id: environment.gi, v 0.8.1 2013/11/16 17:55:19 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("environment_gi"):=
-	"@(#)$Id: environment.gi, v 0.7.9 2013/10/27   18:26:19  gap Exp $";
+	"@(#)$Id: environment.gi, v 0.8.1 2013/11/16   17:55:19  gap Exp $";
 SetInfoLevel(InfoPolymaking,1);
 
 # give the command which calles polymake. You may need to include the full path
@@ -54,27 +54,6 @@ InstallMethod(SetPolymakeCommand,[IsString],
     fi;
 end);
 
-
-#############################################################################
-##
-## additional paths for polymake clients
-##
-if not IsBound(POLYMAKE_CLIENT_PATHS)
-   then
-    POLYMAKE_CLIENT_PATHS:=DirectoriesSystemPrograms();
-    MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
-fi;
-
-InstallMethod(SetPolymakeClientPaths,[IsDenseList],
-        function(dirs)
-    if not ForAll(dirs,IsDirectory)
-       then
-        Error("<dirs> must be a list of directories");
-    fi;
-    MakeReadWriteGlobal("POLYMAKE_CLIENT_PATHS");
-    POLYMAKE_CLIENT_PATHS:=dirs;
-    MakeReadOnlyGlobal("POLYMAKE_CLIENT_PATHS");
-end);
 
 #
 # This directory will hold the files generated for polymake

@@ -37,7 +37,7 @@ gap> plane:=CreatePolymakeObjectFromFile(dir,"pplane.poly");
 
 gap> Polymake(plane,"FACES DIMS");;
 fail
-gap> Polymake(plant, "DIMS");
+gap> Polymake(plane, "DIMS");
 [ 1, 11, 26, 32 ]
 
 gap> STOP_TEST("polymaking.tst", 10000);

@@ -5,7 +5,7 @@
 
  To use <Package>polymaking</Package>, you need a working installation of the program
  polymake <URL>http://www.math.tu-berlin.de/polymake/</URL>. The
- package has been tested on linux and Mac OS X (10.4 and 10.5). 
+ package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). 
  But it should be as platform independent as &GAP; and polymake.
  <P/>
  The interaction with polymake is restricted to writing files and
@@ -16,12 +16,11 @@
 <Br/>
 
  on the command line. Scripts are not supported.
- From vertsion 0.7.2 on, there is limited client-support. All clients that are
- called like 
- <Br/>
- <C>client outfile infile1 infile2 ... -option1 -option2</C>
- <Br/>
- can now be called from &GAP; via <Ref Meth="PolymakeClient"/>.
+Every call to polymake will re-start the program anew. This causes considerable overhead.
+The number of calls to polymake is reduced by caching the results in the so-called 
+<K>PolymakeObject</K> in GAP.
+As of polymaking version 0.8.0, old versions of polymake (i.e. versions before 2.7.9) are not 
+supported anymore.
 
 
 <Section Label="chap:polymakeinstall">
@@ -32,19 +31,13 @@ this fails, a warning is issued at load time (<K>InfoWarning</K> level 1). Note
 that the guessing procedure is suppressed when <Ref Var="POLYMAKE_COMMAND" />
 is set manually (see <Ref Label="SetVarPermanently"/>).
 <Br/>
-Note that polymake calls other external functions ("clients") to do some work
-for it. These functions must be either in the path from which GAP was called or
-in a path listed in the <K>PATH</K> environment variable.
-You can set it using the shell command 
-<Br/>
 <Code><![CDATA[setenv PATH ${PATH}:<your polymakepath>]]></Code>
 <Br/>
 The general rule is: If <Package>polymaking</Package> finds polymake by itself,
 there is nothing to worry about. 
 </Section> 
  
- 
- 
+  
    <Section Label="chap:varsetters">
    <Heading>Setting variables for external programs</Heading>
 
@@ -74,26 +67,13 @@ know
 	</Description>
       </ManSection>
 
-
-       <ManSection>
-        <Meth Name="SetPolymakeClientPaths" Arg="dirs"/>
-        <Description>
-         Defines directories which contain polymake
-         client programs. <C>SetPolymakeClientPaths(dirs)</C> sets
-         <Ref Var="POLYMAKE_CLIENT_PATHS"/>  to <A>dirs</A> which has to be a
-         list of directory objects.
-        </Description>
-       </ManSection>
-
       <Subsection Label="SetVarPermanently"><Heading>Setting variables permanently</Heading>
-       To permanently set the values of <Ref Var="POLYMAKE_COMMAND" />, <Ref
-Var="POLYMAKE_CLIENT_PATHS"/> and 
+       To permanently set the values of <Ref Var="POLYMAKE_COMMAND" />, and 
        <Ref Var="POLYMAKE_DATA_DIR"/>, add the lines
-
+</Subsection>
 <Listing>
 POLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");
 POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
-POLYMAKE_CLIENT_DIRS:=[Directory("/home/myclients/"),Directory("/home/moreclients/")];
 </Listing>
 
        to your <F>.gaprc</F> file (see <Ref Label="The .gaprc file"
@@ -101,7 +81,6 @@ POLYMAKE_CLIENT_DIRS:=[Directory("/home/myclients/"),Directory("/home/moreclient
        <Emph>before</Emph> the <C>LoadPackage("polymaking");</C> line.
        Or you can change the values of the above variables by editing
        <F>lib/environment.gi</F>
-      </Subsection>
 
 
    </Section> 
