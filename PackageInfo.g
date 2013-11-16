@@ -15,10 +15,10 @@ Subtitle := "Interfacing the geometry software polymake",
 ##  See '?Extending: Version Numbers' in GAP help for an explanation
 ##  of valid version numbers. For an automatic package distribution update
 ##  you must provide a new version number even after small changes.
-Version := "0.7.9",
-Date := "27/10/2013",
+Version := "0.8.1",
+Date := "16/11/2013",
 
-ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_7_9",
+ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_8_1",
 
 ##  All provided formats as list of file extensions, separated by white
 ##  space or commas.

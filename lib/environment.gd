@@ -30,9 +30,6 @@ DeclareInfoClass("InfoPolymaking");
 DeclareOperation("SetPolymakeDataDirectory",[IsDirectory]);
 DeclareOperation("SetPolymakeCommand",[IsString]);
 
-DeclareOperation("SetPolymakeClientPaths",[IsDenseList]);
-        
-        
 ##
 ## keep track of the last thing tha caused Polymake to return fail:
 ##

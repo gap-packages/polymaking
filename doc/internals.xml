@@ -52,15 +52,6 @@ output</Heading>
      </Description>
    </ManSection>
 
-   <ManSection>
-    <Var Name="POLYMAKE_CLIENT_PATHS"/>
-     <Description>
-      A list of directories where polymake's the stand-alone clients live. By
-      default, <K>DirectoriesSystemPrograms</K> is used.
-     </Description>
-   </ManSection>
-
-
 </Section>
 
 </Chapter>
@@ -107,10 +98,6 @@ starting from 0. &GAP; enumerates lists starting at 1. So the conversion
 process adds 1 to the numbers corresponding to vertices in facet lists, for
 example. 
 <P/>
-<Emph>Call for help:</Emph> As of version 0.7.0, most of the converters were
-assigned blindly to keywords. So some of them might not be suitable. If you
-find one of those, please tell me about it. Also, for a lot of keywords and
-data types, there is no converter. Please tell me if you want a new converter.
 </Subsection>
 
 The conversion process is done by the following methods:
@@ -273,63 +260,6 @@ of sets.
     </Description> 
   </ManSection>
 
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeHasseDiagramToGAP" Arg="list"/>
-     <Returns>
-      <K>Record</K> with entries <C>.hasse</C> and <C>.faceindices</C>
-     </Returns>
-     <Description>
-      Takes a list <A>list</A> of strings (the <C>HASSE_DIAGRAM</C> returned by
-      polymake and split with <Ref
-      Meth="SplitPolymakeOutputStringIntoBlocks"/>) and returns a record 
-      containing a list of pairs <C>.hasse</C> and a list of lists of integers
-      <C>.faceindices</C>. Every pair in <C>.hasse</C> is of the form
-      <C>[[vertlist],[upfaces]]</C> where vertlist is a list of vertices (given
-      as integers)  and <C>[upfaces]</C> is a list of integers encoding the
-      faces in the next (higher) dimension as positions in the list
-      <C>.hasse</C>. If polymake returns special faces representing the full
-      object or the empty face, they are also included in <C>.hasse</C>.
-      <Br/>
-      
-      <C>.faceindices</C> is a list of lists of integers corresponding to the
-      indices of faces in each dimension in <C>.hasse</C>(possibly including
-      the extra faces). 
-
-      <Br/>
-      Note that the order in which the faces are listed in <C>.hasse</C> is the
-      order they are output from polymake. In particular, the list might start
-      with vertices for one object and with facets for another.
-      </Description>
-   </ManSection>
-    
-<Example>
-<![CDATA[
-gap> square:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"2cube.poly");
-<polymake object. No properties known>
-gap> # "VERTICES" is converted using ConvertPolymakeMatrixToGAPKillOnes
-gap> Polymake(square,"VERTICES");
-[ [ -1, -1 ], [ 1, -1 ], [ -1, 1 ], [ 1, 1 ] ]
-gap> Polymake(square,"HASSE_DIAGRAM");
-rec(
-  hasse := [ [ [  ], [ 2, 3, 4, 5 ] ], [ [ 1 ], [ 6, 8 ] ], [ [ 2 ], [ 7, 8 ] ],
-      [ [ 3 ], [ 6, 9 ] ], [ [ 4 ], [ 7, 9 ] ], [ [ 1, 3 ], [ 10 ] ],
-      [ [ 2, 4 ], [ 10 ] ], [ [ 1, 2 ], [ 10 ] ], [ [ 3, 4 ], [ 10 ] ],
-      [ [ 1, 2, 3, 4 ], [  ] ] ],
-  faceindices := [ [ 1 ], [ 2, 3, 4, 5 ], [ 6, 7, 8, 9 ], [ 10 ] ] )
-gap> simp:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"tmp.top");
-<polymake object. No properties known>
-gap> Polymake(simp,"FACETS"); ## a very small simplicial complex
-[ [ 2, 4 ], [ 1, 2, 3 ] ]
-gap> Polymake(simp,"HASSE_DIAGRAM");
-rec( hasse := [ [ [  ], [  ] ], [ [ 1, 2, 3 ], [ 1 ] ], [ [ 2, 4 ], [ 1 ] ],
-      [ [ 1, 2 ], [ 2 ] ], [ [ 1, 3 ], [ 2 ] ], [ [ 2, 3 ], [ 2 ] ],
-      [ [ 2 ], [ 3, 4, 6 ] ], [ [ 4 ], [ 3 ] ], [ [ 1 ], [ 4, 5 ] ],
-      [ [ 3 ], [ 5, 6 ] ], [ [  ], [ 7, 8, 9, 10 ] ] ],
-  faceindices := [ [ 1 ], [ 2 ], [ 3, 4, 5, 6 ], [ 7, 8, 9, 10 ], [ 11 ] ] )
-gap> ## ... and this one starts with facets
-]]>
-</Example>
 
  </Section>
 

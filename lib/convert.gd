@@ -53,5 +53,4 @@ DeclareOperation("ConvertPolymakeListOfSetsToGAPPlusOne",[IsDenseList]);
 
 DeclareOperation("ConvertPolymakeSetOfSetsToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeGraphToGAP",[IsDenseList]);
-DeclareOperation("ConvertPolymakeHasseDiagramToGAP",[IsDenseList]);
 DeclareOperation("ConvertPolymakeFaceLatticeToGAP",[IsDenseList]);

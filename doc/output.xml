@@ -7,7 +7,7 @@
      This method calls the polymake program (see <Ref
      Var="POLYMAKE_COMMAND"/>) with the option
      <A>option</A>. You may use several keywords such as
-     <C>"DIM VERTICES"</C> as an option. The returned value is cut into blocks
+     <C>"FACETS VERTICES"</C> as an option. The returned value is cut into blocks
      starting with keywords (which are taken from output and not 
      looked up in <A>option</A>). Each block is then
      interpreted and translated into &GAP; readable form. This
@@ -92,62 +92,3 @@
     </Example>    
 
    </Section>
-
-<Section><Heading>Calling Clients</Heading>
-
-<ManSection>
-<Meth Name="PolymakeClient" Arg="clientname [,outobject] [,inobjects]
-[,options]"/>
-<Meth Name="PolymakeClientNC" Arg="clientname ,outobject ,inobjects ,options"/>
-   <Returns>PolymakeObject</Returns>   
-  <Description>
-   Any client program that has a command line syntax like 
-   <Br/>
-    <C>clientname outfile infile1 infile2... -option1 -option2...</C>
-   <Br/>
-   can be called using <K>PolymakeClient</K>. Any output of the client to the
-   terminal is ignored (but a warning  is printed if this happens).
-   <Br/>
-   <A>clientname</A> must be given as a string without path. Polymaking looks
-   for clients in the directories listed in <Ref
-Var="POLYMAKE_CLIENT_PATHS"/>.
-<Br/>
-   The client program is called and passed the file corresponding to
-   the PolymakeObject <A>outobject</A>, the files of the PolymakeObjects in
-   the list <A>inobjects</A> and finally the string <A>options</A>.
-   If no PolymakeObject <A>outobject</A> is given, a new object is created.
-   <K>PolymakeClient</K> returns the PolymakeObject <A>outobject</A> if it was
-   given, otherwise a new PolymakeObject is returned.
-<Br/>
-   <K>PolymakeClientNC</K> does not perform any checks on the input objects.
-<Br/>
-   <Emph>Important:</Emph> <K>PolymakeClient</K> does not change the known
-    properties of  <A>outfile</A>. This can lead to inconsistencies if you
-    "recycle" files. So if you know that a client will overwrite the output
-    file, consider using <Ref Meth="ClearPolymakeObject"/> on the output
-    PolymakeObject before calling the client.
-  </Description>
-</ManSection>
-
-<Example>
-<![CDATA[
-gap> rand:=PolymakeClient("rand_sphere","3 15");
-<polymake object. No properties known>
-gap> Polymake(rand,"N_VERTICES");
-15
-gap> cube:=PolymakeClient("cube","3");
-gap> Polymake(cube,"N_VERTICES");
-8
-gap> PolymakeClient("pyramid",rand,[cube]);
-<polymake object>
-gap> IsIdenticalObj(last,rand);
-true
-gap> ## the file of <rand> has changed, but polymaking doesn't know about it:
-gap> Polymake(rand,"N_VERTICES");
-15
-gap> Polymake(rand,"N_VERTICES":PolymakeNolookup);
-9
-]]>
-</Example>
-
-</Section>
