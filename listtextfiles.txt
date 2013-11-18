@@ -34,17 +34,12 @@ polymaking/lib/environment.gi
 polymaking/lib/Objects.gd
 polymaking/lib/application_version_type.gd
 polymaking/lib/workaround_maps.gi
-polymaking/lib/hasse_diagram_old.gi
 polymaking/lib/construct.gi
 polymaking/lib/ObjectConverters.gd
 polymaking/lib/Objects.gi
-polymaking/lib/clients.gi
 polymaking/lib/application_version_type.gi
 polymaking/lib/construct.gd
-polymaking/lib/clients.gd
 polymaking/lib/workaround_maps.gd
-polymaking/lib/face_lattice_nextgenscript
-polymaking/lib/hasse_diagram.gi
 polymaking/lib/environment.gd
 polymaking/lib/convert.gd
 polymaking/lib/ObjectConverters.gi

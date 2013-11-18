@@ -43,10 +43,3 @@
   In  this  directory the files for polymake will be created. By default, this
   generates a temporary directory using [9XDirectoryTemporary[0m
   
-  [1X3.2-3 POLYMAKE_CLIENT_PATHS[0m
-  
-  [2X> POLYMAKE_CLIENT_PATHS______________________________________[0Xglobal variable
-  
-  A  list  of  directories  where  polymake's the stand-alone clients live. By
-  default, [9XDirectoriesSystemPrograms[0m is used.
-  

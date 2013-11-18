@@ -36,7 +36,6 @@
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X846B284085825FEA">4.2-7 ConvertPolymakeSetToGAP</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7E7886D68356F592">4.2-8 ConvertPolymakeListOfSetsToGAP</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7EBECAA07F8B58D8">4.2-9 ConvertPolymakeGraphToGAP</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap4.html#X7F4BA33C86137259">4.2-10 ConvertPolymakeHasseDiagramToGAP</a></span>
 </div>
 </div>
 
@@ -69,8 +68,6 @@
 <p>The converter functions should take meaningful polymake data into meaningful <strong class="pkg">GAP</strong> data. This sometimes means that the (mathematical) representation is changed. Here is an example: polymake writes vectors as augmented affine vectors of the form <code class="code">1 a1 a2 a3...</code> which does not go very well with the usual <strong class="pkg">GAP</strong> conventions of column vectors and multiplying matrices from the right. So <strong class="pkg">polymaking</strong> converts such a vector to <code class="code">[a1,a2,a3,...]</code> and the user is left with the problem of augmentation and left or right multiplication.</p>
 
 <p>Another area where the <strong class="pkg">GAP</strong> object isn't a literal translation from the polymake world is combinatorics. In Polymake, list elements are enumerated starting from 0. <strong class="pkg">GAP</strong> enumerates lists starting at 1. So the conversion process adds 1 to the numbers corresponding to vertices in facet lists, for example.</p>
-
-<p><em>Call for help:</em> As of version 0.7.0, most of the converters were assigned blindly to keywords. So some of them might not be suitable. If you find one of those, please tell me about it. Also, for a lot of keywords and data types, there is no converter. Please tell me if you want a new converter.</p>
 
 <p>The conversion process is done by the following methods:</p>
 
@@ -174,45 +171,6 @@
 
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeGraphToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <p>Let <var class="Arg">list</var> be a list of strings representing sets (that is, a list of integers enclosed by { and }). Then a record is returned containing two sets named <code class="code">.vertices</code> and <code class="code">.edges</code>.</p>
-
-<p><a id="X7F4BA33C86137259" name="X7F4BA33C86137259"></a></p>
-
-<h5>4.2-10 ConvertPolymakeHasseDiagramToGAP</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; ConvertPolymakeHasseDiagramToGAP</code>( <var class="Arg">list</var> )</td><td class="tdright">( method )</td></tr></table></div>
-<p><b>Returns: </b><code class="keyw">Record</code> with entries <code class="code">.hasse</code> and <code class="code">.faceindices</code></p>
-
-<p>Takes a list <var class="Arg">list</var> of strings (the <code class="code">HASSE_DIAGRAM</code> returned by polymake and split with <code class="func">SplitPolymakeOutputStringIntoBlocks</code> (<a href="chap4.html#X841D81327C6F6E29"><b>4.1-3</b></a>)) and returns a record containing a list of pairs <code class="code">.hasse</code> and a list of lists of integers <code class="code">.faceindices</code>. Every pair in <code class="code">.hasse</code> is of the form <code class="code">[[vertlist],[upfaces]]</code> where vertlist is a list of vertices (given as integers) and <code class="code">[upfaces]</code> is a list of integers encoding the faces in the next (higher) dimension as positions in the list <code class="code">.hasse</code>. If polymake returns special faces representing the full object or the empty face, they are also included in <code class="code">.hasse</code>. <br /> <code class="code">.faceindices</code> is a list of lists of integers corresponding to the indices of faces in each dimension in <code class="code">.hasse</code>(possibly including the extra faces). <br /> Note that the order in which the faces are listed in <code class="code">.hasse</code> is the order they are output from polymake. In particular, the list might start with vertices for one object and with facets for another.</p>
-
-
-<table class="example">
-<tr><td><pre>
-
-gap&gt; square:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"2cube.poly");
-&lt;polymake object. No properties known&gt;
-gap&gt; # "VERTICES" is converted using ConvertPolymakeMatrixToGAPKillOnes
-gap&gt; Polymake(square,"VERTICES");
-[ [ -1, -1 ], [ 1, -1 ], [ -1, 1 ], [ 1, 1 ] ]
-gap&gt; Polymake(square,"HASSE_DIAGRAM");
-rec(
-  hasse := [ [ [  ], [ 2, 3, 4, 5 ] ], [ [ 1 ], [ 6, 8 ] ], [ [ 2 ], [ 7, 8 ] ],
-      [ [ 3 ], [ 6, 9 ] ], [ [ 4 ], [ 7, 9 ] ], [ [ 1, 3 ], [ 10 ] ],
-      [ [ 2, 4 ], [ 10 ] ], [ [ 1, 2 ], [ 10 ] ], [ [ 3, 4 ], [ 10 ] ],
-      [ [ 1, 2, 3, 4 ], [  ] ] ],
-  faceindices := [ [ 1 ], [ 2, 3, 4, 5 ], [ 6, 7, 8, 9 ], [ 10 ] ] )
-gap&gt; simp:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"tmp.top");
-&lt;polymake object. No properties known&gt;
-gap&gt; Polymake(simp,"FACETS"); ## a very small simplicial complex
-[ [ 2, 4 ], [ 1, 2, 3 ] ]
-gap&gt; Polymake(simp,"HASSE_DIAGRAM");
-rec( hasse := [ [ [  ], [  ] ], [ [ 1, 2, 3 ], [ 1 ] ], [ [ 2, 4 ], [ 1 ] ],
-      [ [ 1, 2 ], [ 2 ] ], [ [ 1, 3 ], [ 2 ] ], [ [ 2, 3 ], [ 2 ] ],
-      [ [ 2 ], [ 3, 4, 6 ] ], [ [ 4 ], [ 3 ] ], [ [ 1 ], [ 4, 5 ] ],
-      [ [ 3 ], [ 5, 6 ] ], [ [  ], [ 7, 8, 9, 10 ] ] ],
-  faceindices := [ [ 1 ], [ 2 ], [ 3, 4, 5, 6 ], [ 7, 8, 9, 10 ], [ 11 ] ] )
-gap&gt; ## ... and this one starts with facets
-
-</pre></td></tr></table>
 
 
 <div class="chlinkprevnextbot">&nbsp;<a href="chap0.html">Top of Book</a>&nbsp;  &nbsp;<a href="chap3.html">Previous Chapter</a>&nbsp;  &nbsp;<a href="chapBib.html">Next Chapter</a>&nbsp;  </div>

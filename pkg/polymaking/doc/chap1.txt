@@ -4,16 +4,17 @@
   To  install  the package, just unpack it in your packages directory (usually
   [10X~/gap/pkg[0m  for  local  installation).  To use [5Xpolymaking[0m, you need a working
   installation of the program polymake [7Xhttp://www.math.tu-berlin.de/polymake/[0m.
-  The  package  has  been tested on linux and Mac OS X (10.4 and 10.5). But it
-  should be as platform independent as [5XGAP[0m and polymake.
+  The package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). But
+  it should be as platform independent as [5XGAP[0m and polymake.
   
   The  interaction  with  polymake is restricted to writing files and carrying
   out simple operations looking like
   [10Xpolymake file KEYWORD1 KEYWORD2 KEYWORD3[0m
-  on  the  command  line.  Scripts  are not supported. From vertsion 0.7.2 on,
-  there is limited client-support. All clients that are called like
-  [10Xclient outfile infile1 infile2 ... -option1 -option2[0m
-  can now be called from [5XGAP[0m via [2XPolymakeClient[0m ([14X2.7-1[0m).
+  on  the command line. Scripts are not supported. Every call to polymake will
+  re-start  the program anew. This causes considerable overhead. The number of
+  calls  to  polymake  is  reduced  by  caching  the  results in the so-called
+  [9XPolymakeObject[0m  in  GAP.  As  of  polymaking  version 0.8.0, old versions of
+  polymake (i.e. versions before 2.7.9) are not supported anymore.
   
   
   [1X1.1 A few words about the installation of polymake[0X
@@ -21,11 +22,7 @@
   [5Xpolymaking[0m  will  try  to  guess  the location of polymake. If this fails, a
   warning is issued at load time ([9XInfoWarning[0m level 1). Note that the guessing
   procedure  is  suppressed when [2XPOLYMAKE_COMMAND[0m ([14X3.2-1[0m) is set manually (see
-  [14X1.2-4[0m).
-  Note  that  polymake  calls  other external functions ("clients") to do some
-  work  for  it. These functions must be either in the path from which GAP was
-  called  or in a path listed in the [9XPATH[0m environment variable. You can set it
-  using the shell command
+  [14X1.2-3[0m).
   [10Xsetenv PATH ${PATH}:<your polymakepath>[0m
   The  general  rule  is:  If  [5Xpolymaking[0m  finds  polymake by itself, there is
   nothing to worry about.
@@ -53,24 +50,15 @@
   Sets  the  name  for  the  polymake  program  to  [3Xcommand[0m.  This manipulates
   [2XPOLYMAKE_COMMAND[0m ([14X3.2-1[0m).
   
-  [1X1.2-3 SetPolymakeClientPaths[0m
   
-  [2X> SetPolymakeClientPaths( [0X[3Xdirs[0X[2X ) _____________________________________[0Xmethod
+  [1X1.2-3 Setting variables permanently[0X
   
-  Defines    directories    which    contain    polymake    client   programs.
-  [10XSetPolymakeClientPaths(dirs)[0m  sets  [2XPOLYMAKE_CLIENT_PATHS[0m  ([14X3.2-3[0m)  to  [3Xdirs[0m
-  which has to be a list of directory objects.
-  
-  
-  [1X1.2-4 Setting variables permanently[0X
-  
-  To    permanently    set    the    values   of   [2XPOLYMAKE_COMMAND[0m   ([14X3.2-1[0m),
-  [2XPOLYMAKE_CLIENT_PATHS[0m ([14X3.2-3[0m) and [2XPOLYMAKE_DATA_DIR[0m ([14X3.2-2[0m), add the lines
+  To   permanently   set   the   values   of   [2XPOLYMAKE_COMMAND[0m  ([14X3.2-1[0m),  and
+  [2XPOLYMAKE_DATA_DIR[0m ([14X3.2-2[0m), add the lines
   
   [4X------------------------------------------------------------------[0X
     [4XPOLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");[0X
     [4XPOLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");[0X
-    [4XPOLYMAKE_CLIENT_DIRS:=[Directory("/home/myclients/"),Directory("/home/moreclients/")];[0X
   [4X------------------------------------------------------------------[0X
   
   to  your  [11X.gaprc[0m file (see [14XReference: The .gaprc file[0m). Note that these have

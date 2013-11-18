@@ -2,8 +2,7 @@
   
   [1XReferences[0X
   
-  [[20XGJ[15X]      [16XGawrilow,      E.      and      Joswig,      M.[15X,     [17Xpolymake[15X,
-  \URL{http://www.math.tu-berlin.de/polymake/}.
+  [[20XGJ[15X] [16XGawrilow, E. and Joswig, M.[15X, [17Xpolymake[15X, \URL{http://polymake.org/}.
   
   
   

@@ -12,7 +12,6 @@
   [2XConvertMatrixToPolymakeString[0X  2.4-5
   [2XConvertPolymakeBoolToGAP[0X  4.2-6
   [2XConvertPolymakeGraphToGAP[0X  4.2-9
-  [2XConvertPolymakeHasseDiagramToGAP[0X  4.2-10
   [2XConvertPolymakeIntVectorToGAPPlusOne[0X  4.2-5
   [2XConvertPolymakeListOfSetsToGAP[0X  4.2-8
   [2XConvertPolymakeListOfSetsToGAPPlusOne[0X  4.2-8
@@ -43,14 +42,10 @@
   [2XNamesKnownPropertiesOfPolymakeObject[0X  2.2-4
   [2XObjectConverters[0X  4.1-4
   [2XPolymake[0X  2.5-1
-  [2XPOLYMAKE_CLIENT_PATHS[0X  3.2-3
   [2XPOLYMAKE_COMMAND[0X  3.2-1
   [2XPOLYMAKE_DATA_DIR[0X  3.2-2
   [2XPOLYMAKE_LAST_FAIL_REASON[0X  3.1-2
-  [2XPolymakeClient[0X  2.7-1
-  [2XPolymakeClientNC[0X  2.7-1
   [2XPropertyOfPolymakeObject[0X  2.2-6
-  [2XSetPolymakeClientPaths[0X  1.2-3
   [2XSetPolymakeCommand[0X  1.2-2
   [2XSetPolymakeDataDirectory[0X  1.2-1
   [2XSplitPolymakeOutputStringIntoBlocks[0X  4.1-3

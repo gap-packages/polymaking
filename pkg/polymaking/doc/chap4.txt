@@ -39,11 +39,6 @@
   process  adds 1 to the numbers corresponding to vertices in facet lists, for
   example.
   
-  [13XCall  for  help:[0m  As  of version 0.7.0, most of the converters were assigned
-  blindly  to keywords. So some of them might not be suitable. If you find one
-  of  those,  please  tell  me  about it. Also, for a lot of keywords and data
-  types, there is no converter. Please tell me if you want a new converter.
-  
   The conversion process is done by the following methods:
   
   [1X4.1-2 ConvertPolymakeOutputToGapNotation[0m
@@ -164,51 +159,4 @@
   Let [3Xlist[0m be a list of strings representing sets (that is, a list of integers
   enclosed  by  {  and }). Then a record is returned containing two sets named
   [10X.vertices[0m and [10X.edges[0m.
-  
-  [1X4.2-10 ConvertPolymakeHasseDiagramToGAP[0m
-  
-  [2X> ConvertPolymakeHasseDiagramToGAP( [0X[3Xlist[0X[2X ) ___________________________[0Xmethod
-  [6XReturns:[0X  [9XRecord[0m with entries [10X.hasse[0m and [10X.faceindices[0m
-  
-  Takes  a  list  [3Xlist[0m  of strings (the [10XHASSE_DIAGRAM[0m returned by polymake and
-  split with [2XSplitPolymakeOutputStringIntoBlocks[0m ([14X4.1-3[0m)) and returns a record
-  containing  a  list  of  pairs  [10X.hasse[0m  and  a  list  of  lists  of integers
-  [10X.faceindices[0m.  Every  pair  in  [10X.hasse[0m is of the form [10X[[vertlist],[upfaces]][0m
-  where  vertlist is a list of vertices (given as integers) and [10X[upfaces][0m is a
-  list  of  integers  encoding  the  faces  in  the next (higher) dimension as
-  positions in the list [10X.hasse[0m. If polymake returns special faces representing
-  the full object or the empty face, they are also included in [10X.hasse[0m.
-  [10X.faceindices[0m  is a list of lists of integers corresponding to the indices of
-  faces in each dimension in [10X.hasse[0m(possibly including the extra faces).
-  Note  that  the  order  in which the faces are listed in [10X.hasse[0m is the order
-  they  are  output  from  polymake.  In particular, the list might start with
-  vertices for one object and with facets for another.
-  
-  [4X---------------------------  Example  ----------------------------[0X
-    [4X[0X
-    [4Xgap> square:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"2cube.poly");[0X
-    [4X<polymake object. No properties known>[0X
-    [4Xgap> # "VERTICES" is converted using ConvertPolymakeMatrixToGAPKillOnes[0X
-    [4Xgap> Polymake(square,"VERTICES");[0X
-    [4X[ [ -1, -1 ], [ 1, -1 ], [ -1, 1 ], [ 1, 1 ] ][0X
-    [4Xgap> Polymake(square,"HASSE_DIAGRAM");[0X
-    [4Xrec([0X
-    [4X  hasse := [ [ [  ], [ 2, 3, 4, 5 ] ], [ [ 1 ], [ 6, 8 ] ], [ [ 2 ], [ 7, 8 ] ],[0X
-    [4X      [ [ 3 ], [ 6, 9 ] ], [ [ 4 ], [ 7, 9 ] ], [ [ 1, 3 ], [ 10 ] ],[0X
-    [4X      [ [ 2, 4 ], [ 10 ] ], [ [ 1, 2 ], [ 10 ] ], [ [ 3, 4 ], [ 10 ] ],[0X
-    [4X      [ [ 1, 2, 3, 4 ], [  ] ] ],[0X
-    [4X  faceindices := [ [ 1 ], [ 2, 3, 4, 5 ], [ 6, 7, 8, 9 ], [ 10 ] ] )[0X
-    [4Xgap> simp:=CreatePolymakeObjectFromFile(Directory("~/tmp/"),"tmp.top");[0X
-    [4X<polymake object. No properties known>[0X
-    [4Xgap> Polymake(simp,"FACETS"); ## a very small simplicial complex[0X
-    [4X[ [ 2, 4 ], [ 1, 2, 3 ] ][0X
-    [4Xgap> Polymake(simp,"HASSE_DIAGRAM");[0X
-    [4Xrec( hasse := [ [ [  ], [  ] ], [ [ 1, 2, 3 ], [ 1 ] ], [ [ 2, 4 ], [ 1 ] ],[0X
-    [4X      [ [ 1, 2 ], [ 2 ] ], [ [ 1, 3 ], [ 2 ] ], [ [ 2, 3 ], [ 2 ] ],[0X
-    [4X      [ [ 2 ], [ 3, 4, 6 ] ], [ [ 4 ], [ 3 ] ], [ [ 1 ], [ 4, 5 ] ],[0X
-    [4X      [ [ 3 ], [ 5, 6 ] ], [ [  ], [ 7, 8, 9, 10 ] ] ],[0X
-    [4X  faceindices := [ [ 1 ], [ 2 ], [ 3, 4, 5, 6 ], [ 7, 8, 9, 10 ], [ 11 ] ] )[0X
-    [4Xgap> ## ... and this one starts with facets[0X
-    [4X[0X
-  [4X------------------------------------------------------------------[0X
   

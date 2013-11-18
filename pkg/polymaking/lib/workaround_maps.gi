@@ -5,7 +5,7 @@
 ##  
 
 ##
-#H @(#)$Id: workaround_maps.gi, v 0.7.9 2013/10/27 18:26:19 gap Exp $
+#H @(#)$Id: workaround_maps.gi, v 0.8.1 2013/11/16 17:55:19 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -24,7 +24,7 @@
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
 Revision.("workaround_maps_gi"):=
-	"@(#)$Id: workaround_maps.gi, v 0.7.9 2013/10/27   18:26:19  gap Exp $";
+	"@(#)$Id: workaround_maps.gi, v 0.8.1 2013/11/16   17:55:19  gap Exp $";
 
 ###########
 # This is a workaround for the next-generation polymake

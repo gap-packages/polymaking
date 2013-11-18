@@ -24,23 +24,22 @@
 <div class="ContSect"><span class="nocss">&nbsp;</span><a href="chap1.html#X851C596486F918F0">1.2 <span class="Heading">Setting variables for external programs</span></a>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X794A38E981F9E76F">1.2-1 SetPolymakeDataDirectory</a></span>
 <span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X854645287BC9303E">1.2-2 SetPolymakeCommand</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X862304F37C28FE78">1.2-3 SetPolymakeClientPaths</a></span>
-<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7943B579846BDB76">1.2-4 <span class="Heading">Setting variables permanently</span></a>
+<span class="ContSS"><br /><span class="nocss">&nbsp;&nbsp;</span><a href="chap1.html#X7943B579846BDB76">1.2-3 <span class="Heading">Setting variables permanently</span></a>
 </span>
 </div>
 </div>
 
 <h3>1 <span class="Heading">Installation and Preface</span></h3>
 
-<p>To install the package, just unpack it in your packages directory (usually <code class="code">~/gap/pkg</code> for local installation). To use <strong class="pkg">polymaking</strong>, you need a working installation of the program polymake <span class="URL"><a href="http://www.math.tu-berlin.de/polymake/">http://www.math.tu-berlin.de/polymake/</a></span>. The package has been tested on linux and Mac OS X (10.4 and 10.5). But it should be as platform independent as <strong class="pkg">GAP</strong> and polymake.</p>
+<p>To install the package, just unpack it in your packages directory (usually <code class="code">~/gap/pkg</code> for local installation). To use <strong class="pkg">polymaking</strong>, you need a working installation of the program polymake <span class="URL"><a href="http://www.math.tu-berlin.de/polymake/">http://www.math.tu-berlin.de/polymake/</a></span>. The package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). But it should be as platform independent as <strong class="pkg">GAP</strong> and polymake.</p>
 
-<p>The interaction with polymake is restricted to writing files and carrying out simple operations looking like <br /> <code class="code">polymake file KEYWORD1 KEYWORD2 KEYWORD3</code> <br /> on the command line. Scripts are not supported. From vertsion 0.7.2 on, there is limited client-support. All clients that are called like <br /> <code class="code">client outfile infile1 infile2 ... -option1 -option2</code> <br /> can now be called from <strong class="pkg">GAP</strong> via <code class="func">PolymakeClient</code> (<a href="chap2.html#X7B7BFA407F54D37E"><b>2.7-1</b></a>).</p>
+<p>The interaction with polymake is restricted to writing files and carrying out simple operations looking like <br /> <code class="code">polymake file KEYWORD1 KEYWORD2 KEYWORD3</code> <br /> on the command line. Scripts are not supported. Every call to polymake will re-start the program anew. This causes considerable overhead. The number of calls to polymake is reduced by caching the results in the so-called <code class="keyw">PolymakeObject</code> in GAP. As of polymaking version 0.8.0, old versions of polymake (i.e. versions before 2.7.9) are not supported anymore.</p>
 
 <p><a id="X7A02C64B7A3777FF" name="X7A02C64B7A3777FF"></a></p>
 
 <h4>1.1 <span class="Heading">A few words about the installation of polymake</span></h4>
 
-<p><strong class="pkg">polymaking</strong> will try to guess the location of polymake. If this fails, a warning is issued at load time (<code class="keyw">InfoWarning</code> level 1). Note that the guessing procedure is suppressed when <code class="func">POLYMAKE_COMMAND</code> (<a href="chap3.html#X7B35A5217C8C7B04"><b>3.2-1</b></a>) is set manually (see <a href="chap1.html#X7943B579846BDB76"><b>1.2-4</b></a>). <br /> Note that polymake calls other external functions ("clients") to do some work for it. These functions must be either in the path from which GAP was called or in a path listed in the <code class="keyw">PATH</code> environment variable. You can set it using the shell command <br /> <code class="code">setenv PATH ${PATH}:&lt;your polymakepath&gt;</code> <br /> The general rule is: If <strong class="pkg">polymaking</strong> finds polymake by itself, there is nothing to worry about.</p>
+<p><strong class="pkg">polymaking</strong> will try to guess the location of polymake. If this fails, a warning is issued at load time (<code class="keyw">InfoWarning</code> level 1). Note that the guessing procedure is suppressed when <code class="func">POLYMAKE_COMMAND</code> (<a href="chap3.html#X7B35A5217C8C7B04"><b>3.2-1</b></a>) is set manually (see <a href="chap1.html#X7943B579846BDB76"><b>1.2-3</b></a>). <br /> <code class="code">setenv PATH ${PATH}:&lt;your polymakepath&gt;</code> <br /> The general rule is: If <strong class="pkg">polymaking</strong> finds polymake by itself, there is nothing to worry about.</p>
 
 <p><a id="X851C596486F918F0" name="X851C596486F918F0"></a></p>
 
@@ -62,25 +61,17 @@
 <div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SetPolymakeCommand</code>( <var class="Arg">command</var> )</td><td class="tdright">( method )</td></tr></table></div>
 <p>Sets the name for the polymake program to <var class="Arg">command</var>. This manipulates <code class="func">POLYMAKE_COMMAND</code> (<a href="chap3.html#X7B35A5217C8C7B04"><b>3.2-1</b></a>).</p>
 
-<p><a id="X862304F37C28FE78" name="X862304F37C28FE78"></a></p>
-
-<h5>1.2-3 SetPolymakeClientPaths</h5>
-
-<div class="func"><table class="func" width="100%"><tr><td class="tdleft"><code class="func">&gt; SetPolymakeClientPaths</code>( <var class="Arg">dirs</var> )</td><td class="tdright">( method )</td></tr></table></div>
-<p>Defines directories which contain polymake client programs. <code class="code">SetPolymakeClientPaths(dirs)</code> sets <code class="func">POLYMAKE_CLIENT_PATHS</code> (<a href="chap3.html#X875BDBAE8075192A"><b>3.2-3</b></a>) to <var class="Arg">dirs</var> which has to be a list of directory objects.</p>
-
 <p><a id="X7943B579846BDB76" name="X7943B579846BDB76"></a></p>
 
-<h5>1.2-4 <span class="Heading">Setting variables permanently</span></h5>
+<h5>1.2-3 <span class="Heading">Setting variables permanently</span></h5>
 
-<p>To permanently set the values of <code class="func">POLYMAKE_COMMAND</code> (<a href="chap3.html#X7B35A5217C8C7B04"><b>3.2-1</b></a>), <code class="func">POLYMAKE_CLIENT_PATHS</code> (<a href="chap3.html#X875BDBAE8075192A"><b>3.2-3</b></a>) and <code class="func">POLYMAKE_DATA_DIR</code> (<a href="chap3.html#X7C07B16B873BA46D"><b>3.2-2</b></a>), add the lines</p>
+<p>To permanently set the values of <code class="func">POLYMAKE_COMMAND</code> (<a href="chap3.html#X7B35A5217C8C7B04"><b>3.2-1</b></a>), and <code class="func">POLYMAKE_DATA_DIR</code> (<a href="chap3.html#X7C07B16B873BA46D"><b>3.2-2</b></a>), add the lines</p>
 
 
 <table class="example">
 <tr><td><pre>
 POLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");
 POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
-POLYMAKE_CLIENT_DIRS:=[Directory("/home/myclients/"),Directory("/home/moreclients/")];
 </pre></td></tr></table>
 
 <p>to your <code class="file">.gaprc</code> file (see <a href="/Users/roeder/software/lib/gap4r4/doc/htm/ref/CHAP003.htm#SECT004"><b>Reference: The .gaprc file</b></a>). Note that these have to be <em>before</em> the <code class="code">LoadPackage("polymaking");</code> line. Or you can change the values of the above variables by editing <code class="file">lib/environment.gi</code></p>
