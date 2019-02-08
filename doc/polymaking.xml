@@ -3,39 +3,7 @@
 
 <Book Name="polymaking">
 
-<TitlePage>
-  <Title>An Interface for using <Package>polymake</Package> in &GAP;</Title>
-  <Version>( Version
-<#Include SYSTEM "../../version.ver">
- )
-  </Version>
-  <Author>Marc Roeder
-    <Email>marc&uscore;roeder(at)web.de</Email>
-  </Author>
-
-  <Abstract>
-  This package provides a very basic interface to the polymake program
-  by Ewgenij Gawrilow, Michael Joswig et al.
-  <Cite Key="polymake"></Cite>. The polymake
-  program itself is not included.
-  </Abstract>
-
-  <Address>
-  Marc Roeder, Department of Mathematics, NUI Galway, Irleland
-  </Address>
-
-  <Acknowledgements>
-  This work has been supported by Marie Curie Grant No. MTKD-CT-2006-042685
-  </Acknowledgements>
-
-  <Copyright>&copyright; 2007--2013 Marc Roeder. <P/>
-
-    This package is distributed under the terms of the GNU General
-    Public License version 2 or later (at your convenience). See the file "LICENSE.txt" or 
-    <URL > http://www.gnu.org/copyleft/gpl.html</URL>
-
-  </Copyright>
-</TitlePage>
+<#Include SYSTEM "title.xml">
 
 <TableOfContents/>
 

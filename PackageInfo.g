@@ -55,6 +55,27 @@ BannerString := Concatenation(
 
 Autoload := false,
 TestFile := "tst/testall.g",
-Keywords := ["interface","polymake","computational geometry"]
+Keywords := ["interface","polymake","computational geometry"],
+
+AutoDoc := rec(
+    TitlePage := rec(
+        Copyright := """
+            &copyright; 2007--2013 Marc Roeder. <P/>
+
+            This package is distributed under the terms of the GNU General
+            Public License version 2 or later (at your convenience). See the
+            file "LICENSE.txt" or <URL>https://www.gnu.org/copyleft/gpl.html</URL>
+            """,
+        Abstract := """
+            This package provides a very basic interface to the polymake
+            program by Ewgenij Gawrilow, Michael Joswig et al. <Cite
+            Key="polymake"></Cite>. The polymake program itself is not
+            included.
+            """,
+        Acknowledgements := """
+            This work has been supported by Marie Curie Grant No. MTKD-CT-2006-042685
+            """,
+    )
+),
 
 ));
