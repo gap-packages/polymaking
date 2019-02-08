@@ -1,7 +1,7 @@
    <Section><Heading>Calling Polymake and converting its output</Heading>
 
    <ManSection>
-   <Meth Name="Polymake" Arg="poly option [: [PolymakeNolookup]]"/>
+   <Meth Name="Polymake" Arg="poly, option : PolymakeNolookup"/>
     <Description>
     
      This method calls the polymake program (see <Ref
