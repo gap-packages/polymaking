@@ -5,7 +5,6 @@
 ##  
 
 ##
-#H @(#)$Id$
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,8 +22,6 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("convert_gi"):=
-	"@(#)$Id$";
 InstallMethod(ConvertPolymakeOutputToGapNotation,[IsString],
         function(string)
     local   split,  blockpositions,  splitblocks,  returnlist,  
