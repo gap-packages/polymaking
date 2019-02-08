@@ -5,7 +5,6 @@
 ##  
 
 ##
-#H @(#)$Id: construct.gi, v 0.8.1 2013/11/16 17:55:19 gap Exp $
 ##
 #Y	 Copyright (C) 2006 Marc Roeder 
 #Y 
@@ -23,8 +22,6 @@
 #Y along with this program; if not, write to the Free Software 
 #Y Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA
 ##
-Revision.("construct_gi"):=
-	"@(#)$Id: construct.gi, v 0.8.1 2013/11/16   17:55:19  gap Exp $";
 # just create an empty file:
 InstallMethod(CreateEmptyFile,[IsString],
         function(name)
