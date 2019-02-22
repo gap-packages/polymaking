@@ -3,7 +3,8 @@ SetPackageInfo( rec(
 PackageName := "polymaking",
 Subtitle := "Interfacing the geometry software polymake",
 Version := "0.8.1",
-Date := "16/11/2013",
+Date := "16/11/2013", # dd/mm/yyyy format
+License := "GPL-2.0-or-later",
 
 ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_8_1",
 ArchiveFormats := ".tar.gz,.tar.bz2,-win.zip", # the others are generated automatically
