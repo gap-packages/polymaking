@@ -54,14 +54,6 @@ Dependencies := rec(
 ),
 
 AvailabilityTest := ReturnTrue,
-BannerString := Concatenation(
-  "----------------------------------------------------------------\n",
-  "Loading  polymaking ", ~.Version, "\n",
-  "(",~.PackageDoc.LongTitle,")\n",
-  "by ", ~.Persons[1].FirstNames, " ", ~.Persons[1].LastName,"\n",
-  "----------------------------------------------------------------\n" ),
-
-Autoload := false,
 TestFile := "tst/testall.g",
 Keywords := ["interface","polymake","computational geometry"],
 
