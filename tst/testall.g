@@ -1,2 +1,3 @@
 LoadPackage("polymaking");
-ReadTest(Filename(DirectoriesPackageLibrary("polymaking"),"../tst/polymaking.tst"));
+TestDirectory(DirectoriesPackageLibrary("polymaking", "tst"), rec(exitGAP := true));
+FORCE_QUIT_GAP(1);
