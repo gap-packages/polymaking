@@ -18,6 +18,13 @@ Persons := [
     Email         := "marc_roeder@web.de",
     WWWHome       := "http://csserver.evansville.edu/~mroeder",
   ),
+  rec(
+    LastName      := "GAP Team",
+    FirstNames    := "The",
+    IsAuthor      := false,
+    IsMaintainer  := true,
+    Email         := "support@gap-system.org",
+  ),
 ],
 
 Status := "deposited",
