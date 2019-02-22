@@ -6,9 +6,6 @@ Version := "0.8.1",
 Date := "16/11/2013", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
-ArchiveURL := "http://csserver.evansville.edu/~mroeder/polymaking/polymaking0_8_1",
-ArchiveFormats := ".tar.gz,.tar.bz2,-win.zip", # the others are generated automatically
-
 Persons := [
   rec(
     LastName      := "Roeder",
@@ -29,12 +26,20 @@ Persons := [
 
 Status := "deposited",
 
-README_URL := "http://csserver.evansville.edu/~mroeder/polymaking/README.polymaking",
-PackageInfoURL := "http://csserver.evansville.edu/~mroeder/polymaking/PackageInfo.g",
+PackageWWWHome  := "https://gap-packages.github.io/polymaking/",
+README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
+PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
+SourceRepository := rec(
+    Type := "git",
+    URL := "https://github.com/gap-packages/polymaking",
+),
+IssueTrackerURL := Concatenation( ~.SourceRepository.URL, "/issues" ),
+ArchiveURL      := Concatenation( ~.SourceRepository.URL,
+                                 "/releases/download/v", ~.Version,
+                                 "/polymaking-", ~.Version ),
+ArchiveFormats := ".tar.gz",
 
 AbstractHTML := "This package provides a very basic interface to the polymake program by Ewgenij Gawrilow, Michael Joswig et al.",
-
-PackageWWWHome := "http://csserver.evansville.edu/~mroeder/polymaking.html",
 
 PackageDoc := rec(
   BookName  := "polymaking",
