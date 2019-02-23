@@ -2,8 +2,8 @@ SetPackageInfo( rec(
 
 PackageName := "polymaking",
 Subtitle := "Interfacing the geometry software polymake",
-Version := "0.8.1dev",
-Date := "16/11/2013", # dd/mm/yyyy format
+Version := "0.8.2",
+Date := "23/02/2019", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -52,7 +52,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.4",
+  GAP := ">=4.8",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [["GAPDoc", ">= 0.99"]],
   ExternalConditions := ["polymake (http://www.polymake.org) must be installed"]
@@ -84,6 +84,5 @@ AutoDoc := rec(
         Version := Concatenation( "Version ", ~.Version ),
     )
 ),
-
 
 ));
