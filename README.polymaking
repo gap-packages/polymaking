@@ -7,7 +7,7 @@ National University of Ireland, Galway
 
 A very basic GAP-interface to the program "polymake" by
 Ewgenij Gawrilow and Michael Joswig which is available at
-http://www.math.tu-berlin.de/polymake/
+<https://polymake.org>
 
 Note that this package does not provide the program "polymake", which
 has to be installed separately.
@@ -28,7 +28,7 @@ keywords/features.
 
 		Installation
 		------------
-0. Install polymake (http://www.math.tu-berlin.de/polymake/)
+0. Install polymake <https://polymake.org>
 
 1. Download one of the archives
 	polymaking<ver>.tar.bz2 

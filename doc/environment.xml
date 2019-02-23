@@ -4,7 +4,7 @@
  (usually <C>~/gap/pkg</C> for local installation). 
 
  To use <Package>polymaking</Package>, you need a working installation of the program
- polymake <URL>http://www.math.tu-berlin.de/polymake/</URL>. The
+ polymake <URL>https://polymake.org</URL>. The
  package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). 
  But it should be as platform independent as &GAP; and polymake.
  <P/>
