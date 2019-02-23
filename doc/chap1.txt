@@ -3,9 +3,9 @@
   
   [33X[0;0YTo  install  the package, just unpack it in your packages directory (usually
   [10X~/gap/pkg[110X  for  local  installation).  To use [5Xpolymaking[105X, you need a working
-  installation of the program polymake [7Xhttp://www.math.tu-berlin.de/polymake/[107X.
-  The package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). But
-  it should be as platform independent as [5XGAP[105X and polymake.[133X
+  installation  of  the program polymake [7Xhttps://polymake.org[107X. The package has
+  been tested on linux and Mac OS X (10.4, 10.5 and 10.6). But it should be as
+  platform independent as [5XGAP[105X and polymake.[133X
   
   [33X[0;0YThe  interaction  with  polymake is restricted to writing files and carrying
   out simple operations looking like[133X

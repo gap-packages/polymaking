@@ -22,7 +22,7 @@ suggested-pkgs:
       url: "http://www.math.rwth-aachen.de/~Frank.Luebeck/GAPDoc"
 
 www: https://gap-packages.github.io/polymaking/
-readme: README.md
+readme: README
 packageinfo: https://gap-packages.github.io/polymaking/PackageInfo.g
 
 downloads:
@@ -51,11 +51,14 @@ citeas: |
 bibtex: |
     @misc{ polymaking0.8.2,
       author =           {Roeder, M. and GAP Team, T.},
-      title =            {{polymaking}, Interfacing the geometry software polymake, {V}ersion 0.8.2},
+      title =            {{polymaking},   Interfacing   the   geometry  software
+                          polymake, {V}ersion 0.8.2},
       month =            {Feb},
       year =             {2019},
       note =             {GAP package},
-      howpublished =     {\href {https://gap-packages.github.io/polymaking/} {\texttt{https://gap-packages.github.io/}\discretionary {}{}{}\texttt{polymaking/}}},
+      howpublished =     {\href     {https://gap-packages.github.io/polymaking/}
+                          {\texttt{https://gap-packages.github.io/}\discretionary
+                          {}{}{}\texttt{polymaking/}}},
       keywords =         {interface; polymake; computational geometry},
       printedkey =       {RT19}
     }

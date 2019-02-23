@@ -37,7 +37,7 @@
 
 <h3>1 <span class="Heading">Installation and Preface</span></h3>
 
-<p>To install the package, just unpack it in your packages directory (usually <code class="code">~/gap/pkg</code> for local installation). To use <strong class="pkg">polymaking</strong>, you need a working installation of the program polymake <span class="URL"><a href="http://www.math.tu-berlin.de/polymake/">http://www.math.tu-berlin.de/polymake/</a></span>. The package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). But it should be as platform independent as <strong class="pkg">GAP</strong> and polymake.</p>
+<p>To install the package, just unpack it in your packages directory (usually <code class="code">~/gap/pkg</code> for local installation). To use <strong class="pkg">polymaking</strong>, you need a working installation of the program polymake <span class="URL"><a href="https://polymake.org">https://polymake.org</a></span>. The package has been tested on linux and Mac OS X (10.4, 10.5 and 10.6). But it should be as platform independent as <strong class="pkg">GAP</strong> and polymake.</p>
 
 <p>The interaction with polymake is restricted to writing files and carrying out simple operations looking like <br /> <code class="code">polymake file KEYWORD1 KEYWORD2 KEYWORD3</code> <br /> on the command line. Scripts are not supported. Every call to polymake will re-start the program anew. This causes considerable overhead. The number of calls to polymake is reduced by caching the results in the so-called <code class="keyw">PolymakeObject</code> in GAP. As of polymaking version 0.8.0, old versions of polymake (i.e. versions before 2.7.9) are not supported anymore.</p>
 

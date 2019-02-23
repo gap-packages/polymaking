@@ -6,19 +6,23 @@
                   [1X Interfacing the geometry software polymake [101X
   
   
-                                Version 0.8.1dev
+                                 Version 0.8.2
   
   
-                                16 November 2013
+                                23 February 2019
   
   
                                   Marc Roeder
+  
+                                  The GAP Team
   
   
   
   Marc Roeder
       Email:    [7Xmailto:marc_roeder@web.de[107X
       Homepage: [7Xhttp://csserver.evansville.edu/~mroeder[107X
+  The GAP Team
+      Email:    [7Xmailto:support@gap-system.org[107X
   
   -------------------------------------------------------
   [1XAbstract[101X
