@@ -33,7 +33,6 @@ keywords/features.
 1. Download one of the archives
 	polymaking<ver>.tar.bz2 
 	polymaking<ver>.tar.gz
-	polymaking<ver>.zoo
 	polymaking<ver>-win.zip
    (where <ver> is some version number) to the directory pkg/ of the 
    GAP home directory. If you do not have permission to do so, create 
@@ -42,7 +41,6 @@ keywords/features.
 2. change directory to pkg/ and unpack the archive using the according command:
 	tar -xjf polymaking<ver>.tar.bz2
 	tar -xzf polymaking<ver>.tar.gz
-	zoo -extract polymaking<ver>.zoo 
 	unzip polymaking<ver>-win.zip
  (replace <ver> with the version number)
 
