@@ -1,0 +1,333 @@
+  
+  [1X2 [33X[0;0YPolymake interaction[133X[101X
+  
+  
+  [1X2.1 [33X[0;0YCreating Polymake Objects[133X[101X
+  
+  [33X[0;0YThe   interaction   with   the   polymake  program  is  done  via  files.  A
+  [9XPolymakeObject[109X  is mainly a pointer to a file and a list of known properties
+  of  the  object.  These  properties need not be stored in the file. Whenever
+  polymake  is  called,  the  returned  value is read from standard output and
+  stored in the [9XPolymakeObject[109X corresponding to the file for which polymake is
+  called.  The files for polymake are written in the old (non-xml) format. The
+  first  run  of  polymake converts them into the new (xml) format. This means
+  that  changes  to  the file by means of the methods outlined below after the
+  first run of polymake will probably lead to corrupted files.[133X
+  
+  [1X2.1-1 CreateEmptyFile[101X
+  
+  [33X[1;0Y[29X[2XCreateEmptyFile[102X( [3Xfilename[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YCreates  an empty file with name [3Xfilename[103X. Note that [3Xfilename[103X has to include
+  the full path and the directory for the file must exist.[133X
+  
+  [1X2.1-2 CreatePolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XCreatePolymakeObject[102X(  ) [32X method[133X
+  [33X[1;0Y[29X[2XCreatePolymakeObject[102X( [3Xappvertyp[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XCreatePolymakeObject[102X( [3Xdir[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XCreatePolymakeObject[102X( [3Xdir[103X, [3Xappvertyp[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XCreatePolymakeObject[102X( [3Xprefix[103X, [3Xdir[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XCreatePolymakeObject[102X( [3Xprefix[103X, [3Xdir[103X, [3Xappvertyp[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9XPolymakeObject[109X[133X
+  
+  [33X[0;0YIf  called  without  arguments,  this  method generates an empty file in the
+  directory  defined by [2XPOLYMAKE_DATA_DIR[102X ([14X3.2-2[114X). If a directory [3Xdir[103X is given
+  (this  directory  must exist), an empty file is generated in this directory.
+  If  [3Xprefix[103X  is  not  given,  the file is called [11XpolyN[111X where [9XN[109X is the current
+  runtime.  If  a  file  of  this  name  already  exists, a number is appended
+  separated  by  a  dot  (example:  "poly1340" and "poly1340.1"). If [3Xprefix[103X is
+  given,  the  filename  starts  with this prefix. Optionally, the file can be
+  generated  with  a  header  specifying  application, version and type of the
+  object.  This  is  done  by  passing  the  triple  of  strings  [3Xappvertyp[103X to
+  [2XCreatePolymakeObject[102X.           A          valid          triple          is
+  [10X["polytope","2.3","RationalPolytope"][110X.     Validity     is     checked    by
+  [2XCheckAppVerTypList[102X ([14X2.1-3[114X).[133X
+  
+  [1X2.1-3 CheckAppVerTypList[101X
+  
+  [33X[1;0Y[29X[2XCheckAppVerTypList[102X( [3Xappvertyp[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9Xbool[109X[133X
+  
+  [33X[0;0YChecks if the triple [3Xarppvertyp[103X of strings specifies an application and type
+  of  polymake  version  2.3.  More specifically, the first entry has to be an
+  application  from  [10X["polytope","surface","topaz"][110X and the third entry has to
+  be  a  type  corresponding  to the application given in the first entry. The
+  second entry is not checked.[133X
+  
+  [1X2.1-4 CreatePolymakeObjectFromFile[101X
+  
+  [33X[1;0Y[29X[2XCreatePolymakeObjectFromFile[102X( [3Xfilename[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XCreatePolymakeObjectFromFile[102X( [3Xdir[103X, [3Xfilename[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Y[9XPolymakeObject[109X[133X
+  
+  [33X[0;0YThis method generates a [9XPolymakeObject[109X corresponding to the file [3Xfilename[103X in
+  the  directory [3Xdir[103X. If [3Xdir[103X is not given, the [9XPOLYMAKE_DATA_DIR[109X is used.If no
+  file  with name [3Xfilename[103X exists in [3Xdir[103X (or [9XPOLYMAKE_DATA_DIR[109X, respectively),
+  an  empty  file is created. Note that the contents of the file do not matter
+  for  the  generation  of the object. In particular, the object does not know
+  any  of  the  properties  that might be encoded in the file. The only way to
+  transfer information from files to [9XPolymakeObject[109Xs is via [2XPolymake[102X ([14X2.5-1[114X).[133X
+  
+  
+  [1X2.2 [33X[0;0YAccessing Properties of Polymake Objects[133X[101X
+  
+  [33X[0;0YA  [9XPolymakeObject[109X  contains information about the directory of its file, the
+  name  of  its  file  and  about  properties  calculated  by calling [2XPolymake[102X
+  ([14X2.5-1[114X).  The  properties  returned by the [9Xpolymake[109X program are stored under
+  the  name  [9Xpolymake[109X  assigns to them (that is, the name of the data block in
+  the  corresponding  file).  The  following methods can be used to access the
+  information stored in a [9XPolymakeObject[109X. But be careful! All functions return
+  the  actual object. No copies are made. So if you change one of the returned
+  objects, you change the [9XPolymakeObject[109X itself.[133X
+  
+  [1X2.2-1 DirectoryOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XDirectoryOfPolymakeObject[102X( [3Xpoly[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YDirectory[133X
+  
+  [33X[0;0YReturns the directory of the file associated with [3Xpoly[103X.[133X
+  
+  [1X2.2-2 FilenameOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XFilenameOfPolymakeObject[102X( [3Xpoly[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YString[133X
+  
+  [33X[0;0YReturns  the  name of the file associated with [3Xpoly[103X. This does only mean the
+  name  of  the  [13Xfile[113X,  not the full path. For the full path and file name see
+  [2XFullFilenameOfPolymakeObject[102X ([14X2.2-3[114X)[133X
+  
+  [1X2.2-3 FullFilenameOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XFullFilenameOfPolymakeObject[102X( [3Xpoly[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YString[133X
+  
+  [33X[0;0YReturns  the  file associated with the [9XPolymakeObject[109X [3Xpoly[103X with its complete
+  path.[133X
+  
+  [1X2.2-4 NamesKnownPropertiesOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XNamesKnownPropertiesOfPolymakeObject[102X( [3Xpoly[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YList of Strings[133X
+  
+  [33X[0;0YReturns  a list of the names of all known properties. This does only include
+  the  properties  returned  by [2XPolymake[102X ([14X2.5-1[114X), [10X"dir"[110X and [10X"filename"[110X are not
+  included. If no properties are known, [9Xfail[109X is returned.[133X
+  
+  [1X2.2-5 KnownPropertiesOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XKnownPropertiesOfPolymakeObject[102X( [3Xpoly[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YRecord[133X
+  
+  [33X[0;0YReturns the record of all known properties. If no properties are known, [9Xfail[109X
+  is returned.[133X
+  
+  [1X2.2-6 PropertyOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XPropertyOfPolymakeObject[102X( [3Xpoly[103X, [3Xname[103X ) [32X method[133X
+  
+  [33X[0;0YReturns  the  value of the property [3Xname[103X if it is known. If the value is not
+  known, [9Xfail[109X is returned. [3Xname[103X must be a [9XString[109X.[133X
+  
+  
+  [1X2.3 [33X[0;0YExample: Creating and Accessing Polymake Objects[133X[101X
+  
+  [33X[0;0YSuppose  the file [11X/tmp/threecube.poly[111X contains the three dimensional cube in
+  polymake  form.  Now  generate  a  [9XPolymakeObject[109X  from  this  file and call
+  [2XPolymake[102X ([14X2.5-1[114X) to make the vertices of the cube known to the object.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X[128X[104X
+    [4X[28X### suppose we have a polymake file /tmp/threecube.poly[128X[104X
+    [4X[28X### containing a cube in three dimensions[128X[104X
+    [4X[25Xgap>[125X [27Xcube:=CreatePolymakeObjectFromFile(Directory("/tmp"),"threecube.poly");[127X[104X
+    [4X[28X<polymake object. No properties known>[128X[104X
+    [4X[25Xgap>[125X [27XFilenameOfPolymakeObject(cube);[127X[104X
+    [4X[28X"threecube.poly"[128X[104X
+    [4X[25Xgap>[125X [27XFullFilenameOfPolymakeObject(cube);[127X[104X
+    [4X[28X"/tmp/threecube.poly"[128X[104X
+    [4X[28X   #nothing is known about the cube:[128X[104X
+    [4X[25Xgap>[125X [27XNamesKnownPropertiesOfPolymakeObject(cube);  [127X[104X
+    [4X[28Xfail[128X[104X
+    [4X[25Xgap>[125X [27XPolymake(cube,"VERTICES");[127X[104X
+    [4X[28X[ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ], [ -1, -1, 1 ], [128X[104X
+    [4X[28X  [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ]  [128X[104X
+    [4X[28X   # Now <cube> knows its vertices:[128X[104X
+    [4X[25Xgap>[125X [27XPrint(cube);[127X[104X
+    [4X[28X<polymake object threecube.poly. Properties known: [ "VERTICES" ]>[128X[104X
+    [4X[25Xgap>[125X [27XPropertyOfPolymakeObject(cube,"VERTICES");[127X[104X
+    [4X[28X[ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ], [ -1, -1, 1 ],[128X[104X
+    [4X[28X  [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ][128X[104X
+    [4X[25Xgap>[125X [27XKnownPropertiesOfPolymakeObject(cube);[127X[104X
+    [4X[28Xrec([128X[104X
+    [4X[28X  VERTICES := [ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ],[128X[104X
+    [4X[28X      [ -1, -1, 1 ], [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ] )[128X[104X
+    [4X[28X[128X[104X
+  [4X[32X[104X
+  
+  
+  [1X2.4 [33X[0;0YWriting to Polymake Objects[133X[101X
+  
+  [33X[0;0YTo  transfer  data  from [5XGAP[105X to polymake, the following methods can be used.
+  But bear in mind that none of these functions test if the resulting polymake
+  file is still consistent.[133X
+  
+  [1X2.4-1 AppendToPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XAppendToPolymakeObject[102X( [3Xpoly[103X, [3Xstring[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YThis  appends the string [3Xstring[103X to the file associated to the [9XPolymakeObject[109X
+  [3Xpoly[103X. It is not tested if the string is syntactically correct as a part of a
+  polymake  file.  It  is also not tested if the string is compatible with the
+  data already contained in the file.[133X
+  
+  [33X[0;0YINEQUALITIES, POINTS and VERTICES can be appended to a polymake object using
+  the following functions:[133X
+  
+  [1X2.4-2 AppendPointlistToPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XAppendPointlistToPolymakeObject[102X( [3Xpoly[103X, [3Xpointlist[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YTakes  a  list  [3Xpointlist[103X  of  vectors  and  converts it into a string which
+  represents  a  polymake block labeled "POINTS". This string is then added to
+  the  file  associated  with  [3Xpoly[103X. The "POINTS" block of the file associated
+  with  [3Xpoly[103X  then  contains points with leading ones, as polymake uses affine
+  notation.[133X
+  
+  [1X2.4-3 AppendVertexlistToPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XAppendVertexlistToPolymakeObject[102X( [3Xpoly[103X, [3Xpointlist[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YDoes  the  same  as  [10XAppendPointlistToPolymakeObject[110X,  but  with  "VERTICES"
+  instead of "POINTS".[133X
+  
+  [1X2.4-4 AppendInequalitiesToPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XAppendInequalitiesToPolymakeObject[102X( [3Xpoly[103X, [3Xineqlist[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YJust appends the inequalities given in [3Xineqlist[103X to the polymake object [3X poly[103X
+  (with  caption  "INEQUALITIES").  Note  that  this  does  not  check  if  an
+  "INEQUALITIES" section does already exist in the file associated with [3Xpoly[103X.[133X
+  
+  [1X2.4-5 ConvertMatrixToPolymakeString[101X
+  
+  [33X[1;0Y[29X[2XConvertMatrixToPolymakeString[102X( [3Xname[103X, [3Xmatrix[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YString[133X
+  
+  [33X[0;0YThis function takes a matrix [3Xmatrix[103X and converts it to a string. This string
+  can  then  be appended to a polymake file via [2XAppendToPolymakeObject[102X ([14X2.4-1[114X)
+  to  form a block of data labeled [3Xname[103X. This may be used to write blocks like
+  INEQUALITIES or FACETS.[133X
+  
+  [1X2.4-6 ClearPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XClearPolymakeObject[102X( [3Xpoly[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XClearPolymakeObject[102X( [3Xpoly[103X, [3Xappvertyp[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10Ynothing[133X
+  
+  [33X[0;0YDeletes  all  known  properties  of the [9XPolymakeObject[109X [3Xpoly[103X and replaces its
+  file with an empty one.[133X
+  [33X[0;0YIf  the triple of strings [3Xappvertyp[103X specifying application, version and type
+  (see  [2XCheckAppVerTypList[102X ([14X2.1-3[114X)) is given, the file is replaced with a file
+  that  contains only a header specifying application, version and type of the
+  polymake object.[133X
+  
+  [33X[0;0YThere  are  also methods to manipulate the known values without touching the
+  file of the [9XPolymakeObject[109X:[133X
+  
+  [1X2.4-7 WriteKnownPropertyToPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XWriteKnownPropertyToPolymakeObject[102X( [3Xpoly[103X, [3Xname[103X, [3Xdata[103X ) [32X method[133X
+  
+  [33X[0;0YTakes  the  object [3Xdata[103X and writes it to the known properties section of the
+  [9XPolymakeObject[109X [3Xpoly[103X. The string [3Xname[103X is used as the name of the property. If
+  a property with that name already exists, it is overwritten. Again, there is
+  no check if [3Xdata[103X is consistent, correct or meaningful.[133X
+  
+  [1X2.4-8 UnbindKnownPropertyOfPolymakeObject[101X
+  
+  [33X[1;0Y[29X[2XUnbindKnownPropertyOfPolymakeObject[102X( [3Xpoly[103X, [3Xname[103X ) [32X method[133X
+  
+  [33X[0;0YIf  the  [9XPolymakeObject[109X [3Xpoly[103X has a property with name [3Xname[103X, that property is
+  unbound. If there is no such property, [9Xfail[109X is returned.[133X
+  
+  
+  [1X2.5 [33X[0;0YCalling Polymake and converting its output[133X[101X
+  
+  [1X2.5-1 Polymake[101X
+  
+  [33X[1;0Y[29X[2XPolymake[102X( [3Xpoly[103X, [3Xoption:[103X [3XPolymakeNolookup[103X ) [32X method[133X
+  
+  [33X[0;0YThis  method  calls the polymake program (see [2XPOLYMAKE_COMMAND[102X ([14X3.2-1[114X)) with
+  the option [3Xoption[103X. You may use several keywords such as [10X"FACETS VERTICES"[110X as
+  an  option.  The  returned  value  is cut into blocks starting with keywords
+  (which  are  taken  from  output and not looked up in [3Xoption[103X). Each block is
+  then  interpreted and translated into [5XGAP[105X readable form. This translation is
+  done  using  the functions given in [2XObjectConverters[102X ([14X4.1-4[114X). The first line
+  of  each  block  of  polymake output is taken as a keyword and the according
+  entry  in  [2XObjectConverters[102X  ([14X4.1-4[114X) is called to convert the block into [5XGAP[105X
+  readable form. If no conversion function is known, an info string is printed
+  and [9Xfail[109X is returned. If only one keyword has been given as [3Xoption[103X, [10XPolymake[110X
+  returns the result of the conversion operation. If more than one keyword has
+  been  given  or the output consists of more than one block, [10XPolymake[110X returns
+  [9Xfail[109X.  In any case, the calculated values for each block are stored as known
+  properties  of  the  [9XPolymakeObject[109X  [3Xpoly[103X  as  long as they are not [9Xfail[109X. If
+  [9XPolymake[109X  is  called  with  an  option that corresponds to a name of a known
+  property  of [3Xpoly[103X, the known property is returned. In this case, there is no
+  call of the external program. (see below for suppression of this feature).[133X
+  
+  [33X[0;0YNote  that  the  command [9XPolymake[109X returns [9Xfail[109X if nothing is returned by the
+  program  polymake  or  more than one block of data is returned. For example,
+  the  returned  value  of  [10XPolymake(poly,"VISUAL")[110X  is always [9Xfail[109X. Likewise,
+  [10XPolymake(poly,"POINTS  VERTICES")[110X  will  return  [9Xfail[109X (but may add new known
+  properties  to  [3Xpoly[103X).  For  a  description of the conversion functions, see
+  chapter [14X4[114X.[133X
+  
+  [33X[0;0YIf  the  option  [3XPolymakeNolookup[103X  is  set  to anything else than false, the
+  polymake  program  is  called even if [3Xpoly[103X already has a known property with
+  name [3Xoption[103X.[133X
+  
+  [33X[0;0YNote  that  whenever  [2XPolymake[102X returns [9Xfail[109X, a description of the problem is
+  stored  in [2XPOLYMAKE_LAST_FAIL_REASON[102X ([14X3.1-2[114X). If you call [2XPolymake[102X with more
+  than  one  keyword,  [2XPOLYMAKE_LAST_FAIL_REASON[102X  ([14X3.1-2[114X)  is  changed  before
+  polymake is called. So any further reason to return [9Xfail[109X will overwrite it.[133X
+  
+  
+  [1X2.6 [33X[0;0YAn Example[133X[101X
+  
+  [33X[0;0YLet's generate a three dimensional permutahedron.[133X
+  
+  [4X[32X  Example  [32X[104X
+    [4X[28X    [128X[104X
+    [4X[28X    gap> S:=SymmetricGroup(3);[128X[104X
+    [4X[28X    Sym( [ 1 .. 3 ] )[128X[104X
+    [4X[28X    gap> v:=[1,2,3];[128X[104X
+    [4X[28X    [ 1, 2, 3 ][128X[104X
+    [4X[28X    gap> points:=Orbit(S,v,Permuted);;[128X[104X
+    [4X[28X    gap> permutahedron:=CreatePolymakeObject();[128X[104X
+    [4X[28X    <polymake object. No properties known>[128X[104X
+    [4X[28X    gap> AppendPointlistToPolymakeObject(permutahedron,points);[128X[104X
+    [4X[28X    gap> Polymake(permutahedron,"VOLUME");[128X[104X
+    [4X[28X    3[128X[104X
+    [4X[28X    gap> Polymake(permutahedron,"N_VERTICES");[128X[104X
+    [4X[28X    6[128X[104X
+    [4X[28X          #Now <permutahedron> knows its number of vertices, but not the vertices:[128X[104X
+    [4X[28X    gap> PropertyOfPolymakeObject(permutahedron,"VERTICES");[128X[104X
+    [4X[28X    fail[128X[104X
+    [4X[28X    gap> NamesKnownPropertiesOfPolymakeObject(permutahedron);[128X[104X
+    [4X[28X    [ "VOLUME", "N_VERTICES" ][128X[104X
+    [4X[28X        #Let's look at the object![128X[104X
+    [4X[28X    gap> Polymake(permutahedron,"VISUAL");[128X[104X
+    [4X[28X    #I  There was no or wrong polymake output[128X[104X
+    [4X[28X    fail[128X[104X
+    [4X[28X    gap> Polymake(permutahedron,"DIM");[128X[104X
+    [4X[28X    2[128X[104X
+    [4X[28X    [128X[104X
+    [4X[28X    [128X[104X
+  [4X[32X[104X
+  

@@ -1,0 +1,45 @@
+  
+  [1X3 [33X[0;0YGlobal Variables[133X[101X
+  
+  
+  [1X3.1 [33X[0;0YGetting information about polymake output[133X[101X
+  
+  [1X3.1-1 InfoPolymaking[101X
+  
+  [33X[1;0Y[29X[2XInfoPolymaking[102X[32X info class[133X
+  
+  [33X[0;0YIf  set to at least [22X2[122X, the output of polymake is shown. At level [22X1[122X, warnings
+  are shown. This is the default. And at level [22X0[122X, the polymake package remains
+  silent.[133X
+  
+  [1X3.1-2 POLYMAKE_LAST_FAIL_REASON[101X
+  
+  [33X[1;0Y[29X[2XPOLYMAKE_LAST_FAIL_REASON[102X[32X global variable[133X
+  
+  [33X[0;0YContains a string that explains the last occurence of [9Xfail[109X as a return value
+  of [2XPolymake[102X ([14X2.5-1[114X).[133X
+  
+  
+  [1X3.2 [33X[0;0YVariables for system interaction[133X[101X
+  
+  [33X[0;0YThe  variables  for  interaction  with  the system are contained in the file
+  [11Xenvironment.gi[111X.  Each  of these variables has a function to set it, see [14X1.2[114X.
+  If  [9XPOLYMAKE_COMMAND[109X  or  [9XPOLYMAKE_DATA_DIR[109X are set at startup, they are not
+  overwritten.  So  if  you  don't  want  (or don't have the rights) to modify
+  [11Xenvironment.gi[111X, you can set the variables in your [11X.gaprc[111X file.[133X
+  
+  [1X3.2-1 POLYMAKE_COMMAND[101X
+  
+  [33X[1;0Y[29X[2XPOLYMAKE_COMMAND[102X[32X global variable[133X
+  
+  [33X[0;0YThis variable should contain the name of the polymake program in the form as
+  returned      by      [10XFilename[110X      So      a      probable     value     is
+  [10XFilename(Directory("/usr/local/bin"),"polymake")[110X.[133X
+  
+  [1X3.2-2 POLYMAKE_DATA_DIR[101X
+  
+  [33X[1;0Y[29X[2XPOLYMAKE_DATA_DIR[102X[32X global variable[133X
+  
+  [33X[0;0YIn  this  directory the files for polymake will be created. By default, this
+  generates a temporary directory using [9XDirectoryTemporary[109X[133X
+  

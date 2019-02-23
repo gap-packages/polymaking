@@ -1,0 +1,162 @@
+  
+  [1X4 [33X[0;0YConverting Polymake Output[133X[101X
+  
+  
+  [1X4.1 [33X[0;0YThe General Method[133X[101X
+  
+  [33X[0;0YWhen  polymake  is called, its output is read as a string and then processed
+  as follows:[133X
+  
+  [31X1[131X   [33X[0;6Ythe  lines  containing upper case letters are found. These are treated
+        as  lines  containing  the  keywords.  Each  of  those lines marks the
+        beginning of a block of data.[133X
+  
+  [31X2[131X   [33X[0;6YThe  string  is  then  cut  into a list of blocks (also strings). Each
+        block  starts  with  a  line containing the keyword and continues with
+        some lines of data.[133X
+  
+  [31X3[131X   [33X[0;6Yfor  each  of the blocks, the appropriate function of [10XObjectConverters[110X
+        is  called.  Here  "appropriate"  just  means, that the keyword of the
+        block coincides with the name of the function.[133X
+  
+  [31X4[131X   [33X[0;6YThe  output  of  the  conversion  function  is then added to the known
+        properties of the [10XPolymakeObject[110X for which [10XPolymake[110X was called.[133X
+  
+  
+  [1X4.1-1 [33X[0;0YConverter- Philosopy[133X[101X
+  
+  [33X[0;0YThe converter functions should take meaningful polymake data into meaningful
+  [5XGAP[105X  data.  This  sometimes  means that the (mathematical) representation is
+  changed.  Here  is  an  example: polymake writes vectors as augmented affine
+  vectors of the form [10X1 a1 a2 a3...[110X which does not go very well with the usual
+  [5XGAP[105X  conventions  of column vectors and multiplying matrices from the right.
+  So  [5Xpolymaking[105X converts such a vector to [10X[a1,a2,a3,...][110X and the user is left
+  with the problem of augmentation and left or right multiplication.[133X
+  
+  [33X[0;0YAnother  area  where  the  [5XGAP[105X  object  isn't a literal translation from the
+  polymake  world  is combinatorics. In Polymake, list elements are enumerated
+  starting  from  0.  [5XGAP[105X  enumerates  lists  starting at 1. So the conversion
+  process  adds 1 to the numbers corresponding to vertices in facet lists, for
+  example.[133X
+  
+  [33X[0;0YThe conversion process is done by the following methods:[133X
+  
+  [1X4.1-2 ConvertPolymakeOutputToGapNotation[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeOutputToGapNotation[102X( [3Xstring[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YRecord  having polymake keywords as entry names and the respective
+            converted polymake output as entries.[133X
+  
+  [33X[0;0YGiven  a  the output of the polymake program as a string [3Xstring[103X, this method
+  first  calls  [2XSplitPolymakeOutputStringIntoBlocks[102X  ([14X4.1-3[114X).  For each of the
+  returned  blocks, the name (=first line) of the block is read and the record
+  [2XObjectConverters[102X  ([14X4.1-4[114X)  is looked up for an entry with that name. If such
+  an  entry exists, it (being a function!) is called and passed the block. The
+  returned  value  is then given the name of the block and added to the record
+  returned by [10XConvertPolymakeOutputToGapNotation[110X.[133X
+  
+  [1X4.1-3 SplitPolymakeOutputStringIntoBlocks[101X
+  
+  [33X[1;0Y[29X[2XSplitPolymakeOutputStringIntoBlocks[102X( [3Xstring[103X ) [32X method[133X
+  [6XReturns:[106X  [33X[0;10YList of strings -- "blocks"--[133X
+  
+  [33X[0;0YThe  string [3Xstring[103X is cut at the lines starting with an upper case character
+  and  consisting  only  of  upper  case  letters,  numbers and underscore (_)
+  characters.  The parts are returned as a list of strings. The initial string
+  [3Xstring[103X remains unchanged.[133X
+  
+  [1X4.1-4 ObjectConverters[101X
+  
+  [33X[1;0Y[29X[2XObjectConverters[102X[32X global variable[133X
+  
+  [33X[0;0YThe  entries  of  this  record are labeled by polymake keywords. Each of the
+  entries  is  a  function which converts a string returned by polymake to [5XGAP[105X
+  format.  So  far,  only  a few converters are implemented. To see which, try
+  [10XRecNames(ObjectConverters);[110X[133X
+  
+  [33X[0;0YYou can define new converters using the basic functions described in section
+  [14X4.2[114X.[133X
+  
+  
+  [1X4.2 [33X[0;0YConversion Functions[133X[101X
+  
+  [33X[0;0YThe  following  functions  are  used  for  the functions in [2XObjectConverters[102X
+  ([14X4.1-4[114X).[133X
+  
+  [1X4.2-1 ConvertPolymakeNumber[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeNumber[102X( [3Xstring[103X ) [32X method[133X
+  
+  [33X[0;0YThe  string  [3Xstring[103X is converted to a rational number. Unlike [10XRat[110X, it tests,
+  if  the  number represented by [3Xstring[103X is a floating point number an converts
+  it correctly. If this is the case, a waring is issued.[133X
+  
+  [1X4.2-2 ConvertPolymakeScalarToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeScalarToGAP[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YIf  [3Xlist[103X  contains  a  single string, this string is converted into a number
+  using [2XConvertPolymakeNumber[102X ([14X4.2-1[114X).[133X
+  
+  [1X4.2-3 ConvertPolymakeMatrixOrListOfSetsToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeMatrixOrListOfSetsToGAP[102X( [3Xlist[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XConvertPolymakeMatrixOrListOfSetsToGAPPlusOne[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YTries to decide if the list [3Xlist[103X of strings represents a matrix or a list of
+  sets   by   testing   if   they   start  with  "{".  It  then  calls  either
+  [2XConvertPolymakeMatrixToGAP[102X    ([14X4.2-4[114X)    or   [2XConvertPolymakeListOfSetsToGAP[102X
+  ([14X4.2-8[114X).  The  "PlusOne" version calls [2XConvertPolymakeListOfSetsToGAPPlusOne[102X
+  ([14X4.2-8[114X) if [3Xlist[103X represents a list of sets.[133X
+  
+  [1X4.2-4 ConvertPolymakeMatrixToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeMatrixToGAP[102X( [3Xlist[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XConvertPolymakeMatrixToGAPKillOnes[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YThe  list  [3Xlist[103X  of  strings  is  interpreted  as  a list of row vectors and
+  converted into a matrix. The "KillOnes" version removes the leading ones.[133X
+  
+  [1X4.2-5 ConvertPolymakeVectorToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeVectorToGAP[102X( [3Xlist[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XConvertPolymakeVectorToGAPKillOne[102X( [3Xlist[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XConvertPolymakeIntVectorToGAPPlusOne[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YAs    the    corresponding    "Matrix"    version.    Just    for   vectors.
+  [9XConvertPolymakeIntVectorToGAPPlusOne[109X   requires   the   vector   to  contain
+  integers. It also adds 1 to every entry.[133X
+  
+  [1X4.2-6 ConvertPolymakeBoolToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeBoolToGAP[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YIf  [3Xlist[103X  contains  a single string, which is either 0,false,1, or true this
+  function returns [9Xfalse[109X or [9Xtrue[109X, respectively.[133X
+  
+  [1X4.2-7 ConvertPolymakeSetToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeSetToGAP[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YLet  [3Xlist[103X  be  a list containing a single string, which is a list of numbers
+  separated  by  whitespaces  and  enclosed by { and } . The returned value is
+  then a set of rational numbers (in the GAP sense).[133X
+  
+  [1X4.2-8 ConvertPolymakeListOfSetsToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeListOfSetsToGAP[102X( [3Xlist[103X ) [32X method[133X
+  [33X[1;0Y[29X[2XConvertPolymakeListOfSetsToGAPPlusOne[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YLet  [3Xlist[103X  be a list containing several strings representing sets. Then each
+  of  these strings is converted to a set of rational numbers and the returned
+  value  is  the list of all those sets. The "PlusOne" version adds 1 to every
+  entry.[133X
+  
+  [1X4.2-9 ConvertPolymakeGraphToGAP[101X
+  
+  [33X[1;0Y[29X[2XConvertPolymakeGraphToGAP[102X( [3Xlist[103X ) [32X method[133X
+  
+  [33X[0;0YLet [3Xlist[103X be a list of strings representing sets (that is, a list of integers
+  enclosed  by  {  and }). Then a record is returned containing two sets named
+  [10X.vertices[110X and [10X.edges[110X.[133X
+  

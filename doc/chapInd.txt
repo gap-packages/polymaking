@@ -1,0 +1,49 @@
+  
+  
+  [1XIndex[101X
+  
+  [2XAppendInequalitiesToPolymakeObject[102X 2.4-4 
+  [2XAppendPointlistToPolymakeObject[102X 2.4-2 
+  [2XAppendToPolymakeObject[102X 2.4-1 
+  [2XAppendVertexlistToPolymakeObject[102X 2.4-3 
+  [2XCheckAppVerTypList[102X 2.1-3 
+  [2XClearPolymakeObject[102X 2.4-6  2.4-6 
+  [2XConvertMatrixToPolymakeString[102X 2.4-5 
+  [2XConvertPolymakeBoolToGAP[102X 4.2-6 
+  [2XConvertPolymakeGraphToGAP[102X 4.2-9 
+  [2XConvertPolymakeIntVectorToGAPPlusOne[102X 4.2-5 
+  [2XConvertPolymakeListOfSetsToGAP[102X 4.2-8 
+  [2XConvertPolymakeListOfSetsToGAPPlusOne[102X 4.2-8 
+  [2XConvertPolymakeMatrixOrListOfSetsToGAP[102X 4.2-3 
+  [2XConvertPolymakeMatrixOrListOfSetsToGAPPlusOne[102X 4.2-3 
+  [2XConvertPolymakeMatrixToGAP[102X 4.2-4 
+  [2XConvertPolymakeMatrixToGAPKillOnes[102X 4.2-4 
+  [2XConvertPolymakeNumber[102X 4.2-1 
+  [2XConvertPolymakeOutputToGapNotation[102X 4.1-2 
+  [2XConvertPolymakeScalarToGAP[102X 4.2-2 
+  [2XConvertPolymakeSetToGAP[102X 4.2-7 
+  [2XConvertPolymakeVectorToGAP[102X 4.2-5 
+  [2XConvertPolymakeVectorToGAPKillOne[102X 4.2-5 
+  [2XCreateEmptyFile[102X 2.1-1 
+  [2XCreatePolymakeObject[102X 2.1-2  2.1-2  2.1-2  2.1-2  2.1-2  2.1-2 
+  [2XCreatePolymakeObjectFromFile[102X 2.1-4  2.1-4 
+  [2XDirectoryOfPolymakeObject[102X 2.2-1 
+  [2XFilenameOfPolymakeObject[102X 2.2-2 
+  [2XFullFilenameOfPolymakeObject[102X 2.2-3 
+  [2XInfoPolymaking[102X 3.1-1 
+  [2XKnownPropertiesOfPolymakeObject[102X 2.2-5 
+  [2XNamesKnownPropertiesOfPolymakeObject[102X 2.2-4 
+  [2XObjectConverters[102X 4.1-4 
+  [2XPolymake[102X 2.5-1 
+  [2XPOLYMAKE_COMMAND[102X 3.2-1 
+  [2XPOLYMAKE_DATA_DIR[102X 3.2-2 
+  [2XPOLYMAKE_LAST_FAIL_REASON[102X 3.1-2 
+  [2XPropertyOfPolymakeObject[102X 2.2-6 
+  [2XSetPolymakeCommand[102X 1.2-2 
+  [2XSetPolymakeDataDirectory[102X 1.2-1 
+  [2XSplitPolymakeOutputStringIntoBlocks[102X 4.1-3 
+  [2XUnbindKnownPropertyOfPolymakeObject[102X 2.4-8 
+  [2XWriteKnownPropertyToPolymakeObject[102X 2.4-7 
+  
+  
+  -------------------------------------------------------
