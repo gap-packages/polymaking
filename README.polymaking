@@ -78,8 +78,8 @@ or wrong the reason is probably that I never used this keyword in the
 context you do. For some keywords, the method for conversion was
 actually guessed.
 
-So if you find a bug or strange behaviour, please send a bug report to 
-roeder.marc@gmail.com .
+So if you find a bug or strange behaviour, please submit a bug report to 
+<https://github.com/gap-packages/rds/issues>.
 
 Thanks,
 marc
