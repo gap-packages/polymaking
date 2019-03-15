@@ -12,8 +12,7 @@ Persons := [
     FirstNames    := "Marc",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "marc_roeder@web.de",
-    WWWHome       := "http://csserver.evansville.edu/~mroeder",
+    Email         := "roeder.marc@gmail.com",
   ),
   rec(
     LastName      := "GAP Team",
