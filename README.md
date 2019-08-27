@@ -1,6 +1,5 @@
-(C)2007-2013 by Marc Roeder, 
-National University of Ireland, Galway
-
+[![Build Status](https://travis-ci.org/gap-packages/polymaking.svg?branch=master)](https://travis-ci.org/gap-packages/polymaking)
+[![Code Coverage](https://codecov.io/github/gap-packages/polymaking/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/polymaking)
 
 polymak(e)inG(AP)
 ==================
@@ -15,11 +14,14 @@ has to be installed separately.
 This package is distributed under the terms of the GNU general public
 license version 2 or later (at your descretion).
 
+(C)2007-2013 by Marc Roeder,
+National University of Ireland, Galway
+
 
 Requirements
 ------------
 
-polymaking requires GAP version 4.4. It also needs polymake to be
+polymaking requires GAP version 4.8. It also needs polymake to be
 installed.  The GAPDoc package is needed to display the documentation.
 polymaking was written for the "first generation" polymake which was
 called as a command-line tool. Using it with a current ("next generation")
@@ -68,23 +70,8 @@ level 1 in this case), try this:
 
 
 
-IMPORTANT NOTE!
-===============
+Support
+-------
 
-Please help me extend/improve/debug polymaking!
-
-Not all polymake keywords/properties are yet converted into GAP
-language by polymaking. If you want to use one of those, please tell
-me about it.  
-
-Also, if you find the conversion output for some keyword inconsistent
-or wrong the reason is probably that I never used this keyword in the
-context you do. For some keywords, the method for conversion was
-actually guessed.
-
-So if you find a bug or strange behaviour, please submit a bug report to 
-<https://github.com/gap-packages/rds/issues>.
-
-Thanks,
-marc
-
+If you find a bug or strange behaviour, please submit a bug report to 
+<https://github.com/gap-packages/polymaking/issues>.
