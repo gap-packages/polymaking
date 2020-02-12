@@ -26,7 +26,7 @@ installed.  The GAPDoc package is needed to display the documentation.
 polymaking was written for the "first generation" polymake which was
 called as a command-line tool. Using it with a current ("next generation")
 version of polymake will result in longer runtimes and fewer supported
-keywords/features. 
+keywords/features.
 
 
 Installation
@@ -39,8 +39,8 @@ Installation
    - `polymaking<ver>.tar.gz`
    - `polymaking<ver>-win.zip`
 
-   (where `<ver>` is some version number) to the directory pkg/ of the 
-   GAP home directory. If you do not have permission to do so, create 
+   (where `<ver>` is some version number) to the directory pkg/ of the
+   GAP home directory. If you do not have permission to do so, create
    a directory called gap/pkg in your home directory.
 
 2. Change directory to pkg/ and unpack the archive using the according command:
@@ -49,7 +49,7 @@ Installation
    - `unzip polymaking<ver>-win.zip`
  (replace `<ver>` with the version number)
 
-3. Start GAP. If you have created the directory gap/pkg in your home 
+3. Start GAP. If you have created the directory gap/pkg in your home
    directory, use `gap -l '<homedir>/gap;'` where `<homedir>` is the path of
    your home directory (use `pwd` to find out what it is, if you don't know).
 
@@ -57,21 +57,22 @@ Installation
 
 5. Run `ReadPackage("polymaking","tst/test.gap");` for a quick test.
 
-If polymake is not found automatically (a warning will be printed at 
+If polymake is not found automatically (a warning will be printed at
 level 1 in this case), try this:
 
-6. Tell GAP where to look for polymake by adding the following lines to 
+6. Tell GAP where to look for polymake by adding the following lines to
    your `.gaprc` file:
 
         POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
         MakeImmutable(POLYMAKE_COMMAND);
-        Note that you can also modify the value of the variable in 
-        lib/environment.gi.
+
+    Note that you can also modify the value of the variable `POLYMAKE_COMMAND` in
+    `lib/environment.gi``.
 
 
 
 Support
 -------
 
-If you find a bug or strange behaviour, please submit a bug report to 
+If you find a bug or strange behaviour, please submit a bug report to
 <https://github.com/gap-packages/polymaking/issues>.
