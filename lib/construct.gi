@@ -28,30 +28,46 @@ InstallMethod(CreateEmptyFile,[IsString],
     PrintTo(name,"");
 end);
 
+InstallMethod(InitPolymakeObject,[IsPolymakeObject],
+        function(poly)
+    local appstring;
+    # In polymake 4.1 this is required.
+    appstring:=Concatenation(
+                        "_application polytope\n",
+                        "_type Polytope\n\n"
+                  );
+    AppendToPolymakeObject(poly, appstring);
+    return poly;
+end);
+
 # create a (possibly empty) polygon. 
 # That is, a record just containing the name of a file to use with polymake.
 # If the file does not exist, it is created.
 ####################
 InstallMethod(CreatePolymakeObjectFromFile,[IsString],
         function(name)
-    local filename;
+    local filename, rtn;
+    rtn:=Objectify(PolymakeObject,rec(filename:=name, dir:=POLYMAKE_DATA_DIR));
     filename:=Filename(POLYMAKE_DATA_DIR,name);
     if not IsExistingFile(filename)
        then
         CreateEmptyFile(filename);
+        InitPolymakeObject(rtn);
     fi;
-    return Objectify(PolymakeObject,rec(filename:=name, dir:=POLYMAKE_DATA_DIR));
+    return rtn;
 end);
 
 InstallMethod(CreatePolymakeObjectFromFile,[IsDirectory,IsString],
         function(dir,name)
-    local   filename,  polygon;
+    local   filename,  rtn, polygon;
+    rtn:=Objectify(PolymakeObject,rec(filename:=name,dir:=dir));
     filename:=Filename(dir,name);
     if not IsExistingFile(filename)
        then
         CreateEmptyFile(filename);
+        InitPolymakeObject(rtn);
     fi;
-    return Objectify(PolymakeObject,rec(filename:=name,dir:=dir));
+    return rtn;
 end);
 
 InstallMethod(CreatePolymakeObject,[IsString,IsDirectory],
@@ -224,9 +240,11 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
             returnval,  returnedstring,  block;
     
     callPolymake:=function(object,splitoption)
-        local   returnedstring,  stdout,  stdin,  dir,  exitstatus;
+        local   returnedstring,  pkgdir, scriptarg, stdout,  stdin,  dir,  exitstatus;
         
         returnedstring:=[];
+        scriptarg:=["--no-config", "--script",
+                    Filename(DirectoriesPackageLibrary("polymaking"), "pm_script_arg.pl")];
         stdout:=OutputTextString(returnedstring,false);
         stdin:=InputTextNone();;
         dir:=DirectoryOfPolymakeObject(object);
@@ -235,8 +253,8 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
             dir:=DirectoryCurrent();
         fi;
         exitstatus:=Process( dir, POLYMAKE_COMMAND, stdin, stdout, 
-                            Concatenation([FullFilenameOfPolymakeObject(object)],
-                                    splitoption)
+                            Concatenation(scriptarg, [FullFilenameOfPolymakeObject(object)],
+                                     splitoption)
                             );;
         CloseStream(stdout);
         CloseStream(stdin);
@@ -248,7 +266,9 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
     splitoption:=SplitString(option," ");
     knownProperties:=NamesKnownPropertiesOfPolymakeObject(polygon);
     returnval:=[];
-    
+
+    Info(InfoPolymaking,2,Concatenation("option=",option));
+    Info(InfoPolymaking,2,Concatenation("Size(splitoption)=",String(Size(splitoption))));
     if Size(splitoption)=0
       then
         Error("you must pass an option to polymake");
@@ -263,6 +283,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
         else
 	    Apply(splitoption, MapKeyWordToPolymakeFormat);
             returnedstring:=callPolymake(polygon,splitoption);
+            Info(InfoPolymaking,2,String(returnedstring));
             if returnedstring.status <>0
                then
                 Error("polymake returned an error (error code ", returnedstring.status, ")");
@@ -270,7 +291,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
                 returnval:=fail;
             elif returnedstring.string<>[]
                then
-                Info(InfoPolymaking,2,returnedstring.string);
+               Info(InfoPolymaking,2,returnedstring.string);
                 gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
                 if gapobject[1].object<>fail
                    then

@@ -24,6 +24,8 @@
 ##
 DeclareOperation("CreateEmptyFile",[IsString]);
 
+DeclareOperation("InitPolymakeObject",[IsPolymakeObject]);
+
 DeclareOperation("CreatePolymakeObjectFromFile",[IsString]);
 DeclareOperation("CreatePolymakeObjectFromFile",[IsDirectory,IsString]);
 
