@@ -33,6 +33,13 @@ InstallMethod(ConvertPolymakeOutputToGapNotation,[IsString],
     for splitblock in splitblocks
       do
         name:=NormalizedWhitespace(splitblock[1]);
+        if Size(splitblock) < 2
+           then
+            Info(InfoPolymaking,2,"No data for ", name,". Record not updated for this block");
+            UpdatePolymakeFailReason(Concatenation("polymake returned ",name," empty"));
+            Add(returnlist, rec(name:=name,object:=fail));
+            continue;
+        fi;
         rest:=splitblock{[2..Maximum(Size(splitblock),2)]};
         if rest[Size(rest)]=""
            then
