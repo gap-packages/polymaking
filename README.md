@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/gap-packages/polymaking.svg?branch=master)](https://travis-ci.org/gap-packages/polymaking)
+[![Build Status](https://travis-ci.com/gap-packages/polymaking.svg?branch=master)](https://travis-ci.com/gap-packages/polymaking)
 [![Code Coverage](https://codecov.io/github/gap-packages/polymaking/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/polymaking)
 
 polymak(e)inG(AP)
@@ -67,7 +67,7 @@ level 1 in this case), try this:
         MakeImmutable(POLYMAKE_COMMAND);
 
     Note that you can also modify the value of the variable `POLYMAKE_COMMAND` in
-    `lib/environment.gi``.
+    `lib/environment.gi`.
 
 
 
