@@ -267,8 +267,8 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
     knownProperties:=NamesKnownPropertiesOfPolymakeObject(polygon);
     returnval:=[];
 
-    Info(InfoPolymaking,2,Concatenation("option=",option));
-    Info(InfoPolymaking,2,Concatenation("Size(splitoption)=",String(Size(splitoption))));
+    Info(InfoPolymaking,2,"option=",option);
+    Info(InfoPolymaking,2,"Size(splitoption)=",Size(splitoption));
     if Size(splitoption)=0
       then
         Error("you must pass an option to polymake");
