@@ -291,7 +291,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
                 returnval:=fail;
             elif returnedstring.string<>[]
                then
-               Info(InfoPolymaking,2,returnedstring.string);
+                Info(InfoPolymaking,2,returnedstring.string);
                 gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
                 if gapobject[1].object<>fail
                    then
