@@ -46,15 +46,7 @@ end);
 ####################
 InstallMethod(CreatePolymakeObjectFromFile,[IsString],
         function(name)
-    local filename, rtn;
-    rtn:=Objectify(PolymakeObject,rec(filename:=name, dir:=POLYMAKE_DATA_DIR));
-    filename:=Filename(POLYMAKE_DATA_DIR,name);
-    if not IsExistingFile(filename)
-       then
-        CreateEmptyFile(filename);
-        InitPolymakeObject(rtn);
-    fi;
-    return rtn;
+    return CreatePolymakeObjectFromFile(POLYMAKE_DATA_DIR, name);
 end);
 
 InstallMethod(CreatePolymakeObjectFromFile,[IsDirectory,IsString],

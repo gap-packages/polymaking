@@ -32,7 +32,8 @@ gap> Polymake(poly,"VOLUME");
 
 ## test external files:
 gap> dir:=DirectoriesPackageLibrary("polymaking", "tst")[1];;
-gap> plane:=CreatePolymakeObjectFromFile(dir,"pplane.poly");
+gap> SetPolymakeDataDirectory(dir);;
+gap> plane:=CreatePolymakeObjectFromFile("pplane.poly");
 <polymake object. No properties known>
 
 #
