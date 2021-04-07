@@ -1,4 +1,4 @@
-0.8.2
+0.8.2 (2019-02-23)
 
 - move package to GitHub
 - add the GAP Team as maintainer
@@ -6,8 +6,7 @@
 
 ------------------
 
-0.8.1:
-
+0.8.1 (2013-11-16)
 
 no more support for "old" polymake features. 
 This version is for next-generation polymake run in
@@ -17,7 +16,7 @@ compatibility mode. More specifically:
 
 ------------------
 
-0.7.9:
+0.7.9 (2013-10-27)
 
 - support for two "next-generation" keywords:
   - "FACES" calls "HASSE_DIAGRAM->FACES"
@@ -25,9 +24,11 @@ compatibility mode. More specifically:
   these two keywords cannot be used with old versions of polymake.
 
 - test changed: tests of unsupported features in recent polymake
-  versions removed (clients, some keywords), "FACES DIMS" tested.------------------
+  versions removed (clients, some keywords), "FACES DIMS" tested.
 
-0.7.8:
+------------------
+
+0.7.8 (2010-06-03)
 
 ------------------
 
@@ -36,28 +37,29 @@ compatibility mode. More specifically:
 
 ------------------
 
-0.7.6:
+0.7.6 (2008-12-02)
 - bug fixed in SetPolymakeClientPaths
 - ClearPolymakeObject and CreatePolymakeObject can now be called with 
    application and version information which will then be written to the 
    new file. 
 - Package moved from Galway to Kaiserslautern
+
 ------------------
 
-0.7.5:
+0.7.5 (2008-08-13)
 - changes in README.polymaking (thanks to Andreas Distler)
 - changed subtitle to something more descriptive
 
 ------------------
 
-0.7.4:
+0.7.4 (2008-07-16)
 - fixed the "warning on startup" bug
 - test file written
+
 ------------------
 
-0.7.3:
+0.7.3 (2008-05-12)
 - fixed an embarrassing bug. Now HASSE_DIAGRAM really does what it should.
-
 
 ------------------
 
@@ -91,15 +93,18 @@ Converter things:
 
 Converter method assignment changed for:
 GRAPH, DUAL_GRAPH, FACETS, 
+
 ------------------
 
-0.7.1:
+0.7.1 (2008-03-07)
 - polymaking now suggests GAPdoc
 - changed the way POLYMAKE_COMMAND is determined (thanks to Andreas Distler)
   polymaking now tries to guess the location of polymake using the system 
   path variable via DirectoriesSystemPrograms().
 - documentation now includes a couple of comments on the installation of 
-  polymake.------------------
+  polymake.
+
+------------------
 
 0.7.0:
 - Package is now called "polymaking" instead of "polymake" to avoid 
@@ -112,7 +117,8 @@ GRAPH, DUAL_GRAPH, FACETS,
 - changed PackageInfo.g to point to the new homepage
 - minor changes to the installation instructions in README.polymake and 
   the manual.
-------------------
+-
+-----------------
 
 0.6.2:
 - some changes in the manual.
@@ -122,7 +128,9 @@ GRAPH, DUAL_GRAPH, FACETS,
   rather than the strange record. To be precise, only the ".hasse" part of the
   old version is returned.
 - set global variables POLYMAKE_PROGRAM and POLYMAKE_DATA_DIR to "read only"
-  status (thanks to Alexander Konovalov for this hint).------------------
+  status (thanks to Alexander Konovalov for this hint).
+
+------------------
 
 0.6.1:
 - more converters added to ObjectConverters.gi
@@ -133,7 +141,9 @@ GRAPH, DUAL_GRAPH, FACETS,
 
 0.6:
 - Added a few object converters and removed a 
-- Rewrote most of the documentation------------------
+- Rewrote most of the documentation
+
+------------------
 
 0.5:
 - package does no longer depend on the IO package.
@@ -152,6 +162,7 @@ GRAPH, DUAL_GRAPH, FACETS,
 
 - The objects now have their own type "PolymakeObject". Lots of functions 
   for manipulating them have been added.
+
 ------------------
 
 0.3:
@@ -165,10 +176,10 @@ GRAPH, DUAL_GRAPH, FACETS,
 
 0.2:
 - added conversion functions for polymake output.
+
 ------------------
 
 0.1:
 - packages started with very limited functionality
+
 ------------------
-
-
