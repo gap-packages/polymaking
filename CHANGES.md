@@ -1,3 +1,10 @@
+0.8.3 (2021-04-07)
+
+- polymake 4.1 compatibility (thanks to GitHub user narc-Ontakac2)
+- various janitorial changes
+
+------------------
+
 0.8.2 (2019-02-23)
 
 - move package to GitHub
