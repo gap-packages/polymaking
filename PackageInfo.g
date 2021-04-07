@@ -2,8 +2,8 @@ SetPackageInfo( rec(
 
 PackageName := "polymaking",
 Subtitle := "Interfacing the geometry software polymake",
-Version := "0.8.2",
-Date := "23/02/2019", # dd/mm/yyyy format
+Version := "0.8.3",
+Date := "07/04/2021", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -12,8 +12,7 @@ Persons := [
     FirstNames    := "Marc",
     IsAuthor      := true,
     IsMaintainer  := true,
-    Email         := "marc_roeder@web.de",
-    WWWHome       := "http://csserver.evansville.edu/~mroeder",
+    Email         := "roeder.marc@gmail.com",
   ),
   rec(
     LastName      := "GAP Team",
@@ -27,7 +26,7 @@ Persons := [
 Status := "deposited",
 
 PackageWWWHome  := "https://gap-packages.github.io/polymaking/",
-README_URL      := Concatenation( ~.PackageWWWHome, "README" ),
+README_URL      := Concatenation( ~.PackageWWWHome, "README.md" ),
 PackageInfoURL  := Concatenation( ~.PackageWWWHome, "PackageInfo.g" ),
 SourceRepository := rec(
     Type := "git",

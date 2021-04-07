@@ -67,7 +67,7 @@
   
   [1X4.1-4 ObjectConverters[101X
   
-  [33X[1;0Y[29X[2XObjectConverters[102X[32X global variable[133X
+  [33X[1;0Y[29X[2XObjectConverters[102X [32X global variable[133X
   
   [33X[0;0YThe  entries  of  this  record are labeled by polymake keywords. Each of the
   entries  is  a  function which converts a string returned by polymake to [5XGAP[105X
