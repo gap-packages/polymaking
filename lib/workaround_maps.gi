@@ -37,6 +37,8 @@ InstallMethod(MapKeyWordToPolymakeFormat,"for PolymakeObject",[IsString],
 	   return     "HASSE_DIAGRAM->FACES";
 	elif option = "DIMS"  then 	   
 	   return     "HASSE_DIAGRAM->DIMS";
+        elif option = "ADJACENCY" then
+           return  "HASSE_DIAGRAM->ADJACENCY";
 	else
 	   return option;	
 	fi;
@@ -58,6 +60,8 @@ InstallMethod(MapKeyWordFromPolymakeFormat,"for PolymakeObject",[IsString],
 	   return     "FACES";
 	elif option = "HASSE_DIAGRAM->DIMS"  then 	   
 	   return     "DIMS";
+        elif option = "HASSE_DIAGRAM->ADJACENCY" then
+           return     "ADJACENCY";
 	else
 	   return option;
 	fi;	   	
