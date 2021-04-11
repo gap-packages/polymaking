@@ -3,7 +3,7 @@ SetPackageInfo( rec(
 PackageName := "polymaking",
 Subtitle := "Interfacing the geometry software polymake",
 Version := "0.8.4",
-Date := "08/04/2021", # dd/mm/yyyy format
+Date := "11/04/2021", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
