@@ -1,3 +1,9 @@
+0.8.4 (2021-04-11)
+
+- added functionality for the polymake command ADJACENCY
+
+------------------
+
 0.8.3 (2021-04-07)
 
 - polymake 4.1 compatibility (thanks to GitHub user narc-Ontakac2)
