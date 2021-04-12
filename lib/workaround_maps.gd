@@ -1,12 +1,12 @@
 #############################################################################
 ##
-#W workaround_maps.gd 			 polymaking Package		 Marc Roeder
+#W workaround_maps.gd            polymaking Package      Marc Roeder
 ##
 ##  
 
 ##
 ##
-#Y	 Copyright (C) 2006 Marc Roeder 
+#Y   Copyright (C) 2006 Marc Roeder 
 #Y 
 #Y This program is free software; you can redistribute it and/or 
 #Y modify it under the terms of the GNU General Public License 

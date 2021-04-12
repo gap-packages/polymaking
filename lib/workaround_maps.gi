@@ -1,12 +1,12 @@
 #############################################################################
 ##
-#W workaround_maps.gi 			 polymaking Package		 Marc Roeder
+#W workaround_maps.gi            polymaking Package      Marc Roeder
 ##
 ##  
 
 ##
 ##
-#Y	 Copyright (C) 2006 Marc Roeder 
+#Y   Copyright (C) 2006 Marc Roeder 
 #Y 
 #Y This program is free software; you can redistribute it and/or 
 #Y modify it under the terms of the GNU General Public License 
@@ -32,16 +32,16 @@
 # direction of the mapping: GAP keyword mapped to polymake keyword
 #######
 InstallMethod(MapKeyWordToPolymakeFormat,"for PolymakeObject",[IsString],
-        function(option)
-	if option   = "FACES" then
-	   return     "HASSE_DIAGRAM->FACES";
-	elif option = "DIMS"  then 	   
-	   return     "HASSE_DIAGRAM->DIMS";
-        elif option = "ADJACENCY" then
-           return  "HASSE_DIAGRAM->ADJACENCY";
-	else
-	   return option;	
-	fi;
+  function(option)
+  if option   = "FACES" then
+     return     "HASSE_DIAGRAM->FACES";
+  elif option = "DIMS"  then 	   
+     return     "HASSE_DIAGRAM->DIMS";
+  elif option = "ADJACENCY" then
+     return  "HASSE_DIAGRAM->ADJACENCY";
+  else
+     return option;	
+  fi;
 end);
 
 ##########
@@ -54,15 +54,15 @@ end);
 #######
 
 InstallMethod(MapKeyWordFromPolymakeFormat,"for PolymakeObject",[IsString],
-        function(option)
+  function(option)
 
-	if option   = "HASSE_DIAGRAM->FACES" then
-	   return     "FACES";
-	elif option = "HASSE_DIAGRAM->DIMS"  then 	   
-	   return     "DIMS";
-        elif option = "HASSE_DIAGRAM->ADJACENCY" then
-           return     "ADJACENCY";
-	else
-	   return option;
-	fi;	   	
+  if option   = "HASSE_DIAGRAM->FACES" then
+     return     "FACES";
+  elif option = "HASSE_DIAGRAM->DIMS"  then 	   
+     return     "DIMS";
+  elif option = "HASSE_DIAGRAM->ADJACENCY" then
+     return     "ADJACENCY";
+  else
+     return option;
+  fi;	   	
 end);

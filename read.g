@@ -5,6 +5,3 @@ ReadPackage("polymaking","lib/workaround_maps.gi");
 ReadPackage("polymaking","lib/convert.gi");
 ReadPackage("polymaking","lib/ObjectConverters.gi");
 ReadPackage("polymaking","lib/application_version_type.gi");
-
-
-
