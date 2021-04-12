@@ -6,10 +6,10 @@
                   [1X Interfacing the geometry software polymake [101X
   
   
-                                 Version 0.8.3
+                                 Version 0.8.4
   
   
-                                  7 April 2021
+                                 12 April 2021
   
   
                                   Marc Roeder
