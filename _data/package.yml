@@ -1,6 +1,6 @@
 name: polymaking
-version: 0.8.4
-date: 2021-04-12
+version: 0.8.5
+date: 2021-04-14
 description: |
     Interfacing the geometry software polymake
 
@@ -27,7 +27,7 @@ packageinfo: https://gap-packages.github.io/polymaking/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/polymaking/releases/download/v0.8.4/polymaking-0.8.4.tar.gz
+      url: https://github.com/gap-packages/polymaking/releases/download/v0.8.5/polymaking-0.8.5.tar.gz
 
 abstract: |
     This package provides a very basic interface to the polymake program by Ewgenij Gawrilow, Michael Joswig et al.
@@ -41,7 +41,7 @@ citeas: |
     <p class='BibEntry'>
     [<span class='BibKey'>RT21</span>]   <b class='BibAuthor'>Roeder, M. and GAP Team, T.</b>,
      <i class='BibTitle'>polymaking, Interfacing the geometry software polymake,
-             Version 0.8.4</i>
+             Version 0.8.5</i>
      (<span class='BibYear'>2021</span>)<br />
     (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/polymaking/">https://gap-packages.github.io/polymaking/</a></span>.
@@ -49,10 +49,10 @@ citeas: |
     
 
 bibtex: |
-    @misc{ polymaking0.8.4,
+    @misc{ polymaking0.8.5,
       author =           {Roeder, M. and GAP Team, T.},
       title =            {{polymaking},   Interfacing   the   geometry  software
-                          polymake, {V}ersion 0.8.4},
+                          polymake, {V}ersion 0.8.5},
       month =            {Apr},
       year =             {2021},
       note =             {GAP package},
