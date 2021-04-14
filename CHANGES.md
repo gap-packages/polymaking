@@ -1,3 +1,8 @@
+0.8.5 (2021-04-14)
+
+- updated to recover from the previous faulty update
+
+
 0.8.4 (2021-04-11)
 
 - added functionality for the polymake command ADJACENCY
