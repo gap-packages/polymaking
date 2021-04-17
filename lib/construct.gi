@@ -273,7 +273,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
            then
             returnval:=PropertyOfPolymakeObject(polygon,splitoption[1]);
         else
-	    Apply(splitoption, MapKeyWordToPolymakeFormat);
+            Apply(splitoption, MapKeyWordToPolymakeFormat);
             returnedstring:=callPolymake(polygon,splitoption);
             Info(InfoPolymaking,2,String(returnedstring));
             if returnedstring.status <>0
@@ -311,7 +311,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
         fi;
         if Size(splitoption)>0
            then
-	    Apply(splitoption, MapKeyWordToPolymakeFormat);
+            Apply(splitoption, MapKeyWordToPolymakeFormat);
             returnedstring:=callPolymake(polygon,splitoption);
             if returnedstring.status <>0
                then
