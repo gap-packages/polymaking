@@ -17,14 +17,13 @@
 
  on the command line for polymake versions before 4. The keywords are polymake methods without arguments. 
  Since polymake no longer supports this interface the polymaking package 
- provides a script to emulate this. For cases where this is too limited passing custom scripts is 
- also supported.
+ provides the script <C>lib/pm_script_arg.pl</C> to emulate this. 
 
  <Br/>
- <C>polymake &ndash;&ndash;script CUSTOM_SCRIPT KEYWORD1 KEYWORD2 KEYWORD3</C>
+ <C>polymake &ndash;&ndash;script lib/pm_script_arg.pl KEYWORD1 KEYWORD2 KEYWORD3</C>
  <Br/>
 
- The old behavior is imitatded by the script <C>lib/pm_script_arg.pl</C>.<Br/>
+ Using custom scripts is not supported.<Br/>
 Every call to polymake will re-start the program anew. This causes considerable overhead.
 The number of calls to polymake is reduced by caching the results in the so-called 
 <K>PolymakeObject</K> in GAP.
