@@ -1,3 +1,8 @@
 LoadPackage("polymaking");
-TestDirectory(DirectoriesPackageLibrary("polymaking", "tst"), rec(exitGAP := true));
+# This needs to be done manually
+exclude:=["visual.tst"];
+TestDirectory(
+  DirectoriesPackageLibrary("polymaking", "tst"), 
+  rec(exclude := exclude,
+      exitGAP := true));
 FORCE_QUIT_GAP(1);
