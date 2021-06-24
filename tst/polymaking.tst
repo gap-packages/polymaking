@@ -29,6 +29,8 @@ gap> Polymake(poly,"N_FACETS");
 14
 gap> Polymake(poly,"VOLUME");
 56551499691708521629/103286715323123543904000
+gap> Polymake(poly,"DIM");
+3
 
 ## test external files:
 gap> dir:=DirectoriesPackageLibrary("polymaking", "tst")[1];;
