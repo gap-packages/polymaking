@@ -235,7 +235,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
         local   returnedstring,  pkgdir, scriptarg, stdout,  stdin,  dir,  exitstatus;
         
         returnedstring:=[];
-        scriptarg:=["--no-config", "--script",
+        scriptarg:=["--config-path","", "--script",
                     Filename(DirectoriesPackageLibrary("polymaking"), "pm_script_arg.pl")];
         stdout:=OutputTextString(returnedstring,false);
         stdin:=InputTextNone();;

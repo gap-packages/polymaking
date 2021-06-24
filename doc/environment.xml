@@ -9,13 +9,21 @@
  But it should be as platform independent as &GAP; and polymake.
  <P/>
  The interaction with polymake is restricted to writing files and
- carrying out simple operations looking like 
+ carrying out simple operations. These looked like 
 
  <Br/>
 <C>polymake file KEYWORD1 KEYWORD2 KEYWORD3</C>
 <Br/>
 
- on the command line. Scripts are not supported.
+ on the command line for polymake versions before 4. The keywords are polymake methods without arguments. 
+ Since polymake no longer supports this interface the polymaking package 
+ provides the script <C>lib/pm_script_arg.pl</C> to emulate this. 
+
+ <Br/>
+ <C>polymake &ndash;&ndash;script lib/pm_script_arg.pl KEYWORD1 KEYWORD2 KEYWORD3</C>
+ <Br/>
+
+ Using custom scripts is not supported.<Br/>
 Every call to polymake will re-start the program anew. This causes considerable overhead.
 The number of calls to polymake is reduced by caching the results in the so-called 
 <K>PolymakeObject</K> in GAP.
