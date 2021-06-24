@@ -35,6 +35,7 @@ InstallValue(ObjectConverters, rec(
     COCUBICALITY:=ConvertPolymakeScalarToGAP,
     COMPLEXITY:=ConvertPolymakeScalarToGAP,
     DIMS:=ConvertPolymakeVectorToGAP,  ## done using mapping-hack
+    DIM:=ConvertPolymakeScalarToGAP,
     DUAL_CONNECTIVITY:=ConvertPolymakeScalarToGAP,
     DUAL_DIAMETER:=ConvertPolymakeScalarToGAP,
     DUAL_EVEN:=ConvertPolymakeBoolToGAP,
