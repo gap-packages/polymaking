@@ -47,7 +47,6 @@ PackageDoc := rec(
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "A package for using polymake in GAP",
-  Autoload  := true
 ),
 
 Dependencies := rec(
