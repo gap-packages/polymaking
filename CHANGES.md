@@ -1,7 +1,15 @@
+0.8.6 (2021-07-08)
+
+- restore DIM that was lost between 0.7.9 and 0.8.1 (thanks to GitHub user narc-Ontakac2)
+- fixed VISUAL (thanks to GitHub user narc-Ontakac2)
+
+------------------
+
 0.8.5 (2021-04-14)
 
 - updated to recover from the previous faulty update
 
+------------------
 
 0.8.4 (2021-04-11)
 
