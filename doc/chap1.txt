@@ -8,13 +8,19 @@
   platform independent as [5XGAP[105X and polymake.[133X
   
   [33X[0;0YThe  interaction  with  polymake is restricted to writing files and carrying
-  out simple operations looking like[133X
+  out simple operations. These looked like[133X
   [33X[0;0Y[10Xpolymake file KEYWORD1 KEYWORD2 KEYWORD3[110X[133X
-  [33X[0;0Yon  the command line. Scripts are not supported. Every call to polymake will
-  re-start  the program anew. This causes considerable overhead. The number of
-  calls  to  polymake  is  reduced  by  caching  the  results in the so-called
-  [9XPolymakeObject[109X  in  GAP.  As  of  polymaking  version 0.8.0, old versions of
-  polymake (i.e. versions before 2.7.9) are not supported anymore.[133X
+  [33X[0;0Yon  the  command  line  for  polymake  versions  before  4. The keywords are
+  polymake  methods  without arguments. Since polymake no longer supports this
+  interface the polymaking package provides the script [10Xlib/pm_script_arg.pl[110X to
+  emulate this.[133X
+  [33X[0;0Y[10Xpolymake ––script lib/pm_script_arg.pl KEYWORD1 KEYWORD2 KEYWORD3[110X[133X
+  [33X[0;0YUsing custom scripts is not supported.[133X
+  [33X[0;0YEvery  call  to  polymake  will  re-start  the  program  anew.  This  causes
+  considerable overhead. The number of calls to polymake is reduced by caching
+  the results in the so-called [9XPolymakeObject[109X in GAP. As of polymaking version
+  0.8.0,  old  versions  of  polymake  (i.e.  versions  before  2.7.9) are not
+  supported anymore.[133X
   
   
   [1X1.1 [33X[0;0YA few words about the installation of polymake[133X[101X
