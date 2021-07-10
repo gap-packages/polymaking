@@ -71,7 +71,7 @@
     [ 1, 2, 3 ]
     gap> points3:=Orbit(S,v,Permuted);;
          # project to reduce ambient dimension
-    gap> points:= points3{[1..6]}{[1,2]};;
+    gap> points:=points3{[1..6]}{[1,2]};;
     gap> permutahedron:=CreatePolymakeObject();
     <polymake object. No properties known>
     gap> AppendPointlistToPolymakeObject(permutahedron,points);
