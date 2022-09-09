@@ -84,7 +84,7 @@ POLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");
 POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
 </Listing>
 
-       to your <F>.gaprc</F> file (see <Ref Label="The .gaprc file"
+       to your <F>gap.ini</F> file (see <Ref Label="The gap.ini and gaprc files"
        BookName="ref"></Ref>). Note that these have to be
        <Emph>before</Emph> the <C>LoadPackage("polymaking");</C> line.
        Or you can change the values of the above variables by editing

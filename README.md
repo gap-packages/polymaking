@@ -61,7 +61,7 @@ If polymake is not found automatically (a warning will be printed at
 level 1 in this case), try this:
 
 6. Tell GAP where to look for polymake by adding the following lines to
-   your `.gaprc` file:
+   your `gap.ini` file:
 
         POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
         MakeImmutable(POLYMAKE_COMMAND);

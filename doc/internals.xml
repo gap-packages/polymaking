@@ -31,7 +31,7 @@ output</Heading>
   <K>POLYMAKE&uscore;COMMAND</K> or <K>POLYMAKE&uscore;DATA&uscore;DIR</K> are set at
   startup, they are not overwritten. So if you don't want (or don't
   have the rights) to modify <F>environment.gi</F>, you can set the
-  variables in your <F>.gaprc</F> file.
+  variables in your <F>gap.ini</F> file.
     
    <ManSection>
     <Var Name="POLYMAKE_COMMAND"/>
