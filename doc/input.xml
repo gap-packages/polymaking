@@ -169,7 +169,7 @@ returned objects, you change the <K>PolymakeObject</K> itself.
 </Section>
 
 
-<Section Label="Exmaple:createAndAccess">
+<Section Label="Example:createAndAccess">
 <Heading>Example: Creating and Accessing Polymake Objects</Heading>
 
 Suppose the file <F>/tmp/threecube.poly</F> contains the three

@@ -15,7 +15,7 @@ output</Heading>
     <ManSection>
      <Var Name="POLYMAKE_LAST_FAIL_REASON"/>
     <Description>
-     Contains a string that explains the last occurence of <K>fail</K> as a
+     Contains a string that explains the last occurrence of <K>fail</K> as a
      return value of <Ref Meth="Polymake"/>.
     </Description>
     </ManSection>
@@ -165,7 +165,7 @@ The conversion process is done by the following methods:
     The string <A>string</A> is converted to a rational number. Unlike
     <C>Rat</C>, it tests, if the number represented by <A>string</A>
     is a floating point number an converts it correctly. If this is
-    the case, a waring is issued.
+    the case, a warning is issued.
    </Description>
   </ManSection>
 

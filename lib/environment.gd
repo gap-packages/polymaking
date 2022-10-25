@@ -28,7 +28,7 @@ DeclareOperation("SetPolymakeDataDirectory",[IsDirectory]);
 DeclareOperation("SetPolymakeCommand",[IsString]);
 
 ##
-## keep track of the last thing tha caused Polymake to return fail:
+## keep track of the last thing that caused Polymake to return fail:
 ##
 DeclareGlobalVariable("POLYMAKE_LAST_FAIL_REASON");
 DeclareOperation("UpdatePolymakeFailReason",[IsString]);

@@ -136,7 +136,7 @@ InstallMethod(ConvertPolymakeNumber,[IsString],
     local   sstring,  denom,  enum;
     if '.' in string
        then
-        Info(InfoPolymaking,1,"Warnig!converting a floating point number"); 
+        Info(InfoPolymaking,1,"Warning!converting a floating point number"); 
         sstring:=SplitString(string,".");
         denom:=10^(Length(sstring[2]));
         enum:=Int(Concatenation(sstring));

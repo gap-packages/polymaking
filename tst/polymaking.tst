@@ -107,7 +107,7 @@ gap> Polymake(poly,"NEIGHBORLINESS");
 gap> Polymake(poly,"NEIGHBORLY");
 true
 gap> Polymake(poly,"MINIMAL_VERTEX_ANGLE");
-#I  Warnig!converting a floating point number
+#I  Warning!converting a floating point number
 314159265358979/100000000000000
 gap> Polymake(poly,"POINTED");
 true

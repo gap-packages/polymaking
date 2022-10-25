@@ -221,7 +221,7 @@ end);
 
 ##############################
 # Call polymake. If the option "PolymakeNolookup" is true, 
-# it is not checked, wheather Polymake has already been called
+# it is not checked, whether Polymake has already been called
 # with this option (however, the polymake program will check 
 # this by looking at the file associated to <polygon>).
 #

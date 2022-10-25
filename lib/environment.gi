@@ -24,7 +24,7 @@
 ##
 SetInfoLevel(InfoPolymaking,1);
 
-# give the command which calles polymake. You may need to include the full path
+# give the command which calls polymake. You may need to include the full path
 ####
 
 if not IsBound(POLYMAKE_COMMAND)
