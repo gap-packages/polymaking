@@ -67,7 +67,7 @@
     [4XPOLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");[104X
   [4X[32X[104X
   
-  [33X[0;0Yto  your  [11X.gaprc[111X  file  (see [14XThe .gaprc file???[114X). Note that these have to be
-  [13Xbefore[113X  the [10XLoadPackage("polymaking");[110X line. Or you can change the values of
-  the above variables by editing [11Xlib/environment.gi[111X[133X
+  [33X[0;0Yto  your [11X.gaprc[111X file (see [14XReference: The gap.ini and gaprc files[114X). Note that
+  these  have  to  be  [13Xbefore[113X  the [10XLoadPackage("polymaking");[110X line. Or you can
+  change the values of the above variables by editing [11Xlib/environment.gi[111X[133X
   

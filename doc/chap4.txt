@@ -89,7 +89,7 @@
   
   [33X[0;0YThe  string  [3Xstring[103X is converted to a rational number. Unlike [10XRat[110X, it tests,
   if  the  number represented by [3Xstring[103X is a floating point number an converts
-  it correctly. If this is the case, a waring is issued.[133X
+  it correctly. If this is the case, a warning is issued.[133X
   
   [1X4.2-2 ConvertPolymakeScalarToGAP[101X
   

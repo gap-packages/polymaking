@@ -2,8 +2,8 @@ SetPackageInfo( rec(
 
 PackageName := "polymaking",
 Subtitle := "Interfacing the geometry software polymake",
-Version := "0.8.6",
-Date := "08/07/2021", # dd/mm/yyyy format
+Version := "0.8.7",
+Date := "04/10/2023", # dd/mm/yyyy format
 License := "GPL-2.0-or-later",
 
 Persons := [
@@ -43,7 +43,7 @@ AbstractHTML := "This package provides a very basic interface to the polymake pr
 PackageDoc := rec(
   BookName  := "polymaking",
   ArchiveURLSubset := ["doc"],
-  HTMLStart := "doc/chap0.html",
+  HTMLStart := "doc/chap0_mj.html",
   PDFFile   := "doc/manual.pdf",
   SixFile   := "doc/manual.six",
   LongTitle := "A package for using polymake in GAP",

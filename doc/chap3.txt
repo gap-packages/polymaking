@@ -16,8 +16,8 @@
   
   [33X[1;0Y[29X[2XPOLYMAKE_LAST_FAIL_REASON[102X [32X global variable[133X
   
-  [33X[0;0YContains a string that explains the last occurence of [9Xfail[109X as a return value
-  of [2XPolymake[102X ([14X2.5-1[114X).[133X
+  [33X[0;0YContains  a  string  that  explains  the last occurrence of [9Xfail[109X as a return
+  value of [2XPolymake[102X ([14X2.5-1[114X).[133X
   
   
   [1X3.2 [33X[0;0YVariables for system interaction[133X[101X

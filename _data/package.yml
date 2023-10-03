@@ -1,6 +1,6 @@
 name: polymaking
-version: 0.8.6
-date: 2021-07-08
+version: 0.8.7
+date: 2023-10-04
 description: |
     Interfacing the geometry software polymake
 
@@ -27,39 +27,39 @@ packageinfo: https://gap-packages.github.io/polymaking/PackageInfo.g
 
 downloads:
     - name: .tar.gz
-      url: https://github.com/gap-packages/polymaking/releases/download/v0.8.6/polymaking-0.8.6.tar.gz
+      url: https://github.com/gap-packages/polymaking/releases/download/v0.8.7/polymaking-0.8.7.tar.gz
 
 abstract: |
     This package provides a very basic interface to the polymake program by Ewgenij Gawrilow, Michael Joswig et al.
 
 status: deposited
-doc-html: doc/chap0.html
+doc-html: doc/chap0_mj.html
 doc-pdf: doc/manual.pdf
 keywords: |
     interface, polymake, computational geometry.
 citeas: |
     <p class='BibEntry'>
-    [<span class='BibKey'>RT21</span>]   <b class='BibAuthor'>Roeder, M. and GAP Team, T.</b>,
+    [<span class='BibKey'>RT23</span>]   <b class='BibAuthor'>Roeder, M. and GAP Team, T.</b>,
      <i class='BibTitle'>polymaking, Interfacing the geometry software polymake,
-             Version 0.8.6</i>
-     (<span class='BibYear'>2021</span>)<br />
+             Version 0.8.7</i>
+     (<span class='BibYear'>2023</span>)<br />
     (<span class='BibNote'>GAP package</span>),
     <span class='BibHowpublished'><a href="https://gap-packages.github.io/polymaking/">https://gap-packages.github.io/polymaking/</a></span>.
     </p>
     
 
 bibtex: |
-    @misc{ polymaking0.8.6,
+    @misc{ polymaking0.8.7,
       author =           {Roeder, M. and GAP Team, T.},
       title =            {{polymaking},   Interfacing   the   geometry  software
-                          polymake, {V}ersion 0.8.6},
-      month =            {Jul},
-      year =             {2021},
+                          polymake, {V}ersion 0.8.7},
+      month =            {Oct},
+      year =             {2023},
       note =             {GAP package},
       howpublished =     {\href     {https://gap-packages.github.io/polymaking/}
                           {\texttt{https://gap-packages.github.io/}\discretionary
                           {}{}{}\texttt{polymaking/}}},
       keywords =         {interface; polymake; computational geometry},
-      printedkey =       {RT21}
+      printedkey =       {RT23}
     }
 
