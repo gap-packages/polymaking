@@ -4,6 +4,8 @@
 - fix example 2.6 in the manual
 - janitorial changes
 
+------------------
+
 0.8.6 (2021-07-08)
 
 - restore DIM that was lost between 0.7.9 and 0.8.1 (thanks to GitHub user narc-Ontakac2)
