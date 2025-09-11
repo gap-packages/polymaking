@@ -1,4 +1,4 @@
-[![Build Status](https://github.com/gap-packages/polymaking/workflows/CI/badge.svg?branch=master)](https://github.com/gap-packages/polymaking/actions?query=workflow%3ACI+branch%3Amaster)
+[![CI](https://github.com/gap-packages/polymaking/actions/workflows/CI.yml/badge.svg)](https://github.com/gap-packages/polymaking/actions/workflows/CI.yml)
 [![Code Coverage](https://codecov.io/github/gap-packages/polymaking/coverage.svg?branch=master&token=)](https://codecov.io/gh/gap-packages/polymaking)
 
 polymak(e)inG(AP)
