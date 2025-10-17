@@ -25,11 +25,11 @@
 
    <ManSection>
     <Meth Name="CreatePolymakeObject" Arg=""/> 
-    <Meth Name="CreatePolymakeObject" Arg="appvertyp"/> 
-    <Meth Name="CreatePolymakeObject" Arg="dir"/> 
-    <Meth Name="CreatePolymakeObject" Arg="dir appvertyp"/> 
-    <Meth Name="CreatePolymakeObject" Arg="prefix, dir"/> 
-    <Meth Name="CreatePolymakeObject" Arg="prefix dir appvertyp"/> 
+    <Meth Name="CreatePolymakeObject" Arg="appvertyp" Label="CreatePolymakeObjectAppvertyp"/> 
+    <Meth Name="CreatePolymakeObject" Arg="dir" Label="CreatePolymakeObjectDir"/> 
+    <Meth Name="CreatePolymakeObject" Arg="dir appvertyp" Label="CreatePolymakeObjectDirAppvertyp"/> 
+    <Meth Name="CreatePolymakeObject" Arg="prefix, dir" Label="CreatePolymakeObjectPrefixDir"/> 
+    <Meth Name="CreatePolymakeObject" Arg="prefix dir appvertyp" Label="CreatePolymakeObjectPrefixDirAppvertyp"/> 
     <Returns><K>PolymakeObject</K></Returns>
       <Description>
 
@@ -70,7 +70,7 @@
 
    <ManSection>
     <Meth Name="CreatePolymakeObjectFromFile" Arg="filename"/>
-    <Meth Name="CreatePolymakeObjectFromFile" Arg="dir filename"/>
+    <Meth Name="CreatePolymakeObjectFromFile" Arg="dir filename" Label="CreatePolymakeObjectFromFileDir"/>
     <Returns><K>PolymakeObject</K></Returns>
     <Description> 
 
@@ -283,7 +283,7 @@ rec(
 
    <ManSection>
     <Meth Name="ClearPolymakeObject" Arg="poly"/>
-    <Meth Name="ClearPolymakeObject" Arg="poly appvertyp"/>
+    <Meth Name="ClearPolymakeObject" Arg="poly appvertyp" Label="ClearPolymakeObjectAppvertyp"/>
     <Returns>nothing</Returns>
     <Description>
      Deletes all known properties of the <K>PolymakeObject</K>
