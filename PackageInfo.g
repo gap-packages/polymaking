@@ -53,7 +53,7 @@ Dependencies := rec(
   GAP := ">=4.8",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [["GAPDoc", ">= 0.99"]],
-  ExternalConditions := ["polymake (http://www.polymake.org) must be installed"]
+  ExternalConditions := ["polymake (https://www.polymake.org) must be installed"]
 ),
 
 AvailabilityTest := ReturnTrue,
