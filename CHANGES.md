@@ -1,3 +1,9 @@
+0.8.8 (2025-12-03)
+
+- janitorial changes
+
+------------------
+
 0.8.7 (2023-10-04)
 
 - fix broken link in the manual
