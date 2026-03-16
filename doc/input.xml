@@ -171,8 +171,7 @@ dimensional cube in polymake form. Now generate a
 <K>PolymakeObject</K> from this file and call <Ref Meth="Polymake"/>
 to make the vertices of the cube known to the object.
 
-<Example>
-<![CDATA[
+<Example><![CDATA[
 ### suppose we have a polymake file /tmp/threecube.poly
 ### containing a cube in three dimensions
 gap> cube:=CreatePolymakeObjectFromFile(Directory("/tmp"),"threecube.poly");
@@ -197,8 +196,7 @@ gap> KnownPropertiesOfPolymakeObject(cube);
 rec(
   VERTICES := [ [ -1, -1, -1 ], [ 1, -1, -1 ], [ -1, 1, -1 ], [ 1, 1, -1 ],
       [ -1, -1, 1 ], [ 1, -1, 1 ], [ -1, 1, 1 ], [ 1, 1, 1 ] ] )
-]]>
-</Example>
+]]></Example>
 
 
 

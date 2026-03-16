@@ -59,38 +59,36 @@
 
   </Section>
 
-   <Section><Heading>An Example</Heading>
+<Section><Heading>An Example</Heading>
 
-   Let's generate a three dimensional permutahedron.
+Let's generate a three dimensional permutahedron.
 
-    <Example>
-    <![CDATA[
-    gap> S:=SymmetricGroup(3);
-    Sym( [ 1 .. 3 ] )
-    gap> v:=[1,2,3];
-    [ 1, 2, 3 ]
-    gap> points3:=Orbit(S,v,Permuted);;
-         # project to reduce ambient dimension
-    gap> points:=points3{[1..6]}{[1,2]};;
-    gap> permutahedron:=CreatePolymakeObject();
-    <polymake object. No properties known>
-    gap> AppendPointlistToPolymakeObject(permutahedron,points);
-    gap> Polymake(permutahedron,"VOLUME");
-    3
-    gap> Polymake(permutahedron,"N_VERTICES");
-    6
-          #Now <permutahedron> knows its number of vertices, but not the vertices:
-    gap> PropertyOfPolymakeObject(permutahedron,"VERTICES");
-    fail
-    gap> NamesKnownPropertiesOfPolymakeObject(permutahedron);
-    [ "VOLUME", "N_VERTICES" ]
-        #Let's look at the object!
-    gap> Polymake(permutahedron,"VISUAL");
-    #I  There was no or wrong polymake output
-    fail
-    gap> Polymake(permutahedron,"DIM");
-    2
-    ]]>
-    </Example>    
+<Example><![CDATA[
+gap> S:=SymmetricGroup(3);
+Sym( [ 1 .. 3 ] )
+gap> v:=[1,2,3];
+[ 1, 2, 3 ]
+gap> points3:=Orbit(S,v,Permuted);;
+# project to reduce ambient dimension
+gap> points:=points3{[1..6]}{[1,2]};;
+gap> permutahedron:=CreatePolymakeObject();
+<polymake object. No properties known>
+gap> AppendPointlistToPolymakeObject(permutahedron,points);
+gap> Polymake(permutahedron,"VOLUME");
+3
+gap> Polymake(permutahedron,"N_VERTICES");
+6
+#Now <permutahedron> knows its number of vertices, but not the vertices:
+gap> PropertyOfPolymakeObject(permutahedron,"VERTICES");
+fail
+gap> NamesKnownPropertiesOfPolymakeObject(permutahedron);
+[ "VOLUME", "N_VERTICES" ]
+#Let's look at the object!
+gap> Polymake(permutahedron,"VISUAL");
+#I  There was no or wrong polymake output
+fail
+gap> Polymake(permutahedron,"DIM");
+2
+]]></Example>
 
-   </Section>
+</Section>
