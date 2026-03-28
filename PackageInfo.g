@@ -53,6 +53,7 @@ Dependencies := rec(
   GAP := ">=4.8",
   NeededOtherPackages := [],
   SuggestedOtherPackages := [],
+  NeededSystemPackages := rec( Ubuntu := [["polymake"]] ),
   ExternalConditions := ["polymake (https://www.polymake.org) must be installed"]
 ),
 
