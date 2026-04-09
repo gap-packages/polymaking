@@ -1,3 +1,8 @@
+0.8.9 (2026-04-08)
+
+- janitorial changes
+
+------------------
 0.8.8 (2025-12-03)
 
 - janitorial changes
