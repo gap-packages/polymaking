@@ -54,7 +54,7 @@ Dependencies := rec(
   NeededOtherPackages := [],
   SuggestedOtherPackages := [],
   NeededSystemPackages := rec( Ubuntu := [["polymake"]] ),
-  ExternalConditions := ["polymake (https://www.polymake.org) must be installed"]
+  ExternalConditions := [["polymake must be installed", "https://www.polymake.org"]]
 ),
 
 AvailabilityTest := ReturnTrue,
