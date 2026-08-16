@@ -19,7 +19,7 @@ concurrency:
 jobs:
   # The CI test job
   test:
-    name: ${{ matrix.gap-version }}
+    name: ${{ matrix.gap-version }} / ${{ matrix.chull }}
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -28,6 +28,15 @@ jobs:
           - 'devel'   # current GAP development version from git
           - 'latest'  # latest GAP release
           - 'minimal' # oldest GAP release supported by this package
+        # polymake enumerates facets in a backend dependent order, so run the
+        # tests against more than one; beneath_beyond is built into polymake and
+        # always available, cdd is what Debian and Gentoo builds tend to use.
+        chull: [ 'default' ]
+        include:
+          - gap-version: 'latest'
+            chull: 'cdd'
+          - gap-version: 'latest'
+            chull: 'beneath_beyond'
 
     steps:
       - uses: actions/checkout@v6
@@ -36,6 +45,10 @@ jobs:
           gap-version: ${{ matrix.gap-version }}
       - uses: gap-actions/build-pkg@v3
       - uses: gap-actions/run-pkg-tests@v4
+        env:
+          POLYMAKING_CHULL: ${{ matrix.chull != 'default' && matrix.chull || '' }}
+      - name: "Fail if the tests modified checked-in files"
+        run: git diff --exit-code
       - uses: gap-actions/run-pkg-tests@v4
         with:
           mode: onlyneeded

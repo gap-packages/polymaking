@@ -60,13 +60,15 @@ gap> SetUserPreference("polymaking", "PolymakeCommand", "no/such/polymake");;
 gap> PolymakeCommand();
 fail
 
-# the polymake output preferences have sane defaults and are validated
-gap> UserPreference("polymaking", "PolymakeQuiet");
+# the polymake output preferences are well-formed. Do not check them against
+# their defaults: the test suite is run with PolymakePreferences set, to cover
+# several convex hull backends.
+gap> UserPreference("polymaking", "PolymakeQuiet") in [true, false];
 true
-gap> UserPreference("polymaking", "PolymakeConfigPath");
-""
-gap> UserPreference("polymaking", "PolymakePreferences");
-[  ]
+gap> IsString(UserPreference("polymaking", "PolymakeConfigPath"));
+true
+gap> ForAll(UserPreference("polymaking", "PolymakePreferences"), IsString);
+true
 
 #
 gap> SetUserPreference("polymaking", "PolymakeCommand", oldcmd);;

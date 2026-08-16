@@ -18,6 +18,10 @@
 - `POLYMAKE_LAST_FAIL_REASON` is now actually set when polymake fails; it used
   to be assigned after the `Error` call, and so only when the user resumed from
   the break loop
+- the test suite no longer depends on which convex hull backend polymake picks,
+  and no longer rewrites `tst/pplane.poly` in place while running (issue #18).
+  Set `POLYMAKING_CHULL` to test a specific backend, e.g.
+  `POLYMAKING_CHULL=cdd gap tst/testall.g`.
 - the globals `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` are no longer set by
   the package; if you set them yourself they are still honoured
 
