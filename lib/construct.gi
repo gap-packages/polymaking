@@ -46,7 +46,7 @@ end);
 ####################
 InstallMethod(CreatePolymakeObjectFromFile,[IsString],
         function(name)
-    return CreatePolymakeObjectFromFile(POLYMAKE_DATA_DIR, name);
+    return CreatePolymakeObjectFromFile(PolymakeDataDirectory(), name);
 end);
 
 InstallMethod(CreatePolymakeObjectFromFile,[IsDirectory,IsString],
@@ -112,7 +112,7 @@ end);
 InstallMethod(CreatePolymakeObject,[],
         function()
     local   dir,  name;
-    return CreatePolymakeObject(POLYMAKE_DATA_DIR);
+    return CreatePolymakeObject(PolymakeDataDirectory());
 end);
 
 
@@ -232,7 +232,7 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
             returnval,  returnedstring,  block;
     
     callPolymake:=function(object,splitoption)
-        local   returnedstring,  pkgdir, scriptarg, stdout,  stdin,  dir,  exitstatus;
+        local   returnedstring,  pkgdir, scriptarg, stdout,  stdin,  dir,  cmd,  exitstatus;
         
         returnedstring:=[];
         scriptarg:=["--config-path","", "--script",
@@ -244,7 +244,14 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
            then
             dir:=DirectoryCurrent();
         fi;
-        exitstatus:=Process( dir, POLYMAKE_COMMAND, stdin, stdout, 
+        cmd:=PolymakeCommand();
+        if cmd=fail
+           then
+            UpdatePolymakeFailReason("no usable polymake executable configured");
+            ErrorNoReturn("polymake not found; set it via SetUserPreference(",
+                    "\"polymaking\", \"PolymakeCommand\", <path>)");
+        fi;
+        exitstatus:=Process( dir, cmd, stdin, stdout, 
                             Concatenation(scriptarg, [FullFilenameOfPolymakeObject(object)],
                                      splitoption)
                             );;

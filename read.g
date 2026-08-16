@@ -1,3 +1,5 @@
+ReadPackage("polymaking","lib/userpref.gi");
+POLYMAKING_WarnAboutObsoleteGlobals();
 ReadPackage("polymaking","lib/environment.gi");
 ReadPackage("polymaking","lib/Objects.gi");
 ReadPackage("polymaking","lib/construct.gi");

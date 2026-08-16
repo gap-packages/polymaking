@@ -34,10 +34,10 @@ supported anymore.
 <Section Label="chap:polymakeinstall">
 <Heading>A few words about the installation of polymake</Heading>
 
-<Package>polymaking</Package> will try to guess the location of polymake. If
-this fails, a warning is issued at load time (<K>InfoWarning</K> level 1). Note
-that the guessing procedure is suppressed when <Ref Var="POLYMAKE_COMMAND" />
-is set manually (see <Ref Label="SetVarPermanently"/>).
+<Package>polymaking</Package> looks for a program named <C>polymake</C> in
+your <C>PATH</C> every time it calls polymake. If this fails, a warning is
+issued at load time (<K>InfoWarning</K> level 1) and you have to say where
+polymake lives, see <Ref Sect="chap:varsetters"/>.
 <Br/>
 <Code><![CDATA[setenv PATH ${PATH}:<your polymakepath>]]></Code>
 <Br/>
@@ -47,49 +47,70 @@ there is nothing to worry about.
  
   
    <Section Label="chap:varsetters">
-   <Heading>Setting variables for external programs</Heading>
+   <Heading>Configuring polymaking</Heading>
 
-      As <Package>polymaking</Package> uses the program polymake, it needs to
-know
-      where this program lives. The communication with polymake is done
-      by writing files for polymake and reading its output (as returned to
-      standard output "the prompt"). Note that the interface does not read any
-      polymake file.
+      <Package>polymaking</Package> is configured through the &GAP; user
+      preference mechanism (see <Ref Sect="User Preferences" BookName="ref"/>).
+      Two preferences are available, both empty by default:
 
+      <List>
+      <Mark><C>PolymakeCommand</C></Mark>
+      <Item>the command or path used to invoke polymake. Empty means: look for
+      <C>polymake</C> in <C>DirectoriesSystemPrograms()</C>.</Item>
+      <Mark><C>PolymakeDataDirectory</C></Mark>
+      <Item>the directory in which the files handed to polymake are created.
+      Empty means: use a temporary directory, created on demand and removed
+      when &GAP; exits.</Item>
+      </List>
+
+      To see the current settings, use
+      <C>ShowUserPreferences("polymaking");</C>. To change them for the
+      current session:
+
+<Listing>
+SetUserPreference("polymaking", "PolymakeCommand", "/home/mypolymakebindir/polymake");
+SetUserPreference("polymaking", "PolymakeDataDirectory", "/home/mypolymakedatadir");
+</Listing>
+
+      <Subsection Label="SetVarPermanently"><Heading>Setting preferences permanently</Heading>
+       Add the two lines above to your <F>gap.ini</F> file, or call
+       <C>WriteGapIniFile();</C> once after setting them, and they will be
+       used in every &GAP; session (see <Ref Label="The gap.ini and gaprc files"
+       BookName="ref"></Ref>). Unlike the global variables they replace, the
+       preferences may be set at any time, also after
+       <C>LoadPackage("polymaking");</C>.
+      </Subsection>
 
       <ManSection>
-       <Meth Name="SetPolymakeDataDirectory" Arg="dir" />
+       <Func Name="PolymakeCommand" Arg="" />
         <Description>
-	 Sets the directory in which all polymake files are created to
-	 <A>dir</A>. The standard place for these files is a temporary
-	 directory generated when the package is loaded. This
-	 manipulates <Ref Var="POLYMAKE_DATA_DIR"/>.  
+	 Returns the polymake command actually used: the value of the
+	 <C>PolymakeCommand</C> preference if it is set and names an
+	 executable, otherwise the result of searching for <C>polymake</C>.
+	 Returns <K>fail</K> if no usable executable is found.
 	</Description>
 	</ManSection>
 
       <ManSection>
+       <Func Name="PolymakeDataDirectory" Arg="" />
+        <Description>
+	 Returns the directory in which polymake files are created, as given by
+	 the <C>PolymakeDataDirectory</C> preference. The directory is created
+	 if it does not exist. If the preference is empty, a temporary
+	 directory is returned; it is created on demand and re-created if it
+	 has vanished, so this keeps working after loading a &GAP; workspace
+	 saved in an earlier session.
+	</Description>
+	</ManSection>
+
+      <ManSection>
+       <Meth Name="SetPolymakeDataDirectory" Arg="dir" />
        <Meth Name="SetPolymakeCommand" Arg="command"/>
         <Description>
-        Sets the name for the polymake program to <A>command</A>. This
-        manipulates <Ref Var="POLYMAKE_COMMAND"/>.
+	 Deprecated. These now just set the corresponding user preference; use
+	 <C>SetUserPreference</C> directly instead.
 	</Description>
-      </ManSection>
-
-      <Subsection Label="SetVarPermanently"><Heading>Setting variables permanently</Heading>
-       To permanently set the values of <Ref Var="POLYMAKE_COMMAND" />, and 
-       <Ref Var="POLYMAKE_DATA_DIR"/>, add the lines
-</Subsection>
-<Listing>
-POLYMAKE_DATA_DIR:=Directory("/home/mypolymakedatadir");
-POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
-</Listing>
-
-       to your <F>.gaprc</F> file (see <Ref Label="The gap.ini and gaprc files"
-       BookName="ref"></Ref>). Note that these have to be
-       <Emph>before</Emph> the <C>LoadPackage("polymaking");</C> line.
-       Or you can change the values of the above variables by editing
-       <F>lib/environment.gi</F>
-
+	</ManSection>
 
    </Section> 
    </Chapter>

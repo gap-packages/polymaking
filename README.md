@@ -60,14 +60,18 @@ Installation
 If polymake is not found automatically (a warning will be printed at
 level 1 in this case), try this:
 
-6. Tell GAP where to look for polymake by adding the following lines to
-   your `.gaprc` file:
+6. Tell GAP where to look for polymake:
 
-        POLYMAKE_COMMAND:=Filename(Directory("/home/mypolymakebindir/"),"polymake");
-        MakeImmutable(POLYMAKE_COMMAND);
+        SetUserPreference("polymaking", "PolymakeCommand", "/home/mypolymakebindir/polymake");
 
-    Note that you can also modify the value of the variable `POLYMAKE_COMMAND` in
-    `lib/environment.gi`.
+    Add that line to your `gap.ini` file, or call `WriteGapIniFile();` once, to
+    make it permanent. Use `PolymakeDataDirectory` the same way to choose where
+    polymaking puts the files it hands to polymake; by default it uses a
+    temporary directory.
+
+    The global variables `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` used by
+    polymaking 0.8.9 and earlier are deprecated. They are still honoured if you
+    set them, but the package warns about them at load time.
 
 
 
