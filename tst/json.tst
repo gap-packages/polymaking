@@ -63,5 +63,19 @@ gap> j := JsonStringToGap(
 gap> [ j._type, j.POINTS, j._ns.polymake[2] ];
 [ "polytope::Polytope<Rational>", [ [ "1", "1/4" ] ], "4.0" ]
 
+# polymake before 4.0 cannot read the files polymaking writes, so it is refused
+gap> oldver := POLYMAKING_STATE.version;;
+gap> POLYMAKING_STATE.version := "3.6";;
+gap> POLYMAKING_STATE.versionChecked := false;;
+gap> CALL_WITH_CATCH(POLYMAKING_CheckVersion, [])[1];
+Error, polymaking requires polymake 4.0 or newer, but found 3.6. Use polymakin\
+g 0.8.9 with older versions of polymake.
+false
+gap> POLYMAKING_STATE.version := "4.0";;
+gap> POLYMAKING_CheckVersion();
+gap> POLYMAKING_STATE.versionChecked;
+true
+gap> POLYMAKING_STATE.version := oldver;;
+
 #
 gap> STOP_TEST("json.tst", 1);
