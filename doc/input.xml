@@ -7,10 +7,10 @@
    read back and stored in the <K>PolymakeObject</K> corresponding to the
    file for which polymake was called.
    
-   The files are written in polymake's own JSON format, so polymake never has
-   to convert them. Writing to a <K>PolymakeObject</K> rewrites the whole file
-   from the properties given so far, which means a file may be extended at any
-   point, also after polymake has been called for it.
+   The files are written in polymake's own JSON format. Writing to a
+   <K>PolymakeObject</K> rewrites the whole file from the properties given so
+   far, which means a file may be extended at any point, also after polymake
+   has been called for it.
 
    <ManSection>
     <Meth Name="CreateEmptyFile" Arg="filename" />
