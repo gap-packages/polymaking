@@ -15,7 +15,7 @@ gap> NormalizeRow := function(v)
 gap> CanonicalFaceList := function(L)
 >      local c;
 >      c := ShallowCopy(L);
->      Sort(c, function(a, b) return [Size(a), a] < [Size(b), b]; end);
+>      SortBy(c, a -> [Size(a), a]);
 >      return c;
 >    end;;
 gap> CoversOfFaceList := function(faces)
