@@ -173,7 +173,7 @@ GRAPH, DUAL_GRAPH, FACETS,
   rather than the strange record. To be precise, only the ".hasse" part of the
   old version is returned.
 - set global variables POLYMAKE_PROGRAM and POLYMAKE_DATA_DIR to "read only"
-  status (thanks to Alexander Konovalov for this hint).
+  status (thanks to Olexandr Konovalov for this hint).
 
 ------------------
 
