@@ -24,52 +24,35 @@
 ##
 SetInfoLevel(InfoPolymaking,1);
 
-# give the command which calls polymake. You may need to include the full path
-####
-
-if not IsBound(POLYMAKE_COMMAND)
-   then
-    POLYMAKE_COMMAND:=Filename( DirectoriesSystemPrograms( ), "polymake" );
-fi;
-if POLYMAKE_COMMAND=fail
-   or not IsExecutableFile(POLYMAKE_COMMAND)
-   then
-    Info(InfoWarning,1,"polymake command not found. Please set POLYMAKE_COMMAND by hand");
-else
-    MakeReadOnlyGlobal("POLYMAKE_COMMAND");
-fi;
-
-InstallMethod(SetPolymakeCommand,[IsString],
-        function(command)
-    if not IsExecutableFile(command)
-       then
-        Error("polymake command must exist and be executable.");
-    else
-        MakeReadWriteGlobal("POLYMAKE_COMMAND");
-        POLYMAKE_COMMAND:=command;
-        MakeReadOnlyGlobal("POLYMAKE_COMMAND");
-    fi;
+BindGlobal("POLYMAKING_InfoDeprecated", function(name, replacement)
+    Info(InfoObsolete, 1, "`", name, "` is deprecated, use ", replacement,
+         " instead.");
 end);
 
 
-#
-# This directory will hold the files generated for polymake
-# It can be changed using "SetPolymakeDataDirectory"
-###
-if not IsBound(POLYMAKE_DATA_DIR)
-   then
-    POLYMAKE_DATA_DIR:=DirectoryTemporary();
-fi;
-MakeReadOnlyGlobal("POLYMAKE_DATA_DIR");
+InstallMethod(SetPolymakeCommand,[IsString],
+        function(command)
+    POLYMAKING_InfoDeprecated("SetPolymakeCommand",
+        "SetUserPreference(\"polymaking\", \"PolymakeCommand\", command)");
+    if POLYMAKING_ResolveCommand(command) = fail then
+        ErrorNoReturn("polymake command must exist and be executable");
+    fi;
+    SetUserPreference("polymaking", "PolymakeCommand", command);
+end);
 
 
 InstallMethod(SetPolymakeDataDirectory,[IsDirectory],
         function(dir)
-    MakeReadWriteGlobal("POLYMAKE_DATA_DIR");
-    POLYMAKE_DATA_DIR:=dir;
-    MakeReadOnlyGlobal("POLYMAKE_DATA_DIR");
+    POLYMAKING_InfoDeprecated("SetPolymakeDataDirectory",
+        "SetUserPreference(\"polymaking\", \"PolymakeDataDirectory\", path)");
+    SetUserPreference("polymaking", "PolymakeDataDirectory", Filename(dir, ""));
 end);
 
+
+if PolymakeCommand() = fail then
+    Info(InfoWarning, 1, "polymake command not found; set it via ",
+         "SetUserPreference(\"polymaking\", \"PolymakeCommand\", <path>)");
+fi;
 
 
 ####

@@ -29,7 +29,7 @@
       <Description>
 
       If called without arguments, this method generates an empty file
-      in the directory defined by <Ref Var="POLYMAKE_DATA_DIR"/>.
+      in the directory defined by <Ref Func="PolymakeDataDirectory"/>.
 
       If a directory <A>dir</A> is given (this directory must exist),
       an empty file is generated in this directory.  If <A>prefix</A>

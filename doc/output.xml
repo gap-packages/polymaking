@@ -5,7 +5,7 @@
     <Description>
     
      This method calls the polymake program (see <Ref
-     Var="POLYMAKE_COMMAND"/>) with the option
+     Func="PolymakeCommand"/>) with the option
      <A>option</A>. You may use several keywords such as
      <C>"FACETS VERTICES"</C> as an option. The returned value is cut into blocks
      starting with keywords (which are taken from output and not 

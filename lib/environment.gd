@@ -24,6 +24,16 @@
 ##
 DeclareInfoClass("InfoPolymaking");
 
+##
+## the effective polymake command and data directory, see lib/userpref.gi
+##
+DeclareGlobalFunction("PolymakeCommand");
+DeclareGlobalFunction("PolymakeDataDirectory");
+
+##
+## deprecated in favour of the user preferences PolymakeCommand and
+## PolymakeDataDirectory
+##
 DeclareOperation("SetPolymakeDataDirectory",[IsDirectory]);
 DeclareOperation("SetPolymakeCommand",[IsString]);
 

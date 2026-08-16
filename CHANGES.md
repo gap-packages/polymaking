@@ -1,3 +1,16 @@
+0.9.0 (unreleased)
+
+- polymaking is now configured via the GAP user preferences `PolymakeCommand`
+  and `PolymakeDataDirectory` (issues #16, #19)
+- the data directory is determined lazily and re-created when it has vanished,
+  so `CreatePolymakeObject` works again after restoring a GAP workspace
+  (issue #17). Note that polymake objects created before saving the workspace
+  cannot be rescued: their files are gone.
+- deprecated `SetPolymakeCommand` and `SetPolymakeDataDirectory`
+- the globals `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` are no longer set by
+  the package; if you set them yourself they are still honoured
+
+------------------
 0.8.9 (2026-04-08)
 
 - janitorial changes

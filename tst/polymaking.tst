@@ -134,7 +134,8 @@ gap> Polymake(poly,"VERTICES_IN_FACETS");
 
 ## test external files:
 gap> dir:=DirectoriesPackageLibrary("polymaking", "tst")[1];;
-gap> SetPolymakeDataDirectory(dir);;
+gap> olddatadir:=UserPreference("polymaking", "PolymakeDataDirectory");;
+gap> SetUserPreference("polymaking", "PolymakeDataDirectory", Filename(dir, ""));;
 gap> plane:=CreatePolymakeObjectFromFile("pplane.poly");
 <polymake object. No properties known>
 
@@ -146,4 +147,5 @@ gap> Polymake(plane, "FACETS");
   [ 2, 3, 4 ], [ 2, 3, 6 ], [ 2, 4, 5 ], [ 3, 5, 6 ], [ 4, 5, 6 ] ]
 
 #
+gap> SetUserPreference("polymaking", "PolymakeDataDirectory", olddatadir);;
 gap> STOP_TEST("polymaking.tst", 10000);

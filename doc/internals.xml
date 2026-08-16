@@ -25,32 +25,14 @@ output</Heading>
  <Section Label="variables">
   <Heading>Variables for system interaction</Heading>
 
-  The variables for interaction with the system are contained in the
-  file <F>environment.gi</F>. Each of these variables has a function
-  to set it, see <Ref Sect="chap:varsetters"/>.  If
-  <K>POLYMAKE&uscore;COMMAND</K> or <K>POLYMAKE&uscore;DATA&uscore;DIR</K> are set at
-  startup, they are not overwritten. So if you don't want (or don't
-  have the rights) to modify <F>environment.gi</F>, you can set the
-  variables in your <F>.gaprc</F> file.
-    
-   <ManSection>
-    <Var Name="POLYMAKE_COMMAND"/>
-    <Description>
-     This variable should contain the name of the polymake program in
-     the form as returned by <C>Filename</C> So a probable value is
-     <C>Filename(Directory("/usr/local/bin"),"polymake")</C>.
-     </Description> 
-   </ManSection>
-
-
-   <ManSection>
-    <Var Name="POLYMAKE_DATA_DIR"/>
-     <Description>
-     In this directory the files for polymake will be created. By
-     default, this generates a temporary directory using
-     <K>DirectoryTemporary</K>
-     </Description>
-   </ManSection>
+  Up to version 0.8.9 the polymake command and the directory for polymake
+  files were held in the global variables <K>POLYMAKE&uscore;COMMAND</K> and
+  <K>POLYMAKE&uscore;DATA&uscore;DIR</K>. These are deprecated; they are still
+  honoured if you bind them yourself, but the package no longer sets them and
+  warns at load time if it finds them. Use the user preferences
+  <C>PolymakeCommand</C> and <C>PolymakeDataDirectory</C> instead, see
+  <Ref Sect="chap:varsetters"/>, and <Ref Func="PolymakeCommand"/> and
+  <Ref Func="PolymakeDataDirectory"/> to query the effective values.
 
 </Section>
 
