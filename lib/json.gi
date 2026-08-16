@@ -60,7 +60,7 @@ BindGlobal("POLYMAKING_Scalar", function(x)
 end);
 
 
-BindGlobal("POLYMAKING_Indices", l -> Set(l, i -> i+1));
+BindGlobal("POLYMAKING_Indices", l -> Set(List(l, i -> i+1)));
 
 
 # a dense list, or a sparse record {"3": v, "_dim": n}
@@ -145,7 +145,7 @@ InstallGlobalFunction(PolymakeDecodeValue, function(type, data)
         if not IsEmpty(type.params) and type.params[1].name in ["Int"] then
             return POLYMAKING_Indices(data);
         fi;
-        return Set(data, POLYMAKING_Scalar);
+        return Set(List(data, POLYMAKING_Scalar));
 
     elif name = "Array" then
         if IsEmpty(type.params) then

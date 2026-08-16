@@ -21,7 +21,7 @@ National University of Ireland, Galway
 Requirements
 ------------
 
-polymaking requires GAP version 4.8, the GAP package json, and polymake 4.0
+polymaking requires GAP version 4.12, the GAP package json, and polymake 4.0
 or newer. The GAPDoc package is needed to display the documentation.
 
 Use polymaking 0.8.9 if you need to work with polymake 3 or older.

@@ -50,7 +50,7 @@ PackageDoc := rec(
 ),
 
 Dependencies := rec(
-  GAP := ">=4.8",
+  GAP := ">= 4.12",   # this is what the json package requires
   NeededOtherPackages := [ [ "json", ">= 2.0.0" ] ],
   SuggestedOtherPackages := [],
   NeededSystemPackages := rec( Ubuntu := [["polymake"]] ),

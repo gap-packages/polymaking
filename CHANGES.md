@@ -1,7 +1,7 @@
 0.9.0 (unreleased)
 
 - polymake 4.0 or newer is now required, and the GAP package json is a new
-  dependency. polymaking now writes and reads polymake's own JSON data format
+  dependency; json needs GAP 4.12, so that is now polymaking's minimum too. polymaking now writes and reads polymake's own JSON data format
   instead of the pre-4 plain format, which means polymake no longer converts
   the files and no longer says so (issue #22)
 - nested polymake properties can be named directly, e.g.
