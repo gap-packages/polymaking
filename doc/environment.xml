@@ -61,7 +61,25 @@ there is nothing to worry about.
       <Item>the directory in which the files handed to polymake are created.
       Empty means: use a temporary directory, created on demand and removed
       when &GAP; exits.</Item>
+      <Mark><C>PolymakeQuiet</C></Mark>
+      <Item>whether to suppress polymake's informational messages, such as the
+      credits for third-party software it used. <K>true</K> by default.</Item>
+      <Mark><C>PolymakeConfigPath</C></Mark>
+      <Item>what to pass to polymake's <C>--config-path</C>. Empty, the
+      default, makes polymake ignore all user configuration. Use
+      <C>"user"</C> to honour <F>~/.polymake/settings</F> instead; this is
+      also considerably faster, as polymake then caches its
+      autoconfiguration between calls.</Item>
+      <Mark><C>PolymakePreferences</C></Mark>
+      <Item>a list of polymake rule preferences applied to every call, for
+      example <C>[ "*.convex_hull cdd" ]</C> to choose a convex hull
+      backend. Empty by default.</Item>
       </List>
+
+      Everything polymake writes to standard error is captured. It is shown at
+      <Ref InfoClass="InfoPolymaking"/> level 2, and when a call fails it is
+      part of the error message and of
+      <Ref Var="POLYMAKE_LAST_FAIL_REASON"/>.
 
       To see the current settings, use
       <C>ShowUserPreferences("polymaking");</C>. To change them for the

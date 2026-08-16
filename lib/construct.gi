@@ -232,11 +232,26 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
             returnval,  returnedstring,  block;
     
     callPolymake:=function(object,splitoption)
-        local   returnedstring,  pkgdir, scriptarg, stdout,  stdin,  dir,  cmd,  exitstatus;
+        local   returnedstring,  scriptarg,  errfile,  p,  stdout,  stdin,  
+                dir,  cmd,  exitstatus;
         
         returnedstring:=[];
-        scriptarg:=["--config-path","", "--script",
-                    Filename(DirectoriesPackageLibrary("polymaking"), "pm_script_arg.pl")];
+        errfile:=POLYMAKING_ScratchFile("stderr.txt");
+        RemoveFile(errfile);
+        scriptarg:=["--config-path",
+                    UserPreference("polymaking","PolymakeConfigPath"),
+                    "--script",
+                    Filename(DirectoriesPackageLibrary("polymaking"), "pm_script_arg.pl"),
+                    "--stderr", errfile];
+        if UserPreference("polymaking","PolymakeQuiet")=true
+           then
+            Add(scriptarg,"--quiet");
+        fi;
+        for p in UserPreference("polymaking","PolymakePreferences")
+          do
+            Append(scriptarg,["--prefer",p]);
+        od;
+        Add(scriptarg,"--");
         stdout:=OutputTextString(returnedstring,false);
         stdin:=InputTextNone();;
         dir:=DirectoryOfPolymakeObject(object);
@@ -257,7 +272,16 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
                             );;
         CloseStream(stdout);
         CloseStream(stdin);
-        return rec(status:=exitstatus,string:=returnedstring);
+        errfile:=StringFile(errfile);
+        if errfile=fail
+           then
+            errfile:="";
+        fi;
+        if errfile<>"" and exitstatus=0
+           then
+            Info(InfoPolymaking,2,Chomp(errfile));
+        fi;
+        return rec(status:=exitstatus,string:=returnedstring,stderr:=errfile);
     end;
 
     gapobject:=[];
@@ -285,9 +309,11 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
             Info(InfoPolymaking,2,String(returnedstring));
             if returnedstring.status <>0
                then
-                Error("polymake returned an error (error code ", returnedstring.status, ")");
-                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",String(returnedstring.status)));
+                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",
+                        String(returnedstring.status),"\n",returnedstring.stderr));
                 returnval:=fail;
+                Error("polymake returned an error (error code ", returnedstring.status,
+                        ")\n", returnedstring.stderr);
             elif returnedstring.string<>[]
                then
                 Info(InfoPolymaking,2,returnedstring.string);
@@ -322,9 +348,11 @@ InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
             returnedstring:=callPolymake(polygon,splitoption);
             if returnedstring.status <>0
                then
-                Error("polymake returned an error");
-                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",String(returnedstring.status)));
-            elif returnedstring<>[]
+                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",
+                        String(returnedstring.status),"\n",returnedstring.stderr));
+                Error("polymake returned an error (error code ", returnedstring.status,
+                        ")\n", returnedstring.stderr);
+            elif returnedstring.string<>[]
               then
                 Info(InfoPolymaking,2,returnedstring.string);
                 gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
