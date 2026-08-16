@@ -20,7 +20,7 @@ gap> SetUserPreference("polymaking", "PolymakeDataDirectory", "");;
 gap> d1 := Filename(PolymakeDataDirectory(), "");;
 gap> d1 = Filename(PolymakeDataDirectory(), "");
 true
-gap> RemoveDirectoryRecursively(d1);
+gap> RemoveDirectoryRecursively(ShallowCopy(d1));  # GAP < 4.13 modifies its argument
 true
 gap> d2 := Filename(PolymakeDataDirectory(), "");;
 gap> IsDirectoryPath(d2);
