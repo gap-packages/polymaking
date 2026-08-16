@@ -60,6 +60,14 @@ gap> SetUserPreference("polymaking", "PolymakeCommand", "no/such/polymake");;
 gap> PolymakeCommand();
 fail
 
+# the polymake output preferences have sane defaults and are validated
+gap> UserPreference("polymaking", "PolymakeQuiet");
+true
+gap> UserPreference("polymaking", "PolymakeConfigPath");
+""
+gap> UserPreference("polymaking", "PolymakePreferences");
+[  ]
+
 #
 gap> SetUserPreference("polymaking", "PolymakeCommand", oldcmd);;
 gap> SetUserPreference("polymaking", "PolymakeDataDirectory", olddir);;
