@@ -44,6 +44,18 @@ gap> PolymakeDecodeProperty("M", rec(_type := "common::SparseMatrix<Rational, No
 >      data := [rec(("0") := "1", ("1") := "1"), rec(("3") := "-1"), rec(cols := 4)]));
 [ [ 1, 1, 0, 0 ], [ 0, 0, 0, -1 ] ]
 
+# a SparseMatrix may mix sparse rows with dense ones, and an all-zero row
+# serializes as an empty record
+gap> PolymakeDecodeProperty("M", rec(_type := "common::SparseMatrix<Rational, NonSymmetric>",
+>      data := [["5"], rec(cols := 1)]));
+[ [ 5 ] ]
+gap> PolymakeDecodeProperty("M", rec(_type := "common::SparseMatrix<Rational, NonSymmetric>",
+>      data := [rec(), rec(), rec(cols := 2)]));
+[ [ 0, 0 ], [ 0, 0 ] ]
+gap> PolymakeDecodeProperty("M", rec(_type := "common::SparseMatrix<Rational, NonSymmetric>",
+>      data := [rec(cols := 3)]));
+[  ]
+
 # homogeneous coordinates are stripped
 gap> PolymakeDecodeProperty("VERTICES", rec(_type := "common::Matrix<Rational, NonSymmetric>",
 >      data := [["1","1/4","0"],["1","0","1/5"]]));
