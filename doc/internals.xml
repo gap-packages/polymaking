@@ -44,205 +44,87 @@ output</Heading>
 
 <Section><Heading>The General Method</Heading>
 
-When polymake is called, its output is read as a string and then
-processed as follows: 
+polymaking hands its requests to the polymake script <F>lib/pm.pl</F>, which
+evaluates each of them and serializes the results into a single JSON file using
+polymake's own serializer. &GAP; reads that file with the
+<Package>json</Package> package and converts each value.
 
-<Enum>
- <Item>  the lines containing upper case letters are found. These
- are treated as lines containing the keywords. Each of those lines
- marks the beginning of a block of data. </Item>
- <Item>The string is then cut into a list of blocks (also strings). Each
- block starts with a line containing the keyword and continues with some lines of data.
- </Item>
-<Item>for each of the blocks, the appropriate function of
- <C>ObjectConverters</C> is called. Here "appropriate" just means,
- that the keyword of the block coincides with the name of the
- function.</Item>
-<Item>The output of the conversion function is then added to
- the known properties of the <C>PolymakeObject</C> for which
- <C>Polymake</C> was called.</Item>
-</Enum>
+<P/>
 
-<Subsection><Heading>Converter- Philosopy</Heading>
+The conversion is driven by the polymake type of the value, which is part of
+what polymake writes, so there is no table mapping keywords to parsers -- a
+<C>Matrix&lt;Rational&gt;</C> is decoded as a matrix of rationals whether or not
+polymaking has ever heard of the keyword. Note that polymake writes its own
+number types as strings, so that no precision is lost.
 
-The converter functions should take meaningful polymake data into meaningful
+<Subsection><Heading>Converter Philosophy</Heading>
+
+The converters take meaningful polymake data into meaningful
 &GAP; data. This sometimes means that the (mathematical) representation is
 changed. Here is an example: polymake writes vectors as augmented affine
 vectors of the form  <Code>1 a1 a2 a3...</Code> which does not go very well
 with the usual &GAP; conventions of column vectors and multiplying matrices
 from the right. So <Package>polymaking</Package> converts such a vector to
 <Code>[a1,a2,a3,...]</Code> and the user is left with the problem of
-augmentation and left or right multiplication.
+augmentation and left or right multiplication. This applies to
+<C>POINTS</C>, <C>VERTICES</C>, <C>REL&uscore;INT&uscore;POINT</C>,
+<C>VALID&uscore;POINT</C> and <C>VERTEX&uscore;BARYCENTER</C>; it is a property
+of the keyword, not of the type, so it cannot be derived.
 <P/>
 Another area where the &GAP; object isn't a literal translation from the
-polymake world is combinatorics. In Polymake, list elements are enumerated
+polymake world is combinatorics. In polymake, list elements are enumerated
 starting from 0. &GAP; enumerates lists starting at 1. So the conversion
-process adds 1 to the numbers corresponding to vertices in facet lists, for
-example. 
+process adds 1 to everything that is an index: sets of integers, incidence
+matrices and graph adjacency lists. Lists of plain integers, such as
+<C>FACET&uscore;DEGREES</C>, are values rather than indices and are left alone.
 <P/>
 </Subsection>
 
-The conversion process is done by the following methods:
-
+The conversion is done by the following functions. You are unlikely to need
+them directly.
 
   <ManSection>
-  <Meth Name="ConvertPolymakeOutputToGapNotation" Arg="string"/>
-   <Returns>Record having polymake keywords as entry names and
-   the respective converted polymake output as entries.
-   </Returns>
+  <Func Name="PolymakeParseType" Arg="string"/>
+   <Returns>Record with components <C>name</C> and <C>params</C></Returns>
    <Description>
-
-    Given a the output of the polymake program as a string
-    <A>string</A>, this method first calls <Ref
-    Meth="SplitPolymakeOutputStringIntoBlocks"/>.  For each of the returned
-    blocks, the name (=first line) of the block is read and the record
-    <Ref Var="ObjectConverters"/> is looked up for an entry with that
-    name. If such an entry exists, it (being a function!) is called
-    and passed the block. The returned value is then given the name of
-    the block and added to the record returned by
-    <C>ConvertPolymakeOutputToGapNotation</C>.
-
+    Parses a polymake type such as <C>"common::Array&lt;Set&lt;Int&gt;&gt;"</C>
+    into a record; the application prefix is dropped and type parameters are
+    parsed recursively. Passing <K>fail</K>, which is how the
+    <Package>json</Package> package reports a JSON <C>null</C>, gives the empty
+    name; polymake uses <C>null</C> for values that are plain Perl scalars.
    </Description>
   </ManSection>
 
+  <ManSection>
+  <Func Name="PolymakeDecodeValue" Arg="type data"/>
+   <Description>
+    Converts the JSON value <A>data</A> into a &GAP; object, guided by the
+    parsed <A>type</A>. Understands scalars, dense and sparse vectors and
+    matrices, sets, incidence matrices, graph adjacency lists, node maps and
+    arrays. Unknown types are returned unchanged, with a warning at
+    <Ref InfoClass="InfoPolymaking"/> level 1.
+   </Description>
+  </ManSection>
 
-<ManSection>
- <Meth Name="SplitPolymakeOutputStringIntoBlocks" Arg="string"/>
-  <Returns>List of strings -- "blocks"--</Returns>
-  <Description>
-    The string <A>string</A> is cut at the lines starting with an upper case
-    character and  consisting only of upper case
-    letters, numbers and underscore (&uscore;) characters. 
-    The parts are returned as a list of
-    strings. The initial string <A>string</A> remains unchanged.
-  </Description>
-</ManSection>
+  <ManSection>
+  <Func Name="PolymakeDecodeProperty" Arg="keyword entry"/>
+   <Description>
+    Calls <Ref Func="PolymakeDecodeValue"/> for the polymake result
+    <A>entry</A> and then applies the conventions that depend on
+    <A>keyword</A> rather than on the type, as described above.
+   </Description>
+  </ManSection>
 
-
- <ManSection>
-  <Var Name="ObjectConverters"/> <Description> The entries of this
-    record are labeled by polymake keywords. Each of the entries is a
-    function which converts a string returned by polymake to &GAP;
-    format.  So far, only a few converters are implemented. To see
-    which, try
-     <C>RecNames(ObjectConverters);</C>
-     <Par></Par>
-      You can define new converters using the basic functions
-      described in section <Ref Sect="conversionFunctions"/>.
-     </Description>
-    </ManSection>
-
+  <ManSection>
+  <Func Name="PolymakeEncodeObject" Arg="type properties"/>
+   <Returns>String</Returns>
+   <Description>
+    The other direction: renders the record <A>properties</A> as a polymake
+    data file of polymake type <A>type</A>. Rational numbers are written as
+    strings, which is how polymake spells them, so nothing is rounded.
+   </Description>
+  </ManSection>
 
 </Section>
- 
-
-<Section Label="conversionFunctions"><Heading>Conversion Functions</Heading>
-
-  The following functions are used for the functions in
- <Ref Var="ObjectConverters"></Ref>.
-
-  <ManSection>
-  <Meth Name="ConvertPolymakeNumber" Arg="string"/>
-   <Description>
-    The string <A>string</A> is converted to a rational number. Unlike
-    <C>Rat</C>, it tests, if the number represented by <A>string</A>
-    is a floating point number an converts it correctly. If this is
-    the case, a warning is issued.
-   </Description>
-  </ManSection>
-
-  <ManSection>
-  <Meth Name="ConvertPolymakeScalarToGAP" Arg="list"/>
-   <Description>
-    If <A>list</A> contains a single string, this string is converted
-    into a number using <Ref Meth="ConvertPolymakeNumber" />.
-   </Description>
-  </ManSection>
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeMatrixOrListOfSetsToGAP" Arg="list"/>
-   <Meth Name="ConvertPolymakeMatrixOrListOfSetsToGAPPlusOne" Arg="list"/>
-    <Description>
-     Tries to decide if the list <A>list</A> of strings represents a matrix or
-     a list of sets by testing if they start with "{". It then calls either
-     <Ref Meth="ConvertPolymakeMatrixToGAP"/> or <Ref
-     Meth="ConvertPolymakeListOfSetsToGAP"/>.
-     The "PlusOne" version calls <Ref
-Meth="ConvertPolymakeListOfSetsToGAPPlusOne"/> if <A>list</A> represents a list
-of sets.
-    </Description>
-  </ManSection>
-
-  <ManSection>
-  <Meth Name="ConvertPolymakeMatrixToGAP" Arg="list"/>
-  <Meth Name="ConvertPolymakeMatrixToGAPKillOnes" Arg="list"/>
-   <Description>
-    The list <A>list</A> of strings is interpreted as a list of row
-    vectors and converted into a matrix.
-    
-    The "KillOnes" version removes the leading ones.
-   </Description>
-  </ManSection>
-
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeVectorToGAP" Arg="list"/>
-   <Meth Name="ConvertPolymakeVectorToGAPKillOne" Arg="list"/>
-   <Meth Name="ConvertPolymakeIntVectorToGAPPlusOne" Arg="list"/>
-     <Description>
-      As the corresponding "Matrix" version. Just for vectors.
-      <K>ConvertPolymakeIntVectorToGAPPlusOne</K> requires the vector to
-      contain integers. It also adds 1 to every entry.
-     </Description>
-  </ManSection>
-
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeBoolToGAP" Arg="list"/>
-     <Description>
-      If <A>list</A> contains a single string, which is either
-      0,false,1, or true this function returns <K>false</K> or
-      <K>true</K>, respectively.
-     </Description>
-  </ManSection>
-
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeSetToGAP" Arg="list"/>
-     <Description>
-
-      Let <A>list</A> be a list containing a single string, which is a
-      list of numbers separated by whitespaces and enclosed by
-      &obrace; and &cbrace; . The returned value is then a set of
-      rational numbers (in the GAP sense).
-
-    </Description> 
-  </ManSection>
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeListOfSetsToGAP" Arg="list"/>
-   <Meth Name="ConvertPolymakeListOfSetsToGAPPlusOne" Arg="list"/>
-     <Description>
-
-      Let <A>list</A> be a list containing several strings representing sets.
-      Then each of these strings is converted to a set of rational numbers and
-      the returned value is the list of all those sets.
-      The "PlusOne" version adds 1 to every entry.
-
-    </Description> 
-  </ManSection>
-
-
-  <ManSection>
-   <Meth Name="ConvertPolymakeGraphToGAP" Arg="list"/>
-     <Description>
-      Let <A>list</A> be a list of strings representing sets (that is,
-      a list of integers enclosed by &obrace; and &cbrace;). Then a record is returned
-      containing two sets named <C>.vertices</C> and <C>.edges</C>.
-    </Description> 
-  </ManSection>
-
-
- </Section>
 
 </Chapter>

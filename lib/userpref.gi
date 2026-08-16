@@ -10,7 +10,9 @@
 
 # Temporary directories are created on demand and re-created whenever they have
 # vanished, e.g. after restoring a workspace saved in an earlier session.
-BindGlobal("POLYMAKING_STATE", rec(tmpdir := fail, scratch := fail));
+BindGlobal("POLYMAKING_STATE",
+        rec(tmpdir := fail, scratch := fail,
+            version := fail, versionChecked := false));
 
 
 BindGlobal("POLYMAKING_TempDirectory", function(key)

@@ -28,15 +28,24 @@ InstallMethod(CreateEmptyFile,[IsString],
     PrintTo(name,"");
 end);
 
+# polymaking writes polymake's own JSON format, so polymake never has to convert
+# the file and never says so on stderr.
+BindGlobal("POLYMAKING_DEFAULT_TYPE", "polytope::Polytope<Rational>");
+
+InstallGlobalFunction(POLYMAKING_WriteObject, function(poly)
+    if not "input" in NamesOfComponents(poly) then
+        ErrorNoReturn("this polymake object was read from an existing file, ",
+                "so polymaking cannot add properties to it");
+    fi;
+    FileString(FullFilenameOfPolymakeObject(poly),
+            PolymakeEncodeObject(poly!.type, poly!.input));
+end);
+
 InstallMethod(InitPolymakeObject,[IsPolymakeObject],
         function(poly)
-    local appstring;
-    # In polymake 4.1 this is required.
-    appstring:=Concatenation(
-                        "_application polytope\n",
-                        "_type Polytope\n\n"
-                  );
-    AppendToPolymakeObject(poly, appstring);
+    poly!.input:=rec();
+    poly!.type:=POLYMAKING_DEFAULT_TYPE;
+    POLYMAKING_WriteObject(poly);
     return poly;
 end);
 
@@ -125,98 +134,54 @@ InstallMethod(CreatePolymakeObject,[IsDenseList],
 end);
 
 
-InstallMethod(AppendToPolymakeObject,[IsPolymakeObject,IsString,IsString],
+InstallMethod(AppendToPolymakeObject,[IsPolymakeObject,IsString,IsObject],
         function(poly,keyword,data)
-    local   string;
-    string:=ShallowCopy(keyword);
-    while string[Size(string)] in ['\n','\r','\c']
-      do
-        Unbind(string[Size(string)]);
-    od;
-    string:=Concatenation(keyword,"\n",data);
-    while string[Size(string)] in ['\n','\r','\c']
-      do
-        Unbind(string[Size(string)]);
-    od;
-    Add(string,'\n');
-    AppendToPolymakeObject(poly,string);
-end);
-
-
-InstallMethod(AppendToPolymakeObject,[IsPolymakeObject,IsString],
-        function(poly,string)
-    local   file,  retval;
-    
-    #file:=IO_File(record.filename,"w");
-    #retval:=IO_WriteFlush(file,string);
-    file:=OutputTextFile(FullFilenameOfPolymakeObject(poly),true);
-    #SetPrintFormattingStatus(file,false);
-    retval:=WriteAll(file,string);
-    if not retval
-       then
-        Error("Error writing file");
+    if not "input" in NamesOfComponents(poly) then
+        ErrorNoReturn("this polymake object was read from an existing file, ",
+                "so polymaking cannot add properties to it");
     fi;
-    CloseStream(file);
+    poly!.input.(keyword):=data;
+    POLYMAKING_WriteObject(poly);
 end);
 
 
-InstallMethod(ConvertMatrixToPolymakeString,[IsString,IsDenseList],
-        function(name,matrix)
-    local   dim,  string,  point,  stringpoint;
+BindGlobal("POLYMAKING_CheckMatrix", function(matrix)
+    local dim;
+    if IsEmpty(matrix) then
+        return;
+    fi;
     dim:=Size(matrix[1]);
-    if not ForAll(matrix,point->Size(point)=dim)
-       then
+    if not ForAll(matrix,point->Size(point)=dim) then
         Error("not all rows have the same dimension");
-    elif not ForAll(Concatenation(matrix),IsRat)
-      then
+    elif not ForAll(Concatenation(matrix),IsRat) then
         Error("matrix contains non-rational entries.");
     fi;
-    string:=ShallowCopy(name);
-    Append(string,"\n");
-    for point in matrix
-      do
-        stringpoint:=JoinStringsWithSeparator(List(point,String)," ");
-        Append(string,stringpoint);
-        Append(string,"\n");
-    od;
-    Append(string,"\n");
-    return string;    
 end);
 
-# Now a few functions for convenience:
+# polymake wants points in homogeneous coordinates
+BindGlobal("POLYMAKING_Homogenize",
+        matrix -> List(matrix, p -> Concatenation([1],p)));
+
 
 InstallMethod(AppendPointlistToPolymakeObject,[IsPolymakeObject,IsDenseList],
         function(polygon,pointlist)
-    local   list,  point,string;
-    list:=[];
-    for point in pointlist
-      do
-        Add(list,Concatenation([1],point));
-    od;
-    string:=ConvertMatrixToPolymakeString("POINTS",list);
-    AppendToPolymakeObject(polygon,string);
+    POLYMAKING_CheckMatrix(pointlist);
+    AppendToPolymakeObject(polygon,"POINTS",POLYMAKING_Homogenize(pointlist));
 end);
 
 
 InstallMethod(AppendVertexlistToPolymakeObject,[IsPolymakeObject,IsDenseList],
         function(polygon,pointlist)
-    local   list,  point,string;
-    list:=[];
-    for point in pointlist
-      do
-        Add(list,Concatenation([1],point));
-    od;
-    string:= ConvertMatrixToPolymakeString("VERTICES",list);
-    AppendToPolymakeObject(polygon,string);
+    POLYMAKING_CheckMatrix(pointlist);
+    AppendToPolymakeObject(polygon,"VERTICES",POLYMAKING_Homogenize(pointlist));
 end);
 
 
 InstallMethod(AppendInequalitiesToPolymakeObject,[IsPolymakeObject,IsDenseList],
         function(polygon,ineqlist)
-    
-    AppendToPolymakeObject(polygon,ConvertMatrixToPolymakeString("INEQUALITIES",ineqlist));
+    POLYMAKING_CheckMatrix(ineqlist);
+    AppendToPolymakeObject(polygon,"INEQUALITIES",ineqlist);
 end);
-
 
 
 ##############################
@@ -226,151 +191,129 @@ end);
 # this by looking at the file associated to <polygon>).
 #
 
+# polymake 4 spells nested properties with a dot. Keep the short names the
+# pre-0.9 interface used; note DIMS is gone, polymake 4 cannot compute it from a
+# polytope's Hasse diagram.
+BindGlobal("POLYMAKING_ALIASES", MakeImmutable(rec(
+    FACES     := "HASSE_DIAGRAM.FACES",
+    ADJACENCY := "HASSE_DIAGRAM.ADJACENCY",
+    GRAPH     := "GRAPH.ADJACENCY"
+)));
+
+BindGlobal("POLYMAKING_Keyword", function(kw)
+    if IsBound(POLYMAKING_ALIASES.(kw)) then
+        return POLYMAKING_ALIASES.(kw);
+    fi;
+    return kw;
+end);
+
+# GRAPH is documented to come back as a record of vertices and edges, but
+# polymake gives us adjacency lists.
+BindGlobal("POLYMAKING_POSTPROCESS", MakeImmutable(rec(
+    GRAPH := function(adj)
+        local i, j, edges;
+        edges := [];
+        for i in [1..Length(adj)] do
+            for j in adj[i] do
+                AddSet(edges, Set([i,j]));
+            od;
+        od;
+        return rec(vertices := [1..Length(adj)], edges := edges);
+    end
+)));
+
+
 InstallMethod(Polymake,"for PolymakeObject",[IsPolymakeObject,IsString],
         function(polygon,option)
-    local   callPolymake,  gapobject,  splitoption,  knownProperties,  
-            returnval,  returnedstring,  block;
-    
-    callPolymake:=function(object,splitoption)
-        local   returnedstring,  scriptarg,  errfile,  p,  stdout,  stdin,  
-                dir,  cmd,  exitstatus;
-        
-        returnedstring:=[];
-        errfile:=POLYMAKING_ScratchFile("stderr.txt");
-        RemoveFile(errfile);
-        scriptarg:=["--config-path",
-                    UserPreference("polymaking","PolymakeConfigPath"),
-                    "--script",
-                    Filename(DirectoriesPackageLibrary("polymaking"), "pm_script_arg.pl"),
-                    "--stderr", errfile];
-        if UserPreference("polymaking","PolymakeQuiet")=true
-           then
-            Add(scriptarg,"--quiet");
-        fi;
-        for p in UserPreference("polymaking","PolymakePreferences")
-          do
-            Append(scriptarg,["--prefer",p]);
-        od;
-        Add(scriptarg,"--");
-        stdout:=OutputTextString(returnedstring,false);
-        stdin:=InputTextNone();;
-        dir:=DirectoryOfPolymakeObject(object);
-        if dir=fail 
+    local   keywords,  known,  lookup,  wanted,  dir,  r,  kw,  ask,  val,  
+            returnval,  failed;
+
+    POLYMAKING_CheckVersion();
+
+    keywords:=Filtered(SplitString(NormalizedWhitespace(option)," "), x->x<>"");
+    if IsEmpty(keywords)
+       then
+        Error("you must pass an option to polymake");
+    fi;
+
+    known:=NamesKnownPropertiesOfPolymakeObject(polygon);
+    lookup:=ValueOption("PolymakeNolookup") in [fail,false] and known<>fail;
+
+    wanted:=keywords;
+    if lookup
+       then
+        wanted:=Filtered(keywords, kw -> not kw in known);
+    fi;
+
+    if not IsEmpty(wanted)
+       then
+        dir:=DirectoryOfPolymakeObject(polygon);
+        if dir=fail
            then
             dir:=DirectoryCurrent();
         fi;
-        cmd:=PolymakeCommand();
-        if cmd=fail
-           then
-            UpdatePolymakeFailReason("no usable polymake executable configured");
-            ErrorNoReturn("polymake not found; set it via SetUserPreference(",
-                    "\"polymaking\", \"PolymakeCommand\", <path>)");
-        fi;
-        exitstatus:=Process( dir, cmd, stdin, stdout, 
-                            Concatenation(scriptarg, [FullFilenameOfPolymakeObject(object)],
-                                     splitoption)
-                            );;
-        CloseStream(stdout);
-        CloseStream(stdin);
-        errfile:=StringFile(errfile);
-        if errfile=fail
-           then
-            errfile:="";
-        fi;
-        if errfile<>"" and exitstatus=0
-           then
-            Info(InfoPolymaking,2,Chomp(errfile));
-        fi;
-        return rec(status:=exitstatus,string:=returnedstring,stderr:=errfile);
-    end;
+        ask:=List(wanted, kw -> POLYMAKING_Keyword(kw));
+        r:=POLYMAKING_Run(dir, Concatenation([FullFilenameOfPolymakeObject(polygon)], ask));
 
-    gapobject:=[];
-    option:=NormalizedWhitespace(option);
-    splitoption:=SplitString(option," ");
-    knownProperties:=NamesKnownPropertiesOfPolymakeObject(polygon);
-    returnval:=[];
-
-    Info(InfoPolymaking,2,"option=",option);
-    Info(InfoPolymaking,2,"Size(splitoption)=",Size(splitoption));
-    if Size(splitoption)=0
-      then
-        Error("you must pass an option to polymake");
-        
-    elif Size(splitoption)=1
-      then
-        if ValueOption("PolymakeNolookup") in [fail,false]
-           and knownProperties<>fail
-           and splitoption[1] in knownProperties
+        if r.result=fail
            then
-            returnval:=PropertyOfPolymakeObject(polygon,splitoption[1]);
-        else
-            Apply(splitoption, MapKeyWordToPolymakeFormat);
-            returnedstring:=callPolymake(polygon,splitoption);
-            Info(InfoPolymaking,2,String(returnedstring));
-            if returnedstring.status <>0
+            UpdatePolymakeFailReason(Concatenation(
+                    "polymake terminated with exit status ",String(r.status),
+                    "\n",r.stderr));
+            Error("polymake returned an error (error code ", r.status, ")\n", r.stderr);
+        fi;
+        if IsBound(r.result.fatal)
+           then
+            UpdatePolymakeFailReason(r.result.fatal);
+            Error("polymake could not read ",
+                    FullFilenameOfPolymakeObject(polygon),":\n",r.result.fatal);
+        fi;
+
+        failed:=[];
+        for kw in wanted
+          do
+            if IsBound(r.result.values.(POLYMAKING_Keyword(kw)))
                then
-                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",
-                        String(returnedstring.status),"\n",returnedstring.stderr));
-                returnval:=fail;
-                Error("polymake returned an error (error code ", returnedstring.status,
-                        ")\n", returnedstring.stderr);
-            elif returnedstring.string<>[]
-               then
-                Info(InfoPolymaking,2,returnedstring.string);
-                gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
-                if gapobject[1].object<>fail
+                val:=PolymakeDecodeProperty(kw,
+                             r.result.values.(POLYMAKING_Keyword(kw)));
+                if IsBound(POLYMAKING_POSTPROCESS.(kw))
                    then
-                    WriteKnownPropertyToPolymakeObject(polygon,gapobject[1].name,gapobject[1].object);
-                    returnval:=gapobject[1].object;
-                else
-                    returnval:=fail;
+                    val:=POLYMAKING_POSTPROCESS.(kw)(val);
                 fi;
+                WriteKnownPropertyToPolymakeObject(polygon,kw,val);
             else
-                UpdatePolymakeFailReason("polymake did not return anything");
-                returnval:=fail;
+                Add(failed,kw);
             fi;
+        od;
+        if not IsEmpty(failed)
+           then
+            UpdatePolymakeFailReason(Concatenation(
+                    "polymake could not compute ",
+                    JoinStringsWithSeparator(failed,", "),":\n",
+                    JoinStringsWithSeparator(
+                            List(failed, kw -> Concatenation(kw,": ",
+                                    r.result.errors.(POLYMAKING_Keyword(kw)))),
+                            "")));
         fi;
-        
+    fi;
+
+    # as before: a single keyword returns its value, several always return fail
+    if Size(keywords)>1
+       then
+        if IsEmpty(wanted)
+           then
+            UpdatePolymakeFailReason(
+                    "polymake called with multiple keywords");
+        fi;
+        return fail;
+    fi;
+
+    known:=NamesKnownPropertiesOfPolymakeObject(polygon);
+    if known<>fail and keywords[1] in known
+       then
+        returnval:=PropertyOfPolymakeObject(polygon,keywords[1]);
     else
-        # we return fail, whatever happens.
-        ## only the reason may change...
-        ###
         returnval:=fail;
-        UpdatePolymakeFailReason("polymake called with multiple keywords");
-        if ValueOption("PolymakeNolookup") in [fail,false]
-           and knownProperties<>fail
-           then
-            splitoption:=Filtered(splitoption,i->not i in knownProperties);
-        fi;
-        if Size(splitoption)>0
-           then
-            Apply(splitoption, MapKeyWordToPolymakeFormat);
-            returnedstring:=callPolymake(polygon,splitoption);
-            if returnedstring.status <>0
-               then
-                UpdatePolymakeFailReason(Concatenation("polymake terminated with exit status ",
-                        String(returnedstring.status),"\n",returnedstring.stderr));
-                Error("polymake returned an error (error code ", returnedstring.status,
-                        ")\n", returnedstring.stderr);
-            elif returnedstring.string<>[]
-              then
-                Info(InfoPolymaking,2,returnedstring.string);
-                gapobject:=ConvertPolymakeOutputToGapNotation(returnedstring.string);
-                
-                for block in Filtered(gapobject,i->i.object<>fail)
-                  do
-                    WriteKnownPropertyToPolymakeObject(polygon,block.name,block.object);
-                od;
-            else
-                UpdatePolymakeFailReason("polymake didn't return anything. All keywords that would have triggered output were looked up.");
-            fi;
-            
-        fi;
-     fi;
-     return returnval;
+    fi;
+    return returnval;
 end);
-
-
-        
-
-    

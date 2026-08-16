@@ -36,10 +36,9 @@ DeclareOperation("CreatePolymakeObject",[IsDirectory,IsDenseList]);
 DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory]);
 DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory,IsDenseList]);
 
-DeclareOperation("ConvertMatrixToPolymakeString",[IsString,IsDenseList]);
 
-DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString]);
-DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString,IsString]);
+DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString,IsObject]);
+DeclareGlobalFunction("POLYMAKING_WriteObject");
 DeclareOperation("AppendPointlistToPolymakeObject",[IsPolymakeObject,IsDenseList]);
 DeclareOperation("AppendVertexlistToPolymakeObject",[IsPolymakeObject,IsDenseList]);
 DeclareOperation("AppendInequalitiesToPolymakeObject",[IsPolymakeObject,IsDenseList]);

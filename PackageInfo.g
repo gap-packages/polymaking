@@ -51,7 +51,7 @@ PackageDoc := rec(
 
 Dependencies := rec(
   GAP := ">=4.8",
-  NeededOtherPackages := [],
+  NeededOtherPackages := [ [ "json", ">= 2.0.0" ] ],
   SuggestedOtherPackages := [],
   NeededSystemPackages := rec( Ubuntu := [["polymake"]] ),
   ExternalConditions := [["polymake must be installed", "https://www.polymake.org"]]

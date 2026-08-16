@@ -165,27 +165,28 @@ end);
 InstallMethod(ClearPolymakeObject,
         [IsPolymakeObject],
         function(poly)
-    CreateEmptyFile(FullFilenameOfPolymakeObject(poly));
     Unbind(poly!.knownProperties);
+    InitPolymakeObject(poly);
 end);
 
-# clear known data. Clear file and then set application, version,type 
-# information
+# clear known data, then set the polymake type. The three element form takes the
+# [application, version, type] list the pre-0.9 interface used; polymake 4 has
+# no use for the version, and wants the type qualified by the application.
 InstallMethod(ClearPolymakeObject,
         [IsPolymakeObject,IsDenseList],
         function(poly,appvertyp)
-    local   appendstring;
-    if not CheckAppVerTypList(appvertyp)
-       then
+    local type;
+    if IsString(appvertyp) then
+        type:=appvertyp;
+    elif CheckAppVerTypList(appvertyp) then
+        type:=Concatenation(appvertyp[1],"::",appvertyp[3]);
+    else
         Error("application, version, type not well-formed");
     fi;
-    CreateEmptyFile(FullFilenameOfPolymakeObject(poly));
     Unbind(poly!.knownProperties);
-    appendstring:=Concatenation(["_application ",appvertyp[1],"\n",
-                          "_version ",appvertyp[2],"\n",
-                          "_type ",appvertyp[3],"\n"]
-                          );
-    AppendToPolymakeObject(poly,appendstring);
+    poly!.input:=rec();
+    poly!.type:=type;
+    POLYMAKING_WriteObject(poly);
 end);
 
 # Deleting a something known:

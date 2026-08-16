@@ -1,5 +1,25 @@
 0.9.0 (unreleased)
 
+- polymake 4.0 or newer is now required, and the GAP package json is a new
+  dependency. polymaking now writes and reads polymake's own JSON data format
+  instead of the pre-4 plain format, which means polymake no longer converts
+  the files and no longer says so (issue #22)
+- nested polymake properties can be named directly, e.g.
+  `Polymake(poly, "HASSE_DIAGRAM.FACES")`
+- `Polymake(poly, "GRAPH")` works again; it used to fail with
+  `POSITION_SUBSTRING: <string> must be a string`
+- when several keywords are given, they are now evaluated independently, so one
+  failing no longer discards the others
+- `MINIMAL_VERTEX_ANGLE` and other floating point properties now return a
+  proper GAP float instead of a rational approximation
+- values decoded from polymake are chosen by polymake's own type rather than by
+  a per-keyword table, so properties polymaking has never heard of are decoded
+  correctly too. `ObjectConverters` and the `ConvertPolymake...` functions are
+  gone, as is `ConvertMatrixToPolymakeString`
+- `AppendToPolymakeObject(poly, name, value)` now takes a GAP value; it used to
+  take a string to append to the file verbatim
+- polymaking will not write to a file it did not create
+
 - polymaking is now configured via the GAP user preferences `PolymakeCommand`
   and `PolymakeDataDirectory` (issues #16, #19)
 - the data directory is determined lazily and re-created when it has vanished,
