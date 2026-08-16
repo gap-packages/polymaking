@@ -101,7 +101,7 @@ gap> Collected(List(adj, Length));
   [ 7, 1 ], [ 9, 1 ] ]
 gap> Polymake(poly,"FACET_DEGREES");
 [ 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3 ]
-gap> Set(Polymake(poly,"FACETS"), NormalizeRow);
+gap> Set(List(Polymake(poly,"FACETS"), NormalizeRow));
 [ [ -2303641863, 164204234285, 12897123192, -3359875640 ], 
   [ -1580061339, 1195816838, 93208905900, 843077785 ], 
   [ -519350247, 28577972485, 5781969216, -256601080 ], 
