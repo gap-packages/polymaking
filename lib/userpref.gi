@@ -20,7 +20,7 @@ BindGlobal("POLYMAKING_LEGACY_SET",
 # Temporary directories are created on demand and re-created whenever they have
 # vanished, e.g. after restoring a workspace saved in an earlier session.
 BindGlobal("POLYMAKING_STATE",
-        rec(tmpdir := fail, scratch := fail,
+        rec(tmpdir := fail, scratch := fail, server := fail,
             version := fail, versionChecked := false));
 
 
@@ -210,4 +210,22 @@ Each entry is passed to polymake's <C>prefer_now</C>. This works even when
 """],
   default := [],
   check := x -> IsList(x) and ForAll(x, IsString)
+));
+
+
+DeclareUserPreference(rec(
+  package := "polymaking",
+  name := "PolymakePersistent",
+  description := [
+"""controls whether one polymake process serves the whole &GAP; session.
+
+Starting polymake costs the best part of a second, nearly all of it spent
+loading the rules of an application, so keeping one process alive makes any
+session that calls polymake more than once considerably faster. Set this to
+<K>false</K> to start polymake afresh for every call, which is slower but keeps
+each call fully independent.
+"""],
+  default := true,
+  values := [ true, false ],
+  multi := false
 ));

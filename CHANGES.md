@@ -1,5 +1,10 @@
 0.9.0 (unreleased)
 
+- one polymake process now serves the whole GAP session instead of a fresh one
+  being started for every call, which makes a session of 40 calls about ten
+  times faster. Set the new `PolymakePersistent` preference to `false` for the
+  old behaviour.
+
 - polymake 4.0 or newer is now required, and the GAP package json is a new
   dependency; json needs GAP 4.12, so that is now polymaking's minimum too. polymaking now writes and reads polymake's own JSON data format
   instead of the pre-4 plain format, which means polymake no longer converts
