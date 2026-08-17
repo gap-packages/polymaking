@@ -119,6 +119,17 @@ BindGlobal("POLYMAKING_StopServer", function()
 end);
 
 
+# The settings baked into a running polymake: its config path and quiet flag are
+# fixed when it starts, and rule preferences cannot be withdrawn once applied.
+# Changing any of them means starting again.
+BindGlobal("POLYMAKING_ServerSettings", function()
+    return [ PolymakeCommand(),
+             UserPreference("polymaking", "PolymakeConfigPath"),
+             UserPreference("polymaking", "PolymakeQuiet"),
+             UserPreference("polymaking", "PolymakePreferences") ];
+end);
+
+
 BindGlobal("POLYMAKING_StartServer", function()
     local cmd, stream, prelude;
 
@@ -147,6 +158,7 @@ BindGlobal("POLYMAKING_StartServer", function()
         return fail;
     fi;
     POLYMAKING_STATE.server := stream;
+    POLYMAKING_STATE.serverSettings := POLYMAKING_ServerSettings();
     return stream;
 end);
 
@@ -179,6 +191,7 @@ BindGlobal("POLYMAKING_RunServer", function(objfile, keywords, resfile)
 
     call := Concatenation(
         "polymaking_eval(", POLYMAKING_PerlString(resfile), ", ",
+        POLYMAKING_PerlString(POLYMAKING_ScratchFile("stderr.txt")), ", ",
         POLYMAKING_PerlString(objfile), ", ",
         POLYMAKING_PerlList(UserPreference("polymaking", "PolymakePreferences")),
         Concatenation(List(keywords, k -> Concatenation(", ", POLYMAKING_PerlString(k)))),
@@ -187,6 +200,11 @@ BindGlobal("POLYMAKING_RunServer", function(objfile, keywords, resfile)
     # one retry, in case polymake died or was closed since the last call. Talking
     # to a closed stream raises an error rather than returning fail, so the whole
     # exchange goes through CALL_WITH_CATCH.
+    if POLYMAKING_STATE.server <> fail
+       and POLYMAKING_STATE.serverSettings <> POLYMAKING_ServerSettings() then
+        POLYMAKING_StopServer();
+    fi;
+
     for try in [1, 2] do
         stream := POLYMAKING_STATE.server;
         if stream <> fail and IsClosedStream(stream) then

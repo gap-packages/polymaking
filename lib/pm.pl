@@ -30,8 +30,13 @@ sub polymaking_setup {
 my %polymaking_applied;
 
 sub polymaking_eval {
-  my ($out, $file, $prefer, @keywords) = @_;
+  my ($out, $errfile, $file, $prefer, @keywords) = @_;
   my %r = (version => "$Polymake::Version", values => {}, errors => {});
+
+  # Reopen rather than rely on the handle from polymaking_setup: the caller
+  # starts each call from a clean file, and a persistent process would otherwise
+  # go on writing to the old, unlinked one.
+  polymaking_setup($errfile, 0) if defined($errfile) && length($errfile);
 
   if (defined($file) && length($file)) {
     my $obj = eval { Polymake::User::load($file) };
@@ -84,7 +89,7 @@ if (@ARGV) {
   my $out  = shift(@ARGV);
   my $file = shift(@ARGV);
   $file = undef if defined($file) && $file eq '--version';
-  polymaking_eval($out, $file, \@prefer, @ARGV);
+  polymaking_eval($out, undef, $file, \@prefer, @ARGV);
 }
 
 1;

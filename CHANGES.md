@@ -3,7 +3,9 @@
 - one polymake process now serves the whole GAP session instead of a fresh one
   being started for every call, which makes a session of 40 calls about ten
   times faster. Set the new `PolymakePersistent` preference to `false` for the
-  old behaviour.
+  old behaviour. Note that polymake announces the third party software it uses
+  once per session, so those messages now appear once rather than once per
+  call.
 
 - polymake 4.0 or newer is now required, and the GAP package json is a new
   dependency; json needs GAP 4.12, so that is now polymaking's minimum too. polymaking now writes and reads polymake's own JSON data format

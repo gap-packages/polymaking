@@ -20,7 +20,8 @@ BindGlobal("POLYMAKING_LEGACY_SET",
 # Temporary directories are created on demand and re-created whenever they have
 # vanished, e.g. after restoring a workspace saved in an earlier session.
 BindGlobal("POLYMAKING_STATE",
-        rec(tmpdir := fail, scratch := fail, server := fail,
+        rec(tmpdir := fail, scratch := fail,
+            server := fail, serverSettings := fail,
             version := fail, versionChecked := false));
 
 
@@ -174,6 +175,9 @@ and are usually just noise, so they are turned off by default. Set this to
 Independently of this, everything polymake writes to standard error is shown at
 <K>InfoPolymaking</K> level 2, and is included in the error message and in
 <K>POLYMAKE&uscore;LAST&uscore;FAIL&uscore;REASON</K> when a call fails.
+<P/>
+polymake reports a credit once per session rather than once per call, so with
+<C>PolymakePersistent</C> set, which is the default, each is seen once.
 """],
   default := true,
   values := [ true, false ],
