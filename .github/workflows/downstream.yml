@@ -1,0 +1,76 @@
+name: Downstream
+
+# hap and hapcryst both need polymaking, and neither pins an upper bound, so a
+# change here reaches their released versions unchanged. Run their test suites
+# against this checkout to find that out now rather than after a release.
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+  # they are slow, so also run nightly to catch breakage from their side
+  schedule:
+    - cron: '0 4 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref_name != github.event.repository.default_branch || github.run_number }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  downstream:
+    name: ${{ matrix.pkg }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        pkg:
+          - 'hapcryst'   # drives polymaking hardest
+          - 'hap'
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gap-actions/setup-gap@v3
+      - uses: gap-actions/install-pkg@v1
+        with:
+          packages: ${{ matrix.pkg }}
+      - uses: gap-actions/build-pkg@v3
+
+      # Without this the job could pass while testing against the polymaking
+      # that ships with GAP, which would tell us nothing.
+      - name: "Check that ${{ matrix.pkg }} loads this polymaking"
+        run: |
+          cat > check.g <<'EOF'
+          if LoadPackage("${{ matrix.pkg }}") = fail then
+              Print("FAILED to load ${{ matrix.pkg }}\n");
+              FORCE_QUIT_GAP(1);
+          fi;
+          here := Filename(DirectoriesPackageLibrary("polymaking", "")[1], "");;
+          want := Concatenation(GAPInfo.SystemEnvironment.GITHUB_WORKSPACE, "/");;
+          Print("polymaking ", GAPInfo.PackagesInfo.polymaking[1].Version,
+                " loaded from ", here, "\n");
+          if here <> want then
+              Print("expected the checkout at ", want, "\n");
+              FORCE_QUIT_GAP(1);
+          fi;
+          FORCE_QUIT_GAP(0);
+          EOF
+          gap -A -q -b check.g
+
+      - name: "Run ${{ matrix.pkg }}'s test suite"
+        run: |
+          cat > runtests.g <<'EOF'
+          # whatever the package itself considers its test suite
+          LoadPackage("${{ matrix.pkg }}");;
+          info := First(GAPInfo.PackagesInfo.("${{ matrix.pkg }}"),
+                        r -> IsBound(r.TestFile));;
+          if info = fail then
+              Print("${{ matrix.pkg }} declares no TestFile\n");
+              FORCE_QUIT_GAP(1);
+          fi;
+          Print("running ", info.TestFile, "\n");
+          Read(Filename(Directory(info.InstallationPath), info.TestFile));
+          EOF
+          gap -A -q -b runtests.g
