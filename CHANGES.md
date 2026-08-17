@@ -17,7 +17,10 @@
   correctly too. `ObjectConverters` and the `ConvertPolymake...` functions are
   gone, as is `ConvertMatrixToPolymakeString`
 - `AppendToPolymakeObject(poly, name, value)` now takes a GAP value; it used to
-  take a string to append to the file verbatim
+  take a string to append to the file verbatim. The two argument form and
+  `ConvertMatrixToPolymakeString` still work together as before and are
+  deprecated: the latter now hands the section to the former as a record rather
+  than as a string, so code composing the two is unaffected
 - polymaking will not write to a file it did not create
 
 - polymaking is now configured via the GAP user preferences `PolymakeCommand`
@@ -42,8 +45,9 @@
   and no longer rewrites `tst/pplane.poly` in place while running (issue #18).
   Set `POLYMAKING_CHULL` to test a specific backend, e.g.
   `POLYMAKING_CHULL=cdd gap tst/testall.g`.
-- the globals `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` are no longer set by
-  the package; if you set them yourself they are still honoured
+- the globals `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` are deprecated. They
+  are still set, and still honoured if you set them before loading polymaking,
+  but the preferences above are the ones to use
 
 ------------------
 0.8.9 (2026-04-08)

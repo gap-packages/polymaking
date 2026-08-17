@@ -24,9 +24,16 @@
 ##
 SetInfoLevel(InfoPolymaking,1);
 
-BindGlobal("POLYMAKING_InfoDeprecated", function(name, replacement)
-    Info(InfoObsolete, 1, "`", name, "` is deprecated, use ", replacement,
+# level 2 for shims that exist purely so that code written against polymaking
+# 0.8 keeps running unchanged: warning by default would make their output, and
+# so their test suites, differ.
+BindGlobal("POLYMAKING_InfoDeprecatedAt", function(level, name, replacement)
+    Info(InfoObsolete, level, "`", name, "` is deprecated, use ", replacement,
          " instead.");
+end);
+
+BindGlobal("POLYMAKING_InfoDeprecated", function(name, replacement)
+    POLYMAKING_InfoDeprecatedAt(1, name, replacement);
 end);
 
 
@@ -131,6 +138,34 @@ InstallGlobalFunction(POLYMAKING_CheckVersion, function()
     fi;
     POLYMAKING_STATE.versionChecked := true;
 end);
+
+
+##
+## Keep POLYMAKE_COMMAND and POLYMAKE_DATA_DIR in existence for packages that
+## still read them, hap and hapcryst among them. They are plain assignments
+## rather than BindGlobal, so that the post restore hook can refresh them.
+##
+BindGlobal("POLYMAKING_Rebind", function(name, value)
+    if IsBoundGlobal(name) then
+        MakeReadWriteGlobal(name);
+        UnbindGlobal(name);
+    fi;
+    BindGlobal(name, value);
+end);
+
+InstallGlobalFunction(POLYMAKING_UpdateLegacyGlobals, function()
+    if not POLYMAKING_LEGACY_SET.command then
+        POLYMAKING_Rebind("POLYMAKE_COMMAND", PolymakeCommand());
+    fi;
+    if not POLYMAKING_LEGACY_SET.dataDir then
+        POLYMAKING_Rebind("POLYMAKE_DATA_DIR", PolymakeDataDirectory());
+    fi;
+end);
+
+POLYMAKING_UpdateLegacyGlobals();
+
+# the data directory a restored workspace names is gone, see issue #17
+CallAndInstallPostRestore(POLYMAKING_UpdateLegacyGlobals);
 
 
 if PolymakeCommand() = fail then

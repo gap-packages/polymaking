@@ -38,6 +38,13 @@ DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory,IsDenseList]);
 
 
 DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString,IsObject]);
+
+##
+## deprecated, for code written against polymaking 0.8
+##
+DeclareOperation("ConvertMatrixToPolymakeString",[IsString,IsDenseList]);
+DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsRecord]);
+DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString]);
 DeclareGlobalFunction("POLYMAKING_WriteObject");
 DeclareOperation("AppendPointlistToPolymakeObject",[IsPolymakeObject,IsDenseList]);
 DeclareOperation("AppendVertexlistToPolymakeObject",[IsPolymakeObject,IsDenseList]);

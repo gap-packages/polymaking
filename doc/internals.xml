@@ -27,9 +27,10 @@ output</Heading>
 
   Up to version 0.8.9 the polymake command and the directory for polymake
   files were held in the global variables <K>POLYMAKE&uscore;COMMAND</K> and
-  <K>POLYMAKE&uscore;DATA&uscore;DIR</K>. These are deprecated; they are still
-  honoured if you bind them yourself, but the package no longer sets them and
-  warns at load time if it finds them. Use the user preferences
+  <K>POLYMAKE&uscore;DATA&uscore;DIR</K>. These are deprecated. They are still
+  provided, and still honoured if you bind them before loading
+  <Package>polymaking</Package>, in which case a warning is issued at load
+  time. Use the user preferences
   <C>PolymakeCommand</C> and <C>PolymakeDataDirectory</C> instead, see
   <Ref Sect="chap:varsetters"/>, and <Ref Func="PolymakeCommand"/> and
   <Ref Func="PolymakeDataDirectory"/> to query the effective values.

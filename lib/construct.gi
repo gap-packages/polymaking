@@ -163,6 +163,38 @@ BindGlobal("POLYMAKING_Homogenize",
         matrix -> List(matrix, p -> Concatenation([1],p)));
 
 
+##
+## polymaking 0.8 built a plain format section as a string and appended it
+## verbatim. There is no verbatim appending to a JSON file, so the pair now
+## passes the section along as a record instead; composed as before, the two
+## still do what they always did.
+##
+InstallMethod(ConvertMatrixToPolymakeString,[IsString,IsDenseList],
+        function(name,matrix)
+    POLYMAKING_InfoDeprecatedAt(2, "ConvertMatrixToPolymakeString",
+        "AppendToPolymakeObject(poly, name, matrix)");
+    POLYMAKING_CheckMatrix(matrix);
+    return rec(polymakeSection:=name, polymakeData:=matrix);
+end);
+
+
+InstallMethod(AppendToPolymakeObject,[IsPolymakeObject,IsRecord],
+        function(poly,section)
+    if not (IsBound(section.polymakeSection) and IsBound(section.polymakeData))
+       then
+        ErrorNoReturn("<section> must come from ConvertMatrixToPolymakeString");
+    fi;
+    AppendToPolymakeObject(poly,section.polymakeSection,section.polymakeData);
+end);
+
+
+InstallMethod(AppendToPolymakeObject,[IsPolymakeObject,IsString],
+        function(poly,string)
+    ErrorNoReturn("cannot append a string, use ",
+            "AppendToPolymakeObject(poly, name, value)");
+end);
+
+
 InstallMethod(AppendPointlistToPolymakeObject,[IsPolymakeObject,IsDenseList],
         function(polygon,pointlist)
     POLYMAKING_CheckMatrix(pointlist);

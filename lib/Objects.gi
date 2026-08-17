@@ -169,9 +169,20 @@ InstallMethod(ClearPolymakeObject,
     InitPolymakeObject(poly);
 end);
 
+# The polymake 2.3 era type names the pre-0.9 interface accepted, and what they
+# are called in polymake 4.
+BindGlobal("POLYMAKING_LEGACY_TYPES", MakeImmutable(rec(
+    Polytope           := "polytope::Polytope<Rational>",
+    RationalPolytope   := "polytope::Polytope<Rational>",
+    FloatPolytope      := "polytope::Polytope<Float>",
+    SchlegelDiagram    := "polytope::SchlegelDiagram<Rational>",
+    VoronoiDiagram     := "polytope::VoronoiPolyhedron<Rational>",
+    PropagatedPolytope := "polytope::PropagatedPolytope<Rational>",
+    SimplicialComplex  := "topaz::SimplicialComplex" )));
+
 # clear known data, then set the polymake type. The three element form takes the
 # [application, version, type] list the pre-0.9 interface used; polymake 4 has
-# no use for the version, and wants the type qualified by the application.
+# no use for the version, and names several of the types differently.
 InstallMethod(ClearPolymakeObject,
         [IsPolymakeObject,IsDenseList],
         function(poly,appvertyp)
@@ -179,7 +190,12 @@ InstallMethod(ClearPolymakeObject,
     if IsString(appvertyp) then
         type:=appvertyp;
     elif CheckAppVerTypList(appvertyp) then
-        type:=Concatenation(appvertyp[1],"::",appvertyp[3]);
+        type:=NormalizedWhitespace(appvertyp[3]);
+        if IsBound(POLYMAKING_LEGACY_TYPES.(type)) then
+            type:=POLYMAKING_LEGACY_TYPES.(type);
+        else
+            type:=Concatenation(NormalizedWhitespace(appvertyp[1]),"::",type);
+        fi;
     else
         Error("application, version, type not well-formed");
     fi;
