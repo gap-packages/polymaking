@@ -39,7 +39,11 @@ jobs:
       - uses: gap-actions/install-pkg@v1
         with:
           packages: ${{ matrix.deps }}
+      # nq and friends ship programs that have to be compiled; install-pkg only
+      # unpacks them, and they are not in our own PackageInfo.g
       - uses: gap-actions/build-pkg@v3
+        with:
+          extra-pkgs: ${{ matrix.deps }}
 
       # Without this the job could pass while testing against the polymaking
       # that ships with GAP, which would tell us nothing.
