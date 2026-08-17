@@ -25,7 +25,9 @@ sub polymaking_setup {
   }
 }
 
-our %polymaking_applied;
+# lexical, not a package variable: under --script polymake compiles this with
+# its own namespace pragma, which rejects `our`.
+my %polymaking_applied;
 
 sub polymaking_eval {
   my ($out, $file, $prefer, @keywords) = @_;

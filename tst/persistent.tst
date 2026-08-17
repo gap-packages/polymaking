@@ -14,6 +14,23 @@ gap> for persist in [true, false] do
 gap> results[1] = results[2];
 true
 
+# rule preferences reach polymake in both modes. polymake compiles the helper
+# script differently under --script than when the persistent process reads it,
+# so this needs exercising both ways.
+gap> oldprefs := UserPreference("polymaking", "PolymakePreferences");;
+gap> SetUserPreference("polymaking", "PolymakePreferences",
+>                      ["*.convex_hull beneath_beyond"]);;
+gap> prefres := [];;
+gap> for persist in [true, false] do
+>      SetUserPreference("polymaking", "PolymakePersistent", persist);
+>      POLYMAKING_StopServer();
+>      Add(prefres, Polymake(p, "N_VERTICES" : PolymakeNolookup));
+>    od;
+gap> prefres;
+[ 4, 4 ]
+gap> SetUserPreference("polymaking", "PolymakePreferences", oldprefs);;
+gap> POLYMAKING_StopServer();
+
 # a server is started on demand, and only when asked for
 gap> SetUserPreference("polymaking", "PolymakePersistent", false);;
 gap> POLYMAKING_StopServer();
