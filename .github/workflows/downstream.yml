@@ -45,8 +45,9 @@ jobs:
         with:
           extra-pkgs: ${{ matrix.deps }}
 
-      # Without this the job could pass while testing against the polymaking
-      # that ships with GAP, which would tell us nothing.
+      # Without this the job could pass while testing the polymaking that ships
+      # with GAP, which would tell us nothing. setup-gap stages the checkout
+      # elsewhere than GITHUB_WORKSPACE, so compare contents rather than paths.
       - name: "Check that ${{ matrix.pkg }} loads this polymaking"
         run: |
           cat > check.g <<'EOF'
@@ -57,17 +58,17 @@ jobs:
               LoadPackage("${{ matrix.pkg }}");;
               FORCE_QUIT_GAP(1);
           fi;
-          here := Filename(DirectoriesPackageLibrary("polymaking", "")[1], "");;
-          want := Concatenation(GAPInfo.SystemEnvironment.GITHUB_WORKSPACE, "/");;
-          Print("polymaking ", GAPInfo.PackagesInfo.polymaking[1].Version,
-                " loaded from ", here, "\n");
-          if here <> want then
-              Print("expected the checkout at ", want, "\n");
-              FORCE_QUIT_GAP(1);
-          fi;
+          PrintTo("loaded-from.txt", GAPInfo.PackagesInfo.polymaking[1].InstallationPath);
           FORCE_QUIT_GAP(0);
           EOF
           gap -A -q -b check.g
+          loaded=$(cat loaded-from.txt)
+          echo "polymaking loaded from ${loaded}"
+          if ! diff -q "${loaded}/PackageInfo.g" "${GITHUB_WORKSPACE}/PackageInfo.g" >/dev/null; then
+            echo "::error::${{ matrix.pkg }} loaded a different polymaking than the one under test"
+            exit 1
+          fi
+          echo "matches the checkout"
 
       - name: "Run ${{ matrix.pkg }}'s test suite"
         run: |
