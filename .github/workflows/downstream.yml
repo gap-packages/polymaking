@@ -26,16 +26,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        pkg:
-          - 'hapcryst'   # drives polymaking hardest
-          - 'hap'
+        include:
+          # install-pkg does not resolve dependencies, so name the whole closure
+          - pkg: 'hapcryst'   # drives polymaking hardest
+            deps: 'hapcryst hap aclib cryst crystcat fga nq polycyclic smallgrp'
+          - pkg: 'hap'
+            deps: 'hap aclib crystcat fga nq polycyclic smallgrp'
 
     steps:
       - uses: actions/checkout@v6
       - uses: gap-actions/setup-gap@v3
       - uses: gap-actions/install-pkg@v1
         with:
-          packages: ${{ matrix.pkg }}
+          packages: ${{ matrix.deps }}
       - uses: gap-actions/build-pkg@v3
 
       # Without this the job could pass while testing against the polymaking
@@ -44,7 +47,10 @@ jobs:
         run: |
           cat > check.g <<'EOF'
           if LoadPackage("${{ matrix.pkg }}") = fail then
-              Print("FAILED to load ${{ matrix.pkg }}\n");
+              Print("FAILED to load ${{ matrix.pkg }}, loading log follows\n");
+              SetInfoLevel(InfoPackageLoading, 4);
+              DisplayPackageLoadingLog(PACKAGE_DEBUG);
+              LoadPackage("${{ matrix.pkg }}");;
               FORCE_QUIT_GAP(1);
           fi;
           here := Filename(DirectoriesPackageLibrary("polymaking", "")[1], "");;
