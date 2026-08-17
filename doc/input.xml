@@ -3,14 +3,14 @@
    The interaction with the polymake program is done via files. A 
    <K>PolymakeObject</K> is mainly a pointer to a file and a list of
    known properties of the object. These properties need not be stored
-   in the file. Whenever polymake is called, the returned value is
-   read from standard output and stored in the <K>PolymakeObject</K>
-   corresponding to the file for which polymake is called.
+   in the file. Whenever polymake is called, the returned values are
+   read back and stored in the <K>PolymakeObject</K> corresponding to the
+   file for which polymake was called.
    
-   The files for polymake are written in the old (non-xml) format.
-   The first run of polymake converts them into the new (xml) format. This
-   means that changes to the file by means of the methods outlined below 
-   after the first run of polymake will probably lead to corrupted files.
+   The files are written in polymake's own JSON format. Writing to a
+   <K>PolymakeObject</K> rewrites the whole file from the properties given so
+   far, which means a file may be extended at any point, also after polymake
+   has been called for it.
 
    <ManSection>
     <Meth Name="CreateEmptyFile" Arg="filename" />
@@ -39,11 +39,12 @@
       "poly1340.1"). If <A>prefix</A> is given, the filename starts
       with this prefix. 
 
-      Optionally, the file can be generated with a header specifying
-      application, version and type of the object. This is done by passing the
-      triple of strings <A>appvertyp</A> to 
-      <Ref Meth="CreatePolymakeObject"/>. A valid triple is 
-      <C>["polytope","2.3","RationalPolytope"]</C>. Validity is checked by 
+      Objects are of polymake type <C>polytope::Polytope&lt;Rational&gt;</C>
+      unless another type is given. A type may be passed either as a qualified
+      polymake 4 type name, or as the triple of strings <A>appvertyp</A> the
+      pre-0.9 interface used, for example
+      <C>["polytope","2.3","RationalPolytope"]</C>; in the latter case the
+      version is ignored and the application and type are joined, see 
       <Ref Meth="CheckAppVerTypList"/>.
     </Description>
    </ManSection>
@@ -70,15 +71,17 @@
 
      This method generates a <K>PolymakeObject</K> corresponding to
      the file <A>filename</A> in the directory <A>dir</A>. If
-     <A>dir</A> is not given, the <K>POLYMAKE&uscore;DATA&uscore;DIR</K> is
-     used.If no file with name <A>filename</A> exists in <A>dir</A> (or
-     <K>POLYMAKE&uscore;DATA&uscore;DIR</K>, respectively), an empty file is created.
+     <A>dir</A> is not given, <Ref Func="PolymakeDataDirectory"/> is used. If
+     no file of that name exists there, a new one is created.
      
-     Note that the contents of the file do not matter for the
+     Note that the contents of an existing file do not matter for the
      generation of the object. In particular, the object does not know
      any of the properties that might be encoded in the file. The only
      way to transfer information from files to <K>PolymakeObject</K>s
-     is via <Ref Meth="Polymake"/>.
+     is via <Ref Meth="Polymake"/>. polymaking will not write to a file it
+     did not create, so the methods of Section 
+     <Ref Sect="WritingToObjects"/> raise an error for such an object; polymake
+     may read files in any format it understands.
 
     </Description>
    </ManSection>
@@ -211,15 +214,15 @@ rec(
    resulting polymake file is still consistent.
 
    <ManSection>
-    <Meth Name="AppendToPolymakeObject" Arg="poly string"/>
+    <Meth Name="AppendToPolymakeObject" Arg="poly name value"/>
     <Returns>nothing</Returns>
     <Description>
-     This appends the string <A>string</A> to the file associated to
-     the <K>PolymakeObject</K>
-     <A>poly</A>. It is not tested if the string is syntactically
-     correct as a part of a polymake file. It is also not tested if
-     the string is compatible with the data already contained in the
-     file.
+     Sets the polymake property <A>name</A> of <A>poly</A> to <A>value</A> and
+     rewrites the file. Rational numbers are written the way polymake spells
+     them; no check is made that <A>value</A> is meaningful for <A>name</A>, or
+     consistent with the properties set so far.
+     <P/>
+     Before version 0.9 this took a string to append verbatim to the file.
     </Description>    
    </ManSection>
 
@@ -230,12 +233,9 @@ rec(
    <Meth Name="AppendPointlistToPolymakeObject" Arg="poly pointlist"/>
    <Returns>nothing</Returns>
    <Description>
-      Takes a list <A>pointlist</A> of vectors and converts it into a
-      string which represents a polymake block labeled "POINTS". This
-      string is then added to the file associated with <A>poly</A>.
-      The "POINTS" block of the file associated with <A>poly</A> then
-      contains points with leading ones, as polymake uses affine
-      notation.
+      Sets the "POINTS" property of <A>poly</A> to the list
+      <A>pointlist</A> of vectors. The points are written with leading ones, as
+      polymake uses affine notation.
    </Description>
    </ManSection>
 
@@ -252,38 +252,22 @@ rec(
    <Meth Name="AppendInequalitiesToPolymakeObject" Arg="poly ineqlist"/>
    <Returns>nothing</Returns>
    <Description>
-     Just appends the inequalities given in <A>ineqlist</A> to  the polymake
-     object <A> poly</A> (with caption "INEQUALITIES"). Note that this does 
-     not check if an "INEQUALITIES" section does already exist in the file 
-     associated with <A>poly</A>.
+     Sets the "INEQUALITIES" property of the polymake object <A>poly</A> to
+     <A>ineqlist</A>. Unlike points and vertices, inequalities are written as
+     given.
    </Description>
    </ManSection>
 
-
-  <ManSection>
-   <Meth  Name="ConvertMatrixToPolymakeString" Arg="name matrix"/>
-   <Returns>String</Returns>
-   <Description>
-    This function takes a matrix <A>matrix</A> and converts it to a
-    string. This string can then be appended to a polymake file via
-    <Ref Meth="AppendToPolymakeObject"/> to form a block of data labeled
-    <A>name</A>.
-
-    This may be used to write blocks like INEQUALITIES or FACETS.
-   </Description>
-   </ManSection>
 
    <ManSection>
     <Meth Name="ClearPolymakeObject" Arg="poly[, appvertyp]"/>
     <Returns>nothing</Returns>
     <Description>
      Deletes all known properties of the <K>PolymakeObject</K>
-     <A>poly</A> and replaces its file with an empty one.
+     <A>poly</A> and replaces its file with an empty object of the same type.
      <Br/>
-     If the triple of strings <A>appvertyp</A> specifying application, version
-     and type (see <Ref Meth="CheckAppVerTypList"/>) is given, the file is
-     replaced with a file that contains only a header specifying application,
-     version and type of the polymake object.
+     If <A>appvertyp</A> is given, the object is given that polymake type
+     instead, see <Ref Meth="CreatePolymakeObject"/>.
     </Description>
    </ManSection>
    

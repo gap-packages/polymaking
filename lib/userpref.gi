@@ -8,9 +8,20 @@
 #Y of the License, or (at your option) any later version.
 ##
 
+# Whether the user bound the obsolete globals before loading us. Only then are
+# they a configuration source; we bind them ourselves further down, for the
+# benefit of packages that still read them, and must not mistake our own value
+# for the user's.
+BindGlobal("POLYMAKING_LEGACY_SET",
+        MakeImmutable(rec(command := IsBoundGlobal("POLYMAKE_COMMAND"),
+                          dataDir := IsBoundGlobal("POLYMAKE_DATA_DIR"))));
+
+
 # Temporary directories are created on demand and re-created whenever they have
 # vanished, e.g. after restoring a workspace saved in an earlier session.
-BindGlobal("POLYMAKING_STATE", rec(tmpdir := fail, scratch := fail));
+BindGlobal("POLYMAKING_STATE",
+        rec(tmpdir := fail, scratch := fail,
+            version := fail, versionChecked := false));
 
 
 BindGlobal("POLYMAKING_TempDirectory", function(key)
@@ -63,13 +74,19 @@ end);
 
 BindGlobal("POLYMAKING_WarnAboutObsoleteGlobals", function()
     local obsolete;
-    obsolete := Filtered(["POLYMAKE_COMMAND", "POLYMAKE_DATA_DIR"], IsBoundGlobal);
+    obsolete := [];
+    if POLYMAKING_LEGACY_SET.command then
+        Add(obsolete, "POLYMAKE_COMMAND");
+    fi;
+    if POLYMAKING_LEGACY_SET.dataDir then
+        Add(obsolete, "POLYMAKE_DATA_DIR");
+    fi;
     if not IsEmpty(obsolete) then
         Info(InfoWarning, 1,
-             "polymaking no longer sets the global variables ",
+             "polymaking honours the deprecated global variable(s) ",
              JoinStringsWithSeparator(obsolete, ", "),
-             "; they are still honoured but deprecated. Use ",
-             "SetUserPreference(\"polymaking\", ...) instead, see the manual.");
+             ", but please use SetUserPreference(\"polymaking\", ...) ",
+             "instead, see the manual.");
     fi;
     return obsolete;
 end);
@@ -81,7 +98,7 @@ InstallGlobalFunction(PolymakeCommand, function()
     if IsString(pref) and pref <> "" then
         return POLYMAKING_ResolveCommand(pref);
     fi;
-    if IsBoundGlobal("POLYMAKE_COMMAND") then
+    if POLYMAKING_LEGACY_SET.command then
         cmd := POLYMAKING_ResolveCommand(VALUE_GLOBAL("POLYMAKE_COMMAND"));
         if cmd <> fail then
             return cmd;
@@ -97,7 +114,7 @@ InstallGlobalFunction(PolymakeDataDirectory, function()
     if IsString(pref) and pref <> "" then
         return POLYMAKING_EnsureDirectory(pref);
     fi;
-    if IsBoundGlobal("POLYMAKE_DATA_DIR") then
+    if POLYMAKING_LEGACY_SET.dataDir then
         dir := VALUE_GLOBAL("POLYMAKE_DATA_DIR");
         if IsDirectory(dir) then
             return POLYMAKING_EnsureDirectory(Filename(dir, ""));

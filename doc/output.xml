@@ -7,18 +7,15 @@
      This method calls the polymake program (see <Ref
      Func="PolymakeCommand"/>) with the option
      <A>option</A>. You may use several keywords such as
-     <C>"FACETS VERTICES"</C> as an option. The returned value is cut into blocks
-     starting with keywords (which are taken from output and not 
-     looked up in <A>option</A>). Each block is then
-     interpreted and translated into &GAP; readable form. This
-     translation is done using the functions given in <Ref
-     Var="ObjectConverters"/>.
+     <C>"FACETS VERTICES"</C> as an option. Each keyword names a polymake
+     property; nested properties are reached with a dot, as in
+     <C>"HASSE&uscore;DIAGRAM.FACES"</C>. polymake computes each of them and
+     returns its value, which is then translated into &GAP; readable form as
+     described in Chapter <Ref Chap="Converting"/>.
 
-     The first line of each block of polymake output is taken as a
-     keyword and the according entry in <Ref Var="ObjectConverters"/>
-     is called to convert the block into &GAP; readable form. If no
-     conversion function is known, an info string is printed and <K>fail</K> is
-     returned.
+     Keywords are evaluated independently, so one of them failing does not stop
+     the others; whatever polymake said about the failures can be found in
+     <Ref Var="POLYMAKE&uscore;LAST&uscore;FAIL&uscore;REASON"/>.
 
      If only one keyword has been given as <A>option</A>,
      <C>Polymake</C> returns the result of the conversion operation.
