@@ -61,6 +61,174 @@ end);
 ## to a file: polymake's own chatter goes to stderr, so a result on stdout could
 ## never be trusted.
 ##
+##
+## The persistent polymake. Starting polymake costs about 0.8s, almost all of it
+## loading the rules of an application, and a session usually makes many calls;
+## one long lived process answers them in about a millisecond each. Results
+## still go to a file, so the pipe only ever carries a marker line.
+##
+BindGlobal("POLYMAKING_DONE", "__polymaking_done__");
+
+# perl double quoted string literal
+BindGlobal("POLYMAKING_PerlString", function(str)
+    local out, c;
+    out := "\"";
+    for c in str do
+        if c in "\\\"$@" then
+            Add(out, '\\');
+        fi;
+        Add(out, c);
+    od;
+    Add(out, '\"');
+    return out;
+end);
+
+BindGlobal("POLYMAKING_Bool", b -> String(Number([b], x -> x = true)));
+
+BindGlobal("POLYMAKING_PerlList",
+        l -> Concatenation("[", JoinStringsWithSeparator(
+                List(l, POLYMAKING_PerlString), ","), "]"));
+
+
+# Read until polymake reports the call finished. fail means the process died,
+# in which case the caller retries once with a fresh one.
+BindGlobal("POLYMAKING_AwaitDone", function(stream)
+    local line;
+    while true do
+        line := ReadLine(stream);
+        if line = fail then
+            return false;
+        fi;
+        line := Chomp(line);
+        if line = POLYMAKING_DONE then
+            return true;
+        elif line <> "" then
+            Info(InfoPolymaking, 2, line);
+        fi;
+    od;
+end);
+
+
+BindGlobal("POLYMAKING_StopServer", function()
+    if POLYMAKING_STATE.server <> fail then
+        if not IsClosedStream(POLYMAKING_STATE.server) then
+            CloseStream(POLYMAKING_STATE.server);
+        fi;
+        POLYMAKING_STATE.server := fail;
+    fi;
+end);
+
+
+# The settings baked into a running polymake: its config path and quiet flag are
+# fixed when it starts, and rule preferences cannot be withdrawn once applied.
+# Changing any of them means starting again.
+BindGlobal("POLYMAKING_ServerSettings", function()
+    return [ PolymakeCommand(),
+             UserPreference("polymaking", "PolymakeConfigPath"),
+             UserPreference("polymaking", "PolymakeQuiet"),
+             UserPreference("polymaking", "PolymakePreferences") ];
+end);
+
+
+BindGlobal("POLYMAKING_StartServer", function()
+    local cmd, stream, prelude;
+
+    cmd := PolymakeCommand();
+    if cmd = fail then
+        return fail;
+    fi;
+    stream := InputOutputLocalProcess(POLYMAKING_TempDirectory("scratch"), cmd,
+                      ["--config-path",
+                       UserPreference("polymaking", "PolymakeConfigPath"), "-"]);
+    if stream = fail then
+        return fail;
+    fi;
+
+    prelude := Concatenation(
+        "do ", POLYMAKING_PerlString(
+                Filename(DirectoriesPackageLibrary("polymaking"), "pm.pl")), "; ",
+        "polymaking_setup(",
+        POLYMAKING_PerlString(POLYMAKING_ScratchFile("stderr.txt")), ", ",
+        POLYMAKING_Bool(UserPreference("polymaking", "PolymakeQuiet")), "); ",
+        "print ", POLYMAKING_PerlString(POLYMAKING_DONE), ", \"\\n\";");
+
+    if WriteLine(stream, prelude) = fail
+       or not POLYMAKING_AwaitDone(stream) then
+        CloseStream(stream);
+        return fail;
+    fi;
+    POLYMAKING_STATE.server := stream;
+    POLYMAKING_STATE.serverSettings := POLYMAKING_ServerSettings();
+    return stream;
+end);
+
+
+BindGlobal("POLYMAKING_Result", function(resfile, errfile, status)
+    local err, res;
+    err := StringFile(errfile);
+    if err = fail then
+        err := "";
+    fi;
+    if err <> "" then
+        Info(InfoPolymaking, 2, Chomp(err));
+    fi;
+    res := StringFile(resfile);
+    if res = fail then
+        return rec(status := status, stderr := err, result := fail);
+    fi;
+    return rec(status := status, stderr := err, result := JsonStringToGap(res));
+end);
+
+
+# Ask the persistent polymake; fail means it could not be used at all, so the
+# caller falls back to starting polymake for this one call.
+BindGlobal("POLYMAKING_RunServer", function(objfile, keywords, resfile)
+    local try, stream, call;
+
+    if UserPreference("polymaking", "PolymakePersistent") <> true then
+        return fail;
+    fi;
+
+    call := Concatenation(
+        "polymaking_eval(", POLYMAKING_PerlString(resfile), ", ",
+        POLYMAKING_PerlString(POLYMAKING_ScratchFile("stderr.txt")), ", ",
+        POLYMAKING_PerlString(objfile), ", ",
+        POLYMAKING_PerlList(UserPreference("polymaking", "PolymakePreferences")),
+        Concatenation(List(keywords, k -> Concatenation(", ", POLYMAKING_PerlString(k)))),
+        "); print ", POLYMAKING_PerlString(POLYMAKING_DONE), ", \"\\n\";");
+
+    # one retry, in case polymake died or was closed since the last call. Talking
+    # to a closed stream raises an error rather than returning fail, so the whole
+    # exchange goes through CALL_WITH_CATCH.
+    if POLYMAKING_STATE.server <> fail
+       and POLYMAKING_STATE.serverSettings <> POLYMAKING_ServerSettings() then
+        POLYMAKING_StopServer();
+    fi;
+
+    for try in [1, 2] do
+        stream := POLYMAKING_STATE.server;
+        if stream <> fail and IsClosedStream(stream) then
+            POLYMAKING_STATE.server := fail;
+            stream := fail;
+        fi;
+        if stream = fail then
+            stream := POLYMAKING_StartServer();
+            if stream = fail then
+                return fail;
+            fi;
+        fi;
+        if CALL_WITH_CATCH(function()
+                   return WriteLine(stream, call) <> fail
+                          and POLYMAKING_AwaitDone(stream);
+               end, []) = [true, true] then
+            return true;
+        fi;
+        POLYMAKING_StopServer();
+    od;
+    return fail;
+end);
+
+
 InstallGlobalFunction(POLYMAKING_Run, function(dir, args)
     local cmd, errfile, resfile, scriptarg, p, out, status, err, res;
 
@@ -75,6 +243,12 @@ InstallGlobalFunction(POLYMAKING_Run, function(dir, args)
     resfile := POLYMAKING_ScratchFile("result.json");
     RemoveFile(errfile);
     RemoveFile(resfile);
+
+    # args is [objfile, keyword...], or ["--version"]
+    if Length(args) > 1 and POLYMAKING_RunServer(args[1], args{[2..Length(args)]},
+                                                 resfile) = true then
+        return POLYMAKING_Result(resfile, errfile, 0);
+    fi;
 
     scriptarg := ["--config-path", UserPreference("polymaking","PolymakeConfigPath"),
                   "--script", Filename(DirectoriesPackageLibrary("polymaking"), "pm.pl"),
@@ -92,19 +266,7 @@ InstallGlobalFunction(POLYMAKING_Run, function(dir, args)
     status := Process(dir, cmd, InputTextNone(), out, scriptarg);
     CloseStream(out);
 
-    err := StringFile(errfile);
-    if err = fail then
-        err := "";
-    fi;
-    if err <> "" then
-        Info(InfoPolymaking, 2, Chomp(err));
-    fi;
-
-    res := StringFile(resfile);
-    if res = fail then
-        return rec(status := status, stderr := err, result := fail);
-    fi;
-    return rec(status := status, stderr := err, result := JsonStringToGap(res));
+    return POLYMAKING_Result(resfile, errfile, status);
 end);
 
 
@@ -163,6 +325,13 @@ InstallGlobalFunction(POLYMAKING_UpdateLegacyGlobals, function()
 end);
 
 POLYMAKING_UpdateLegacyGlobals();
+
+# a stream does not survive into another session
+CallAndInstallPostRestore(function()
+    POLYMAKING_STATE.server := fail;
+end);
+
+InstallAtExit(POLYMAKING_StopServer);
 
 # the data directory a restored workspace names is gone, see issue #17
 CallAndInstallPostRestore(POLYMAKING_UpdateLegacyGlobals);
