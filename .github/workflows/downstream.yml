@@ -1,0 +1,87 @@
+name: Downstream
+
+# hap and hapcryst both need polymaking, and neither pins an upper bound, so a
+# change here reaches their released versions unchanged. Run their test suites
+# against this checkout to find that out now rather than after a release.
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+  # they are slow, so also run nightly to catch breakage from their side
+  schedule:
+    - cron: '0 4 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}-${{ github.ref_name != github.event.repository.default_branch || github.run_number }}
+  cancel-in-progress: ${{ startsWith(github.ref, 'refs/pull/') }}
+
+jobs:
+  downstream:
+    name: ${{ matrix.pkg }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # install-pkg does not resolve dependencies, so name the whole closure
+          - pkg: 'hapcryst'   # drives polymaking hardest
+            deps: 'hapcryst hap aclib cryst crystcat fga nq polycyclic smallgrp'
+          - pkg: 'hap'
+            deps: 'hap aclib crystcat fga nq polycyclic smallgrp'
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: gap-actions/setup-gap@v3
+      - uses: gap-actions/install-pkg@v1
+        with:
+          packages: ${{ matrix.deps }}
+      # nq and friends ship programs that have to be compiled; install-pkg only
+      # unpacks them, and they are not in our own PackageInfo.g
+      - uses: gap-actions/build-pkg@v3
+        with:
+          extra-pkgs: ${{ matrix.deps }}
+
+      # Without this the job could pass while testing the polymaking that ships
+      # with GAP, which would tell us nothing. setup-gap stages the checkout
+      # elsewhere than GITHUB_WORKSPACE, so compare contents rather than paths.
+      - name: "Check that ${{ matrix.pkg }} loads this polymaking"
+        run: |
+          cat > check.g <<'EOF'
+          if LoadPackage("${{ matrix.pkg }}") = fail then
+              Print("FAILED to load ${{ matrix.pkg }}, loading log follows\n");
+              SetInfoLevel(InfoPackageLoading, 4);
+              DisplayPackageLoadingLog(PACKAGE_DEBUG);
+              LoadPackage("${{ matrix.pkg }}");;
+              FORCE_QUIT_GAP(1);
+          fi;
+          PrintTo("loaded-from.txt", GAPInfo.PackagesInfo.polymaking[1].InstallationPath);
+          FORCE_QUIT_GAP(0);
+          EOF
+          gap -A -q -b check.g
+          loaded=$(cat loaded-from.txt)
+          echo "polymaking loaded from ${loaded}"
+          if ! diff -q "${loaded}/PackageInfo.g" "${GITHUB_WORKSPACE}/PackageInfo.g" >/dev/null; then
+            echo "::error::${{ matrix.pkg }} loaded a different polymaking than the one under test"
+            exit 1
+          fi
+          echo "matches the checkout"
+
+      - name: "Run ${{ matrix.pkg }}'s test suite"
+        run: |
+          cat > runtests.g <<'EOF'
+          # whatever the package itself considers its test suite
+          LoadPackage("${{ matrix.pkg }}");;
+          info := First(GAPInfo.PackagesInfo.("${{ matrix.pkg }}"),
+                        r -> IsBound(r.TestFile));;
+          if info = fail then
+              Print("${{ matrix.pkg }} declares no TestFile\n");
+              FORCE_QUIT_GAP(1);
+          fi;
+          Print("running ", info.TestFile, "\n");
+          Read(Filename(Directory(info.InstallationPath), info.TestFile));
+          EOF
+          gap -A -q -b runtests.g
