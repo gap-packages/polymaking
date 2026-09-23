@@ -21,6 +21,7 @@ BindGlobal("POLYMAKING_LEGACY_SET",
 # vanished, e.g. after restoring a workspace saved in an earlier session.
 BindGlobal("POLYMAKING_STATE",
         rec(tmpdir := fail, scratch := fail,
+            server := fail, serverSettings := fail,
             version := fail, versionChecked := false));
 
 
@@ -174,6 +175,9 @@ and are usually just noise, so they are turned off by default. Set this to
 Independently of this, everything polymake writes to standard error is shown at
 <K>InfoPolymaking</K> level 2, and is included in the error message and in
 <K>POLYMAKE&uscore;LAST&uscore;FAIL&uscore;REASON</K> when a call fails.
+<P/>
+polymake reports a credit once per session rather than once per call, so with
+<C>PolymakePersistent</C> set, which is the default, each is seen once.
 """],
   default := true,
   values := [ true, false ],
@@ -210,4 +214,22 @@ Each entry is passed to polymake's <C>prefer_now</C>. This works even when
 """],
   default := [],
   check := x -> IsList(x) and ForAll(x, IsString)
+));
+
+
+DeclareUserPreference(rec(
+  package := "polymaking",
+  name := "PolymakePersistent",
+  description := [
+"""controls whether one polymake process serves the whole &GAP; session.
+
+Starting polymake costs the best part of a second, nearly all of it spent
+loading the rules of an application, so keeping one process alive makes any
+session that calls polymake more than once considerably faster. Set this to
+<K>false</K> to start polymake afresh for every call, which is slower but keeps
+each call fully independent.
+"""],
+  default := true,
+  values := [ true, false ],
+  multi := false
 ));
