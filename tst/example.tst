@@ -14,7 +14,7 @@ gap> Polymake(permutahedron,"N_VERTICES");
 6
 gap> PropertyOfPolymakeObject(permutahedron,"VERTICES");
 fail
-gap> NamesKnownPropertiesOfPolymakeObject(permutahedron);
+gap> Set(NamesKnownPropertiesOfPolymakeObject(permutahedron));
 [ "N_VERTICES", "VOLUME" ]
 gap> Polymake(permutahedron,"DIM");
 2

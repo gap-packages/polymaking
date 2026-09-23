@@ -134,9 +134,9 @@ gap> Polymake(poly,"NEIGHBORLINESS");
 1
 gap> Polymake(poly,"NEIGHBORLY");
 true
-gap> Polymake(poly,"MINIMAL_VERTEX_ANGLE");
-#I  Warning!converting a floating point number
-314159265358979/100000000000000
+gap> angle := Polymake(poly,"MINIMAL_VERTEX_ANGLE");;
+gap> IsFloat(angle) and AbsoluteValue(angle - 3.14159265358979) < 1.e-10;
+true
 gap> Polymake(poly,"POINTED");
 true
 gap> Polymake(poly,"POSITIVE");
@@ -179,6 +179,30 @@ fail
 gap> Polymake(plane, "FACETS");
 [ [ 1, 2, 5 ], [ 1, 2, 6 ], [ 1, 3, 4 ], [ 1, 3, 5 ], [ 1, 4, 6 ], 
   [ 2, 3, 4 ], [ 2, 3, 6 ], [ 2, 4, 5 ], [ 3, 5, 6 ], [ 4, 5, 6 ] ]
+
+## polymake 4 spells nested properties with a dot, and polymaking no longer has
+## to rewrite the keyword to reach them
+##
+gap> Polymake(poly,"HASSE_DIAGRAM.FACES") = faces;
+true
+
+## GRAPH comes back as documented; it used to raise an error
+##
+gap> g := Polymake(poly,"GRAPH");;
+gap> Set(RecNames(g));
+[ "edges", "vertices" ]
+gap> g.vertices = [1..9];
+true
+gap> g.edges = Filtered(CanonicalFaceList(faces), f -> Size(f) = 2);
+true
+
+## polymaking writes polymake's own format, so nothing needs converting
+##
+gap> j := JsonStringToGap(StringFile(FullFilenameOfPolymakeObject(poly)));;
+gap> j._type;
+"polytope::Polytope<Rational>"
+gap> j.POINTS[1];
+[ "1", "1/4", "1/75", "1/22" ]
 
 #
 gap> SetUserPreference("polymaking", "PolymakeDataDirectory", olddatadir);;

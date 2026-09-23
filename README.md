@@ -21,12 +21,10 @@ National University of Ireland, Galway
 Requirements
 ------------
 
-polymaking requires GAP version 4.8. It also needs polymake to be
-installed.  The GAPDoc package is needed to display the documentation.
-polymaking was written for the "first generation" polymake which was
-called as a command-line tool. Using it with a current ("next generation")
-version of polymake will result in longer runtimes and fewer supported
-keywords/features.
+polymaking requires GAP version 4.12, the GAP package json, and polymake 4.0
+or newer. The GAPDoc package is needed to display the documentation.
+
+Use polymaking 0.8.9 if you need to work with polymake 3 or older.
 
 
 Installation

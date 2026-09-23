@@ -24,9 +24,16 @@
 ##
 SetInfoLevel(InfoPolymaking,1);
 
-BindGlobal("POLYMAKING_InfoDeprecated", function(name, replacement)
-    Info(InfoObsolete, 1, "`", name, "` is deprecated, use ", replacement,
+# level 2 for shims that exist purely so that code written against polymaking
+# 0.8 keeps running unchanged: warning by default would make their output, and
+# so their test suites, differ.
+BindGlobal("POLYMAKING_InfoDeprecatedAt", function(level, name, replacement)
+    Info(InfoObsolete, level, "`", name, "` is deprecated, use ", replacement,
          " instead.");
+end);
+
+BindGlobal("POLYMAKING_InfoDeprecated", function(name, replacement)
+    POLYMAKING_InfoDeprecatedAt(1, name, replacement);
 end);
 
 
@@ -47,6 +54,118 @@ InstallMethod(SetPolymakeDataDirectory,[IsDirectory],
         "SetUserPreference(\"polymaking\", \"PolymakeDataDirectory\", path)");
     SetUserPreference("polymaking", "PolymakeDataDirectory", Filename(dir, ""));
 end);
+
+
+##
+## Running polymake. Everything goes through lib/pm.pl, which writes its result
+## to a file: polymake's own chatter goes to stderr, so a result on stdout could
+## never be trusted.
+##
+InstallGlobalFunction(POLYMAKING_Run, function(dir, args)
+    local cmd, errfile, resfile, scriptarg, p, out, status, err, res;
+
+    cmd := PolymakeCommand();
+    if cmd = fail then
+        UpdatePolymakeFailReason("no usable polymake executable configured");
+        ErrorNoReturn("polymake not found; set it via SetUserPreference(",
+                "\"polymaking\", \"PolymakeCommand\", <path>)");
+    fi;
+
+    errfile := POLYMAKING_ScratchFile("stderr.txt");
+    resfile := POLYMAKING_ScratchFile("result.json");
+    RemoveFile(errfile);
+    RemoveFile(resfile);
+
+    scriptarg := ["--config-path", UserPreference("polymaking","PolymakeConfigPath"),
+                  "--script", Filename(DirectoriesPackageLibrary("polymaking"), "pm.pl"),
+                  "--stderr", errfile];
+    if UserPreference("polymaking","PolymakeQuiet") = true then
+        Add(scriptarg, "--quiet");
+    fi;
+    for p in UserPreference("polymaking","PolymakePreferences") do
+        Append(scriptarg, ["--prefer", p]);
+    od;
+    Append(scriptarg, ["--", resfile]);
+    Append(scriptarg, args);
+
+    out := OutputTextNone();
+    status := Process(dir, cmd, InputTextNone(), out, scriptarg);
+    CloseStream(out);
+
+    err := StringFile(errfile);
+    if err = fail then
+        err := "";
+    fi;
+    if err <> "" then
+        Info(InfoPolymaking, 2, Chomp(err));
+    fi;
+
+    res := StringFile(resfile);
+    if res = fail then
+        return rec(status := status, stderr := err, result := fail);
+    fi;
+    return rec(status := status, stderr := err, result := JsonStringToGap(res));
+end);
+
+
+InstallGlobalFunction(PolymakeVersion, function()
+    local r;
+    if POLYMAKING_STATE.version = fail then
+        r := POLYMAKING_Run(DirectoryCurrent(), ["--version"]);
+        if r.result = fail or not IsBound(r.result.version) then
+            return fail;
+        fi;
+        POLYMAKING_STATE.version := r.result.version;
+    fi;
+    return POLYMAKING_STATE.version;
+end);
+
+
+# polymaking 0.9 writes and reads polymake's JSON format, which polymake 3 and
+# earlier cannot handle at all, so this is an error rather than a warning.
+InstallGlobalFunction(POLYMAKING_CheckVersion, function()
+    local v;
+    if POLYMAKING_STATE.versionChecked then
+        return;
+    fi;
+    v := PolymakeVersion();
+    if v = fail then
+        ErrorNoReturn("could not determine the polymake version; check that ",
+                PolymakeCommand(), " works");
+    elif not CompareVersionNumbers(v, "4.0") then
+        ErrorNoReturn("polymaking requires polymake 4.0 or newer, but found ",
+                v, ". Use polymaking 0.8.9 with older versions of polymake.");
+    fi;
+    POLYMAKING_STATE.versionChecked := true;
+end);
+
+
+##
+## Keep POLYMAKE_COMMAND and POLYMAKE_DATA_DIR in existence for packages that
+## still read them, hap and hapcryst among them. They are plain assignments
+## rather than BindGlobal, so that the post restore hook can refresh them.
+##
+BindGlobal("POLYMAKING_Rebind", function(name, value)
+    if IsBoundGlobal(name) then
+        MakeReadWriteGlobal(name);
+        UnbindGlobal(name);
+    fi;
+    BindGlobal(name, value);
+end);
+
+InstallGlobalFunction(POLYMAKING_UpdateLegacyGlobals, function()
+    if not POLYMAKING_LEGACY_SET.command then
+        POLYMAKING_Rebind("POLYMAKE_COMMAND", PolymakeCommand());
+    fi;
+    if not POLYMAKING_LEGACY_SET.dataDir then
+        POLYMAKING_Rebind("POLYMAKE_DATA_DIR", PolymakeDataDirectory());
+    fi;
+end);
+
+POLYMAKING_UpdateLegacyGlobals();
+
+# the data directory a restored workspace names is gone, see issue #17
+CallAndInstallPostRestore(POLYMAKING_UpdateLegacyGlobals);
 
 
 if PolymakeCommand() = fail then

@@ -28,7 +28,9 @@ DeclareRepresentation("IsPolymakeObjectRep",
         IsComponentObjectRep,
         ["dir",
          "filename",
-         "knownProperties"]
+         "knownProperties",
+         "input",
+         "type"]
         );
 
 #

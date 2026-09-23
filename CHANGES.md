@@ -1,5 +1,28 @@
 0.9.0 (unreleased)
 
+- polymake 4.0 or newer is now required, and the GAP package json is a new
+  dependency; json needs GAP 4.12, so that is now polymaking's minimum too. polymaking now writes and reads polymake's own JSON data format
+  instead of the pre-4 plain format, which means polymake no longer converts
+  the files and no longer says so (issue #22)
+- nested polymake properties can be named directly, e.g.
+  `Polymake(poly, "HASSE_DIAGRAM.FACES")`
+- `Polymake(poly, "GRAPH")` works again; it used to fail with
+  `POSITION_SUBSTRING: <string> must be a string`
+- when several keywords are given, they are now evaluated independently, so one
+  failing no longer discards the others
+- `MINIMAL_VERTEX_ANGLE` and other floating point properties now return a
+  proper GAP float instead of a rational approximation
+- values decoded from polymake are chosen by polymake's own type rather than by
+  a per-keyword table, so properties polymaking has never heard of are decoded
+  correctly too. `ObjectConverters` and the `ConvertPolymake...` functions are
+  gone, as is `ConvertMatrixToPolymakeString`
+- `AppendToPolymakeObject(poly, name, value)` now takes a GAP value; it used to
+  take a string to append to the file verbatim. The two argument form and
+  `ConvertMatrixToPolymakeString` still work together as before and are
+  deprecated: the latter now hands the section to the former as a record rather
+  than as a string, so code composing the two is unaffected
+- polymaking will not write to a file it did not create
+
 - polymaking is now configured via the GAP user preferences `PolymakeCommand`
   and `PolymakeDataDirectory` (issues #16, #19)
 - the data directory is determined lazily and re-created when it has vanished,
@@ -22,8 +45,9 @@
   and no longer rewrites `tst/pplane.poly` in place while running (issue #18).
   Set `POLYMAKING_CHULL` to test a specific backend, e.g.
   `POLYMAKING_CHULL=cdd gap tst/testall.g`.
-- the globals `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` are no longer set by
-  the package; if you set them yourself they are still honoured
+- the globals `POLYMAKE_COMMAND` and `POLYMAKE_DATA_DIR` are deprecated. They
+  are still set, and still honoured if you set them before loading polymaking,
+  but the preferences above are the ones to use
 
 ------------------
 0.8.9 (2026-04-08)
