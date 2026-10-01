@@ -36,10 +36,16 @@ DeclareOperation("CreatePolymakeObject",[IsDirectory,IsDenseList]);
 DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory]);
 DeclareOperation("CreatePolymakeObject",[IsString,IsDirectory,IsDenseList]);
 
-DeclareOperation("ConvertMatrixToPolymakeString",[IsString,IsDenseList]);
 
+DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString,IsObject]);
+
+##
+## deprecated, for code written against polymaking 0.8
+##
+DeclareOperation("ConvertMatrixToPolymakeString",[IsString,IsDenseList]);
+DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsRecord]);
 DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString]);
-DeclareOperation("AppendToPolymakeObject",[IsPolymakeObject,IsString,IsString]);
+DeclareGlobalFunction("POLYMAKING_WriteObject");
 DeclareOperation("AppendPointlistToPolymakeObject",[IsPolymakeObject,IsDenseList]);
 DeclareOperation("AppendVertexlistToPolymakeObject",[IsPolymakeObject,IsDenseList]);
 DeclareOperation("AppendInequalitiesToPolymakeObject",[IsPolymakeObject,IsDenseList]);

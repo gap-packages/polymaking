@@ -9,26 +9,25 @@
  But it should be as platform independent as &GAP; and polymake.
  <P/>
  The interaction with polymake is restricted to writing files and
- carrying out simple operations. These looked like 
+ carrying out simple operations. polymaking writes a data file in polymake's
+ own JSON format and then asks polymake to evaluate properties of it, using
+ the script <C>lib/pm.pl</C>:
 
  <Br/>
-<C>polymake file KEYWORD1 KEYWORD2 KEYWORD3</C>
-<Br/>
-
- on the command line for polymake versions before 4. The keywords are polymake methods without arguments. 
- Since polymake no longer supports this interface the polymaking package 
- provides the script <C>lib/pm_script_arg.pl</C> to emulate this. 
-
+ <C>polymake &ndash;&ndash;script lib/pm.pl RESULTFILE OBJECTFILE KEYWORD1 KEYWORD2</C>
  <Br/>
- <C>polymake &ndash;&ndash;script lib/pm_script_arg.pl KEYWORD1 KEYWORD2 KEYWORD3</C>
- <Br/>
+
+ The keywords are polymake properties or methods without arguments. The script
+ writes the results as JSON to <C>RESULTFILE</C>, which &GAP; reads back with
+ the <Package>json</Package> package; going through a file rather than through
+ standard output keeps the results clear of anything polymake prints.
 
  Using custom scripts is not supported.<Br/>
 Every call to polymake will re-start the program anew. This causes considerable overhead.
 The number of calls to polymake is reduced by caching the results in the so-called 
 <K>PolymakeObject</K> in GAP.
-As of polymaking version 0.8.0, old versions of polymake (i.e. versions before 2.7.9) are not 
-supported anymore.
+As of polymaking version 0.9.0, polymake 4.0 or newer is required. Use
+polymaking 0.8.9 with older versions of polymake.
 
 
 <Section Label="chap:polymakeinstall">

@@ -28,18 +28,20 @@ true
 gap> d1 = d2;
 false
 
-# the obsolete globals are still honoured as a fallback
-gap> POLYMAKE_DATA_DIR := tmp;;
-gap> Filename(PolymakeDataDirectory(), "") = Filename(tmp, "");
-true
-gap> oldwarn := InfoLevel(InfoWarning);;
-gap> SetInfoLevel(InfoWarning, 0);;
-gap> POLYMAKING_WarnAboutObsoleteGlobals();
-[ "POLYMAKE_DATA_DIR" ]
-gap> Unbind(POLYMAKE_DATA_DIR);
+# The obsolete globals are still provided, for packages that read them, and
+# track the accessors. Whether the user set them before loading is decided once
+# at load time, so it cannot be simulated here; POLYMAKING_LEGACY_SET says no.
+gap> POLYMAKING_LEGACY_SET.command or POLYMAKING_LEGACY_SET.dataDir;
+false
 gap> POLYMAKING_WarnAboutObsoleteGlobals();
 [  ]
-gap> SetInfoLevel(InfoWarning, oldwarn);;
+gap> POLYMAKE_COMMAND = PolymakeCommand();
+true
+gap> SetUserPreference("polymaking", "PolymakeDataDirectory", sub);;
+gap> POLYMAKING_UpdateLegacyGlobals();
+gap> Filename(POLYMAKE_DATA_DIR, "") = Filename(PolymakeDataDirectory(), "");
+true
+gap> SetUserPreference("polymaking", "PolymakeDataDirectory", "");;
 
 # the deprecated setters forward to the preferences
 gap> oldinfo := InfoLevel(InfoObsolete);;
@@ -69,6 +71,22 @@ gap> IsString(UserPreference("polymaking", "PolymakeConfigPath"));
 true
 gap> ForAll(UserPreference("polymaking", "PolymakePreferences"), IsString);
 true
+
+# hap and hapcryst compose these two, so the pair has to keep working
+gap> poly := CreatePolymakeObject("compat", PolymakeDataDirectory(),
+>              ["polytope", "2.3", "RationalPolytope"]);;
+gap> AppendToPolymakeObject(poly,
+>      ConvertMatrixToPolymakeString("POINTS", [[1,0,0],[1,1,0],[1,0,1]]));
+gap> j := JsonStringToGap(StringFile(FullFilenameOfPolymakeObject(poly)));;
+gap> j._type;
+"polytope::Polytope<Rational>"
+gap> j.POINTS;
+[ [ "1", "0", "0" ], [ "1", "1", "0" ], [ "1", "0", "1" ] ]
+
+# but a bare string cannot be appended to a JSON file
+gap> CALL_WITH_CATCH(AppendToPolymakeObject, [poly, "POINTS\n1 0 0\n"])[1];
+Error, cannot append a string, use AppendToPolymakeObject(poly, name, value)
+false
 
 #
 gap> SetUserPreference("polymaking", "PolymakeCommand", oldcmd);;

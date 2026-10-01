@@ -29,6 +29,10 @@ DeclareInfoClass("InfoPolymaking");
 ##
 DeclareGlobalFunction("PolymakeCommand");
 DeclareGlobalFunction("PolymakeDataDirectory");
+DeclareGlobalFunction("PolymakeVersion");
+DeclareGlobalFunction("POLYMAKING_Run");
+DeclareGlobalFunction("POLYMAKING_CheckVersion");
+DeclareGlobalFunction("POLYMAKING_UpdateLegacyGlobals");
 
 ##
 ## deprecated in favour of the user preferences PolymakeCommand and
