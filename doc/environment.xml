@@ -23,9 +23,12 @@
  standard output keeps the results clear of anything polymake prints.
 
  Using custom scripts is not supported.<Br/>
-Every call to polymake will re-start the program anew. This causes considerable overhead.
-The number of calls to polymake is reduced by caching the results in the so-called 
-<K>PolymakeObject</K> in GAP.
+Starting polymake takes the best part of a second, nearly all of it spent
+loading the rules of an application. By default one polymake process therefore
+serves the whole &GAP; session, reading its instructions from a pipe and
+answering each in a few milliseconds; see the <C>PolymakePersistent</C>
+preference in <Ref Sect="chap:varsetters"/>. The number of calls is reduced
+further by caching the results in the so-called <K>PolymakeObject</K> in GAP.
 As of polymaking version 0.9.0, polymake 4.0 or newer is required. Use
 polymaking 0.8.9 with older versions of polymake.
 
@@ -69,6 +72,11 @@ there is nothing to worry about.
       <C>"user"</C> to honour <F>~/.polymake/settings</F> instead; this is
       also considerably faster, as polymake then caches its
       autoconfiguration between calls.</Item>
+      <Mark><C>PolymakePersistent</C></Mark>
+      <Item>whether one polymake process serves the whole session, rather than
+      starting a new one for every call. <K>true</K> by default; starting
+      polymake takes the best part of a second, so this makes any session that
+      calls polymake more than once considerably faster.</Item>
       <Mark><C>PolymakePreferences</C></Mark>
       <Item>a list of polymake rule preferences applied to every call, for
       example <C>[ "*.convex_hull cdd" ]</C> to choose a convex hull
